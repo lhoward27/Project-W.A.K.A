@@ -22,7 +22,7 @@ func _on_join_button_pressed() -> void:
 			animation_player.play("text_fade", 0.5)
 		else:
 			start_screen.queue_free()
-	#This is only for testing
+	#This is only for local testing
 	#else:
 		#MultiplayerManager.join_server("localhost")
 		#if MultiplayerManager.error != OK:
