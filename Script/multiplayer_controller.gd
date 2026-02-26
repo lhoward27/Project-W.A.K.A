@@ -1,5 +1,6 @@
 extends CharacterBody3D
 
+# Player nodes
 @onready var neck: Node3D = $Neck
 @onready var head: Node3D = $Neck/Head
 @onready var standing_cs: CollisionShape3D = $Standing_CS
@@ -14,36 +15,40 @@ extends CharacterBody3D
 @onready var right_arm_ik: SkeletonIK3D = $Littleguy/Armature/Skeleton3D/RightArm_IK
 @onready var skeleton: Skeleton3D = $Littleguy/Armature/Skeleton3D
 @onready var player_synchronizer: MultiplayerSynchronizer = $PlayerSynchronizer
+@onready var light_bulb: MeshInstance3D = $Littleguy/Armature/Skeleton3D/RightHandAttachment/Flashlight/SpotLight3D/LightBulb
 
+# Speed Vars
 var current_speed = 5.0
 @export var walking_speed = 5.0
 @export var sprinting_speed = 8.0
 @export var crouching_speed = 3.0
 @export var mouse_sens = 0.4
-
 var lerp_speed = 25
 var crouch_lerp_speed = 10
 var free_look_lerp_speed = 10
 var slide_free_look_lerp_speed = 10
 var head_bobbing_lerp_speed = 10
 
+# Movement Vars
 const jump_velocity = 6.5
 var direction = Vector3()
 var crouching_depth = -0.5
 var free_look_tilt_amount = 10
 
-# --- STATE MACHINE FLAGS ---
+#States
 var walking = false
 var sprinting = false
 var crouching = false
 var free_looking = false
 var sliding = false
 
+#Slide vars
 var slide_timer = 0.0
 var slide_timer_max = 1.0
 var slide_vector = Vector2.ZERO
 var slide_speed = 10
 
+# Headbobbing Vars
 const head_bobbing_sprinting_speed = 22.0
 const head_bobbing_walking_speed = 14.0
 const head_bobbing_crouching_speed = 10.0
@@ -56,16 +61,19 @@ var head_bobbing_vector = Vector2.ZERO
 var head_bobbing_index = 0.0
 var head_bobbing_current_intensity = 0.0
 
+# Gravity Vars
 var gravity = 20
 var fall_gravity = 30
 var is_rising = false
 
-var is_paused = false
+# Arm aiming vars
 @export var arm_reach_distance: float = .25
 var is_ik_initialized = false
 var shoulder_bone_id
 
-# --- MULTIPLAYER SYNC ---
+var is_paused = false
+
+# Multiplayer sync inputs
 var keyboard_input_state = {
 	"Left": false,
 	"Right": false,
@@ -246,7 +254,6 @@ func _unhandled_input(event: InputEvent) -> void:
 	# Mouse looking logic
 	if event is InputEventMouseMotion and not is_paused:
 		if free_looking:
-			# Only rotate neck when freelooking
 			neck.rotate_y(deg_to_rad(-event.relative.x * mouse_sens))
 			neck.rotation.y = clamp(neck.rotation.y,deg_to_rad(-120), deg_to_rad(120))
 		else:
@@ -264,7 +271,12 @@ func _unhandled_input(event: InputEvent) -> void:
 	
 	# Toggle Flashlight
 	if event.is_action_pressed("Flashlight"):
-		flashlight.light_energy = 1 if flashlight.light_energy == 0 else 0
+		if flashlight.light_energy > 0:
+			light_bulb.visible = false
+			flashlight.light_energy = 0
+		else:
+			light_bulb.visible = true
+			flashlight.light_energy = 1
 
 	# Pause Menu
 	if event.is_action_pressed("ui_cancel"):
@@ -299,8 +311,6 @@ func _update_ik_pose():
 	if not free_looking:
 		ik_target.global_transform = Transform3D(cam_transform.basis, hand_target_pos)
 
-# --- NETWORK RPCS ---
-
 @rpc("any_peer", "call_local")
 func update_camera_rotation(body_rotation, camera_rotation):
 	rotation.y = body_rotation
@@ -310,8 +320,6 @@ func update_camera_rotation(body_rotation, camera_rotation):
 func update_single_action_rpc(action, is_pressed):
 	if action in keyboard_input_state:
 		keyboard_input_state[action] = is_pressed
-
-# --- UI SIGNALS ---
 
 func _on_exit_button_pressed() -> void:
 	get_tree().quit()
