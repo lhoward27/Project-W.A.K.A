@@ -260,11 +260,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2944329, 6, -2.1475246)
 light_energy = 0.5
 omni_range = 9.634009
 
-[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=1448362948]
-_spawnable_scenes = PackedStringArray("uid://dfmmvxqef4b6b")
-spawn_path = NodePath("../Players")
-spawn_limit = 5
-
 [node name="Players" type="Node3D" parent="." unique_id=130084441]
 
 [node name="StartScreen" type="Control" parent="." unique_id=1497430148]
@@ -324,6 +319,11 @@ text = "Invalid IP Address..."
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
 text = "Exit Game"
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=1448362948]
+_spawnable_scenes = PackedStringArray("uid://dfmmvxqef4b6b")
+spawn_path = NodePath("../Players")
+spawn_limit = 5
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1603832741]
 libraries/ = SubResource("AnimationLibrary_rgh2o")
