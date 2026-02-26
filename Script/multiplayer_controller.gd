@@ -107,7 +107,7 @@ func _ready() -> void:
 		set_process_unhandled_input(false)
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if is_multiplayer_authority():
 		# Update the ik position every other frame
 		ik_update_counter += 1

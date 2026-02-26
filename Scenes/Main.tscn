@@ -142,6 +142,12 @@ _data = {
 
 [node name="World" type="Node3D" unique_id=364456515]
 script = ExtResource("1_kln2b")
+debug_mode = true
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=1448362948]
+_spawnable_scenes = PackedStringArray("uid://dfmmvxqef4b6b")
+spawn_path = NodePath("../Players")
+spawn_limit = 5
 
 [node name="Stage" type="Node3D" parent="." unique_id=713326975]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -68.81575)
@@ -319,11 +325,6 @@ text = "Invalid IP Address..."
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
 text = "Exit Game"
-
-[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=1448362948]
-_spawnable_scenes = PackedStringArray("uid://dfmmvxqef4b6b")
-spawn_path = NodePath("../Players")
-spawn_limit = 5
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1603832741]
 libraries/ = SubResource("AnimationLibrary_rgh2o")
