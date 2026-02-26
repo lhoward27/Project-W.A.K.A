@@ -176,8 +176,6 @@ func _physics_process(delta: float) -> void:
 			sprinting = false
 			crouching = false
 	
-	# --- CAMERA EFFECTS ---
-	
 	# Free Look Logic
 	if Input.is_action_pressed("free_look") || sliding:
 		free_looking = true
