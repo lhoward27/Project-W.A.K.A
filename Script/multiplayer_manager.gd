@@ -25,7 +25,6 @@ func become_host():
 	var server_peer = ENetMultiplayerPeer.new()
 	server_peer.create_server(SERVER_PORT)
 	
-	# Assign the peer to the MultiplayerAPI
 	multiplayer.multiplayer_peer = server_peer
 	
 	# Connect signals to handle players joining and leaving dynamically
