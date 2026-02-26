@@ -16,6 +16,8 @@ extends CharacterBody3D
 @onready var skeleton: Skeleton3D = $Littleguy/Armature/Skeleton3D
 @onready var player_synchronizer: MultiplayerSynchronizer = $PlayerSynchronizer
 @onready var light_bulb: MeshInstance3D = $Littleguy/Armature/Skeleton3D/RightHandAttachment/Flashlight/SpotLight3D/LightBulb
+@onready var animation_player: AnimationPlayer = $Littleguy/AnimationPlayer
+
 
 # Speed Vars
 var current_speed = 5.0
@@ -70,17 +72,11 @@ var is_rising = false
 @export var arm_reach_distance: float = .25
 var is_ik_initialized = false
 var shoulder_bone_id
+var ik_update_counter = 0
+const IK_UPDATE_INTERVAL = 2
+
 
 var is_paused = false
-
-# Multiplayer sync inputs
-var keyboard_input_state = {
-	"Left": false,
-	"Right": false,
-	"Forward": false,
-	"Backward": false,
-}
-var actions_to_sync = ["Left", "Right", "Forward", "Backward"]
 
 @export var player_id := 1:
 	set(id):
@@ -110,19 +106,20 @@ func _ready() -> void:
 		player_synchronizer.synchronized.connect(_update_ik_pose)
 		set_process_unhandled_input(false)
 
+
 func _process(delta: float) -> void:
 	if is_multiplayer_authority():
-		_update_ik_pose()
-	
+		# Update the ik position every other frame
+		ik_update_counter += 1
+		if ik_update_counter >= IK_UPDATE_INTERVAL:
+			ik_update_counter = 0
+			_update_ik_pose()
+
 func _physics_process(delta: float) -> void:
 	if not is_multiplayer_authority(): return
 	
 	var input_dir = Input.get_vector("Left", "Right", "Forward", "Backward")
-	
-	# Standardize server-side input check
-	if multiplayer.is_server():
-		input_dir = Input.get_vector("Left", "Right", "Forward", "Backward")
-	
+
 	if velocity.y < 0:
 		is_rising = true
 	else:
@@ -240,9 +237,9 @@ func _physics_process(delta: float) -> void:
 	
 	# Handle animation
 	if walking && input_dir != Vector2.ZERO:
-		$Littleguy/AnimationPlayer.play("Walk",-1,2)
+		animation_player.play("Walk",-1,2)
 	if sprinting && input_dir != Vector2.ZERO:
-		$Littleguy/AnimationPlayer.play("Walk",-1,3.25)
+		animation_player.play("Walk",-1,3.25)
 	
 	move_and_slide()
 
@@ -259,13 +256,6 @@ func _unhandled_input(event: InputEvent) -> void:
 			rotate_y(deg_to_rad(-event.relative.x * mouse_sens))
 			head.rotate_x(deg_to_rad(-event.relative.y * mouse_sens))
 			head.rotation.x = clamp(head.rotation.x,deg_to_rad(-45), deg_to_rad(65))
-			update_camera_rotation.rpc_id(1, rotation.y, head.rotation.x)
-	
-	# Sync input state to server
-	for action in actions_to_sync:
-		if event.is_action_pressed(action) or event.is_action_released(action):
-			var is_pressed = Input.is_action_pressed(action)
-			update_single_action_rpc.rpc_id(1, action, is_pressed)
 	
 	# Toggle Flashlight
 	if event.is_action_pressed("Flashlight"):
@@ -313,11 +303,6 @@ func _update_ik_pose():
 func update_camera_rotation(body_rotation, camera_rotation):
 	rotation.y = body_rotation
 	head.rotation.x = camera_rotation
-
-@rpc("any_peer", "call_local", "reliable")
-func update_single_action_rpc(action, is_pressed):
-	if action in keyboard_input_state:
-		keyboard_input_state[action] = is_pressed
 
 func _on_exit_button_pressed() -> void:
 	get_tree().quit()
