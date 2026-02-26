@@ -95,7 +95,7 @@ func _ready() -> void:
 	if shoulder_bone_id != -1:
 		is_ik_initialized = true
 	else:
-		push_warning("IK Bone 'shoulder.L' not found!")
+		push_warning("IK Bone not found")
 		
 	# Disable input processing for puppets (other players)
 	if not is_multiplayer_authority():
@@ -115,7 +115,6 @@ func _physics_process(delta: float) -> void:
 	if multiplayer.is_server():
 		input_dir = Input.get_vector("Left", "Right", "Forward", "Backward")
 	
-	# Variable Gravity: Falling faster than jumping feels better in FPS
 	if velocity.y < 0:
 		is_rising = true
 	else:
@@ -186,7 +185,6 @@ func _physics_process(delta: float) -> void:
 		neck.rotation.y = lerp(neck.rotation.y, 0.0, delta * free_look_lerp_speed)
 		camera_3d.rotation.z = lerp(neck.rotation.z, 0.0, delta * free_look_lerp_speed)
 
-	# Sliding Timer Logic
 	if sliding:
 		slide_timer -= delta
 		if slide_timer <= 0:
@@ -195,8 +193,7 @@ func _physics_process(delta: float) -> void:
 		# Manual cancel
 		if slide_timer <= slide_timer_max * 0.65 && Input.is_action_just_pressed("Player Controls"):
 			sliding = false
-
-	# Headbobbing Logic
+	
 	if sprinting:
 		head_bobbing_current_intensity = head_bobbing_sprinting_intensity
 		head_bobbing_index += head_bobbing_sprinting_speed * delta
@@ -219,7 +216,6 @@ func _physics_process(delta: float) -> void:
 		eyes.position.y = lerp(eyes.position.y, 0.0, delta * head_bobbing_lerp_speed)
 		eyes.position.x = lerp(eyes.position.x, 0.0, delta * head_bobbing_lerp_speed)
 	
-	# --- FINAL VELOCITY CALCULATION ---
 	direction = lerp(direction, (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized(), delta * lerp_speed)
 	
 	if sliding:
@@ -237,7 +233,6 @@ func _physics_process(delta: float) -> void:
 		velocity.x = move_toward(velocity.x, 0, current_speed)
 		velocity.z = move_toward(velocity.z, 0, current_speed)
 	
-	# Animations
 	if walking && input_dir != Vector2.ZERO:
 		$Littleguy/AnimationPlayer.play("Walk",-1,2)
 	if sprinting && input_dir != Vector2.ZERO:
