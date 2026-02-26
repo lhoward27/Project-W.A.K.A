@@ -67,7 +67,7 @@ var fall_gravity = 30
 var is_rising = false
 
 # Arm aiming vars
-@export var arm_reach_distance: float = .25
+@export var arm_reach_distance: float = .4
 var is_ik_initialized = false
 var shoulder_bone_id
 
@@ -99,7 +99,7 @@ func _ready() -> void:
 	
 	# Initialize IK for arm aiming
 	right_arm_ik.start()
-	shoulder_bone_id = skeleton.find_bone("shoulder.L")
+	shoulder_bone_id = skeleton.find_bone("shoulder.L.001")
 	if shoulder_bone_id != -1:
 		is_ik_initialized = true
 	else:
@@ -242,9 +242,9 @@ func _physics_process(delta: float) -> void:
 	
 	# Handle animation
 	if walking && input_dir != Vector2.ZERO:
-		$Littleguy/AnimationPlayer.play("Walk",-1,2)
+		$Littleguy/AnimationPlayer.play("Walk",-1, 2)
 	if sprinting && input_dir != Vector2.ZERO:
-		$Littleguy/AnimationPlayer.play("Walk",-1,3.25)
+		$Littleguy/AnimationPlayer.play("Walk",-1, 3.4)
 	
 	move_and_slide()
 

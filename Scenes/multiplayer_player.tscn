@@ -346,7 +346,6 @@ _data = {
 [node name="MultiplayerPlayer" type="CharacterBody3D" unique_id=109561205]
 process_priority = 1
 script = ExtResource("1_tq1mk")
-arm_reach_distance = 0.5
 
 [node name="PlayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1187062537]
 replication_config = SubResource("SceneReplicationConfig_5obxw")
@@ -365,7 +364,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 target_position = Vector3(0, 2, 0)
 
 [node name="Neck" type="Node3D" parent="." unique_id=1991559191]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6597357, -0.14544138)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.50651383, -0.079806775)
 
 [node name="Head" type="Node3D" parent="Neck" unique_id=50785907]
 
@@ -381,7 +380,6 @@ transform = Transform3D(-0.45, 0, -6.794811e-08, 0, 0.45, 0, 6.794811e-08, 0, -0
 [node name="Armature" type="Node3D" parent="Littleguy" unique_id=1065052898]
 
 [node name="Skeleton3D" type="Skeleton3D" parent="Littleguy/Armature" unique_id=433920680]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3433857, 0)
 bones/0/name = "spine"
 bones/0/parent = -1
 bones/0/rest = Transform3D(1, 6.217249e-15, 2.384186e-07, -2.8351653e-08, 0.99290437, 0.11891541, -2.3672688e-07, -0.11891541, 0.99290437, -0.0032256898, 1.846342, -0.0757549)
@@ -510,9 +508,8 @@ skin = SubResource("Skin_lenjf")
 mesh = SubResource("ArrayMesh_fux7b")
 
 [node name="RightArm_IK" type="SkeletonIK3D" parent="Littleguy/Armature/Skeleton3D" unique_id=1431702271]
-root_bone = &"shoulder.L"
+root_bone = &"shoulder.L.001"
 tip_bone = &"shoulder.L.002"
-use_magnet = true
 target_node = NodePath("../../../../IK_Target/AimOffset")
 
 [node name="RightHandAttachment" type="BoneAttachment3D" parent="Littleguy/Armature/Skeleton3D" unique_id=891611549]
@@ -544,7 +541,6 @@ mesh = SubResource("SphereMesh_5obxw")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Littleguy" unique_id=415624093]
 libraries/ = SubResource("AnimationLibrary_c8b38")
-speed_scale = 3.375
 
 [node name="IK_Target" type="Node3D" parent="." unique_id=1271152205]
 
