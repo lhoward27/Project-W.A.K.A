@@ -31,9 +31,6 @@ func become_host():
 	multiplayer.peer_connected.connect(_add_player_to_game)
 	multiplayer.peer_disconnected.connect(_remove_player_from_game)
 	
-	# Remove the placeholder local player before spawning the networked version
-	#_remove_single_player()
-	
 	# Add the host themselves to the game (Host ID is always 1)
 	_add_player_to_game(1)
 
@@ -49,8 +46,6 @@ func join_server(server_ip):
 		return
 	else:
 		multiplayer.multiplayer_peer = client_peer
-		# Remove the local placeholder player; the server will handle spawning our networked instance via the peer_connected signal. 
-		#_remove_single_player()
 
 # Instantiates a player scene and adds it to the world
 func _add_player_to_game(id: int):
@@ -79,14 +74,6 @@ func _remove_player_from_game(id: int):
 	_players_spawn_node.get_node(str(id)).queue_free()
 	if players.has(id):
 		players.erase(id)
-
-# Removes the default "Player" node present in the scene before multiplayer starts
-# Not need any more, no single player is spawned
-#func _remove_single_player():
-	#print("Remove single player placeholder")
-	#var player_to_remove = get_tree().current_scene.get_node("Player")
-	#if player_to_remove:
-		#player_to_remove.queue_free()
 
 
 # Allows a peer to request their own removal from the server's tracking
