@@ -1,6 +1,5 @@
 extends CharacterBody3D
 
-# --- NODES ---
 @onready var neck: Node3D = $Neck
 @onready var head: Node3D = $Neck/Head
 @onready var standing_cs: CollisionShape3D = $Standing_CS
@@ -16,21 +15,18 @@ extends CharacterBody3D
 @onready var skeleton: Skeleton3D = $Littleguy/Armature/Skeleton3D
 @onready var player_synchronizer: MultiplayerSynchronizer = $PlayerSynchronizer
 
-# --- SETTINGS & SPEEDS ---
 var current_speed = 5.0
 @export var walking_speed = 5.0
 @export var sprinting_speed = 8.0
 @export var crouching_speed = 3.0
 @export var mouse_sens = 0.4
 
-# --- LERP SPEEDS (Smoothness) ---
 var lerp_speed = 25
 var crouch_lerp_speed = 10
 var free_look_lerp_speed = 10
 var slide_free_look_lerp_speed = 10
 var head_bobbing_lerp_speed = 10
 
-# --- MOVEMENT LOGIC ---
 const jump_velocity = 6.5
 var direction = Vector3()
 var crouching_depth = -0.5
@@ -43,13 +39,11 @@ var crouching = false
 var free_looking = false
 var sliding = false
 
-# --- SLIDING SYSTEM ---
 var slide_timer = 0.0
 var slide_timer_max = 1.0
 var slide_vector = Vector2.ZERO
 var slide_speed = 10
 
-# --- HEADBOBBING CONFIG ---
 const head_bobbing_sprinting_speed = 22.0
 const head_bobbing_walking_speed = 14.0
 const head_bobbing_crouching_speed = 10.0
@@ -62,12 +56,10 @@ var head_bobbing_vector = Vector2.ZERO
 var head_bobbing_index = 0.0
 var head_bobbing_current_intensity = 0.0
 
-# --- PHYSICS & ENVIRONMENT ---
 var gravity = 20
 var fall_gravity = 30
 var is_rising = false
 
-# --- INTERACTION & IK ---
 var is_paused = false
 @export var arm_reach_distance: float = .25
 var is_ik_initialized = false
