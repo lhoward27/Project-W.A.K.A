@@ -202,6 +202,7 @@ func _physics_process(delta: float) -> void:
 		if slide_timer <= slide_timer_max * 0.65 && Input.is_action_just_pressed("Player Controls"):
 			sliding = false
 	
+	# Handle Headbobbing
 	if sprinting:
 		head_bobbing_current_intensity = head_bobbing_sprinting_intensity
 		head_bobbing_index += head_bobbing_sprinting_speed * delta
@@ -212,7 +213,6 @@ func _physics_process(delta: float) -> void:
 		head_bobbing_current_intensity = head_bobbing_crouching_intensity
 		head_bobbing_index += head_bobbing_crouching_speed * delta
 	
-	# Apply Sine-wave movement to eyes
 	if is_on_floor() && !sliding && input_dir != Vector2.ZERO:
 		head_bobbing_vector.y = sin(head_bobbing_index)
 		head_bobbing_vector.x = sin(head_bobbing_index/2) + 0.5
@@ -220,7 +220,6 @@ func _physics_process(delta: float) -> void:
 		eyes.position.y = lerp(eyes.position.y, head_bobbing_vector.y * (head_bobbing_current_intensity/2.0), delta * head_bobbing_lerp_speed)
 		eyes.position.x = lerp(eyes.position.x, head_bobbing_vector.x * head_bobbing_current_intensity, delta * head_bobbing_lerp_speed)
 	else:
-		# Reset bobbing when stationary
 		eyes.position.y = lerp(eyes.position.y, 0.0, delta * head_bobbing_lerp_speed)
 		eyes.position.x = lerp(eyes.position.x, 0.0, delta * head_bobbing_lerp_speed)
 	
@@ -241,6 +240,7 @@ func _physics_process(delta: float) -> void:
 		velocity.x = move_toward(velocity.x, 0, current_speed)
 		velocity.z = move_toward(velocity.z, 0, current_speed)
 	
+	# Handle animation
 	if walking && input_dir != Vector2.ZERO:
 		$Littleguy/AnimationPlayer.play("Walk",-1,2)
 	if sprinting && input_dir != Vector2.ZERO:
