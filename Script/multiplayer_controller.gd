@@ -74,10 +74,6 @@ var shoulder_bone_id
 var ik_update_counter = 0
 const IK_UPDATE_INTERVAL = 2
 
-var ik_update_counter = 0
-const IK_UPDATE_INTERVAL = 2
-
-
 var is_paused = false
 
 @export var player_spawn_index := 0
