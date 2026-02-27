@@ -11,8 +11,6 @@ var error
 var player_count = 0
 
 
-var host_mode_enabled = false
-
 func _ready() -> void:
 	_get_spawn_node().spawn_function = _spawn_player
 
