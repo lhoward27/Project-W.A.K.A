@@ -18,8 +18,6 @@ extends CharacterBody3D
 @onready var light_bulb: MeshInstance3D = $littleguyywithlb/Armature/Skeleton3D/RightHandAttachment/Flashlight/SpotLight3D/LightBulb
 @onready var animation_player: AnimationPlayer = $Littleguy/AnimationPlayer
 
-
-
 # Speed Vars
 var current_speed = 5.0
 @export var walking_speed = 5.0
@@ -78,16 +76,8 @@ var ik_update_counter = 0
 const IK_UPDATE_INTERVAL = 2
 
 
-var is_paused = false
 
-# Multiplayer sync inputs
-var keyboard_input_state = {
-	"Left": false,
-	"Right": false,
-	"Forward": false,
-	"Backward": false,
-}
-var actions_to_sync = ["Left", "Right", "Forward", "Backward"]
+var is_paused = false
 
 @export var player_id := 1:
 	set(id):
@@ -97,17 +87,19 @@ func _enter_tree() -> void:
 	# Set authority based on node name (usually the peer ID in multiplayer)
 	set_multiplayer_authority(str(name).to_int())
 
+
 func _ready() -> void:
-	var spawn_points_node = get_tree().current_scene.get_node("SpawnPoints")
-	var spawn_points = spawn_points_node.get_children()
-	print(spawn_points[1].global_position)
+	
 	if is_multiplayer_authority():
+		var spawn_points_node = get_tree().current_scene.get_node("SpawnPoints")
+		var spawn_points = spawn_points_node.get_children()
+		print(spawn_points[MultiplayerManager.player_count].global_position)
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 		camera_3d.current = true
 		head_mesh.visible = false # Hide own head to prevent clipping into camera
 		pause_menu.visible = false
 		self.global_position = spawn_points[MultiplayerManager.player_count].global_position
-	print(MultiplayerManager.player_count)
+	prints(MultiplayerManager.player_count, "client")
 
 	
 	# Initialize IK for arm aiming
@@ -277,10 +269,10 @@ func _unhandled_input(event: InputEvent) -> void:
 			update_camera_rotation.rpc_id(1, rotation.y, head.rotation.x)
 	
 	# Sync input state to server
-	for action in actions_to_sync:
-		if event.is_action_pressed(action) or event.is_action_released(action):
-			var is_pressed = Input.is_action_pressed(action)
-			update_single_action_rpc.rpc_id(1, action, is_pressed)
+	#for action in actions_to_sync:
+		#if event.is_action_pressed(action) or event.is_action_released(action):
+			#var is_pressed = Input.is_action_pressed(action)
+			#update_single_action_rpc.rpc_id(1, action, is_pressed)
 	
 	# Toggle Flashlight
 	if event.is_action_pressed("Flashlight"):
@@ -329,10 +321,10 @@ func update_camera_rotation(body_rotation, camera_rotation):
 	rotation.y = body_rotation
 	head.rotation.x = camera_rotation
 
-@rpc("any_peer", "call_local", "reliable")
-func update_single_action_rpc(action, is_pressed):
-	if action in keyboard_input_state:
-		keyboard_input_state[action] = is_pressed
+#@rpc("any_peer", "call_local", "reliable")
+#func update_single_action_rpc(action, is_pressed):
+	#if action in keyboard_input_state:
+		#keyboard_input_state[action] = is_pressed
 
 func _on_exit_button_pressed() -> void:
 	get_tree().quit()

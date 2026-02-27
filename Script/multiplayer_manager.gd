@@ -44,9 +44,10 @@ func become_host():
 func join_server(server_ip):
 	print("Player is joining")
 	
-	if multiplayer.multiplayer_peer:
-		multiplayer.multiplayer_peer.close()
-		multiplayer.multiplayer_peer = null
+	#if multiplayer.multiplayer_peer:
+		#multiplayer.multiplayer_peer.close()
+		#multiplayer.multiplayer_peer = null
+		#print("i clean")
 	
 	var client_peer = ENetMultiplayerPeer.new()
 	error = client_peer.create_client(server_ip, SERVER_PORT)
@@ -73,7 +74,9 @@ func _add_player_to_game(id: int):
 	
 	# Add to the scene tree. 'true' for 'force_readable_name' helps with debugging.
 	_get_spawn_node().add_child(player_to_add, true)
+	prints(player_count, "server")
 	player_count += 1
+	
 
 func _remove_player_from_game(id: int):
 	print("Player %s left the game" % id)
