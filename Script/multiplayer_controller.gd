@@ -8,16 +8,15 @@ extends CharacterBody3D
 @onready var ray_cast_3d: RayCast3D = $RayCast3D # Used to check for ceiling when uncrouching
 @onready var camera_3d: Camera3D = $Neck/Head/Eyes/Camera3D
 @onready var eyes: Node3D = $Neck/Head/Eyes
-@onready var flashlight: SpotLight3D = $Littleguy/Armature/Skeleton3D/RightHandAttachment/Flashlight/SpotLight3D
-@onready var head_mesh: MeshInstance3D = $Littleguy/Armature/Skeleton3D/head
+@onready var head_mesh: MeshInstance3D = $littleguyywithlb/Armature/Skeleton3D/head
 @onready var pause_menu: Control = $PauseMenu
 @onready var ik_target: Node3D = $IK_Target
-@onready var right_arm_ik: SkeletonIK3D = $Littleguy/Armature/Skeleton3D/RightArm_IK
-@onready var skeleton: Skeleton3D = $Littleguy/Armature/Skeleton3D
+@onready var right_arm_ik: SkeletonIK3D = $littleguyywithlb/Armature/Skeleton3D/RightArm_IK
+@onready var skeleton: Skeleton3D = $littleguyywithlb/Armature/Skeleton3D
 @onready var player_synchronizer: MultiplayerSynchronizer = $PlayerSynchronizer
-@onready var light_bulb: MeshInstance3D = $Littleguy/Armature/Skeleton3D/RightHandAttachment/Flashlight/SpotLight3D/LightBulb
+@onready var flashlight: SpotLight3D = $littleguyywithlb/Armature/Skeleton3D/RightHandAttachment/Flashlight/SpotLight3D
+@onready var light_bulb: MeshInstance3D = $littleguyywithlb/Armature/Skeleton3D/RightHandAttachment/Flashlight/SpotLight3D/LightBulb
 @onready var animation_player: AnimationPlayer = $Littleguy/AnimationPlayer
-
 
 # Speed Vars
 var current_speed = 5.0
@@ -69,15 +68,19 @@ var fall_gravity = 30
 var is_rising = false
 
 # Arm aiming vars
-@export var arm_reach_distance: float = .25
+@export var arm_reach_distance: float = .4
 var is_ik_initialized = false
 var shoulder_bone_id
+var ik_update_counter = 0
+const IK_UPDATE_INTERVAL = 2
+
 var ik_update_counter = 0
 const IK_UPDATE_INTERVAL = 2
 
 
 var is_paused = false
 
+@export var player_spawn_index := 0
 @export var player_id := 1:
 	set(id):
 		player_id = id
@@ -85,17 +88,23 @@ var is_paused = false
 func _enter_tree() -> void:
 	# Set authority based on node name (usually the peer ID in multiplayer)
 	set_multiplayer_authority(str(name).to_int())
+	
+
 
 func _ready() -> void:
 	if is_multiplayer_authority():
+		var spawn_points_node = get_tree().current_scene.get_node("SpawnPoints")
+		var spawn_points = spawn_points_node.get_children()
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 		camera_3d.current = true
 		head_mesh.visible = false # Hide own head to prevent clipping into camera
 		pause_menu.visible = false
+		self.global_position = spawn_points[player_spawn_index].global_position
+
 	
 	# Initialize IK for arm aiming
 	right_arm_ik.start()
-	shoulder_bone_id = skeleton.find_bone("shoulder.L")
+	shoulder_bone_id = skeleton.find_bone("shoulder.L.001")
 	if shoulder_bone_id != -1:
 		is_ik_initialized = true
 	else:

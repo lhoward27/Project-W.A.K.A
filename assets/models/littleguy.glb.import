@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://bfyxx5qtpoy8x"
-path="res://.godot/imported/newmaze.glb-fcf60231ff2b08b771302c77fdb840fe.scn"
+uid="uid://qklqckvte3wg"
+path="res://.godot/imported/littleguy.glb-25cac59542d9a3633ede24b2718a3a57.scn"
 
 [deps]
 
-source_file="res://assets/newmaze.glb"
-dest_files=["res://.godot/imported/newmaze.glb-fcf60231ff2b08b771302c77fdb840fe.scn"]
+source_file="res://assets/models/littleguy.glb"
+dest_files=["res://.godot/imported/littleguy.glb-25cac59542d9a3633ede24b2718a3a57.scn"]
 
 [params]
 
