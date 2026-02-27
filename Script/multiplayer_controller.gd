@@ -14,14 +14,11 @@ extends CharacterBody3D
 @onready var right_arm_ik: SkeletonIK3D = $littleguyywithlb/Armature/Skeleton3D/RightArm_IK
 @onready var skeleton: Skeleton3D = $littleguyywithlb/Armature/Skeleton3D
 @onready var player_synchronizer: MultiplayerSynchronizer = $PlayerSynchronizer
-<<<<<<< Updated upstream
-@onready var light_bulb: MeshInstance3D = $Littleguy/Armature/Skeleton3D/RightHandAttachment/Flashlight/SpotLight3D/LightBulb
-=======
 @onready var flashlight: SpotLight3D = $littleguyywithlb/Armature/Skeleton3D/RightHandAttachment/Flashlight/SpotLight3D
 @onready var light_bulb: MeshInstance3D = $littleguyywithlb/Armature/Skeleton3D/RightHandAttachment/Flashlight/SpotLight3D/LightBulb
 @onready var animation_player: AnimationPlayer = $Littleguy/AnimationPlayer
 
->>>>>>> Stashed changes
+
 
 # Speed Vars
 var current_speed = 5.0
@@ -76,11 +73,10 @@ var is_rising = false
 @export var arm_reach_distance: float = .4
 var is_ik_initialized = false
 var shoulder_bone_id
-<<<<<<< Updated upstream
-=======
+
 var ik_update_counter = 0
 const IK_UPDATE_INTERVAL = 2
->>>>>>> Stashed changes
+
 
 var is_paused = false
 

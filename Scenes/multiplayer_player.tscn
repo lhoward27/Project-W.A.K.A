@@ -460,6 +460,7 @@ height = 0.02
 [node name="MultiplayerPlayer" type="CharacterBody3D" unique_id=109561205]
 process_priority = 1
 script = ExtResource("1_tq1mk")
+arm_reach_distance = 0.5
 
 [node name="PlayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1187062537]
 replication_config = SubResource("SceneReplicationConfig_5obxw")
@@ -478,11 +479,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 target_position = Vector3(0, 2, 0)
 
 [node name="Neck" type="Node3D" parent="." unique_id=1991559191]
-<<<<<<< Updated upstream
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.50651383, -0.079806775)
-=======
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5202065, -0.07900569)
->>>>>>> Stashed changes
 
 [node name="Head" type="Node3D" parent="Neck" unique_id=50785907]
 
@@ -626,43 +623,9 @@ skin = SubResource("Skin_lenjf")
 [node name="head" type="MeshInstance3D" parent="Littleguy/Armature/Skeleton3D" unique_id=2071404352]
 mesh = SubResource("ArrayMesh_fux7b")
 
-<<<<<<< Updated upstream
-[node name="RightArm_IK" type="SkeletonIK3D" parent="Littleguy/Armature/Skeleton3D" unique_id=1431702271]
-root_bone = &"shoulder.L.001"
-tip_bone = &"shoulder.L.002"
-target_node = NodePath("../../../../IK_Target/AimOffset")
-
-[node name="RightHandAttachment" type="BoneAttachment3D" parent="Littleguy/Armature/Skeleton3D" unique_id=891611549]
-transform = Transform3D(-1, 1.3969824e-09, -5.940624e-07, 3.2642865e-07, -1.0000001, -1.4486669e-07, -5.828433e-07, -1.7208873e-07, 0.99999994, -0.48425806, 2.078728, -8.068754e-08)
-bone_name = "shoulder.L.002"
-bone_idx = 7
-
-[node name="Flashlight" type="Node3D" parent="Littleguy/Armature/Skeleton3D/RightHandAttachment" unique_id=174649447]
-transform = Transform3D(2.2222223, 1.2737343e-16, -2.2737368e-13, -3.1507227e-14, -2.2222211, 1.9427284e-07, 3.410605e-13, -1.942729e-07, -2.2222219, 0, 0.62903064, 1.0824917e-07)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Littleguy/Armature/Skeleton3D/RightHandAttachment/Flashlight" unique_id=262620946]
-transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_sxj10")
-skeleton = NodePath("../../../../../..")
-
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="Littleguy/Armature/Skeleton3D/RightHandAttachment/Flashlight" unique_id=1541354954]
-transform = Transform3D(0.99999994, -1.3658914e-16, 0, 5.716964e-15, 0.9999998, -1.4210855e-14, 5.684342e-14, 1.4210855e-14, 0.9999999, 0, -0.06479615, -1.1150689e-08)
-mesh = SubResource("CylinderMesh_y481q")
-
-[node name="SpotLight3D" type="SpotLight3D" parent="Littleguy/Armature/Skeleton3D/RightHandAttachment/Flashlight" unique_id=1355094324]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, -0.081323385, -1.39948355e-08)
-light_energy = 1.5
-spot_range = 8.466755
-spot_angle = 33.56934
-
-[node name="LightBulb" type="MeshInstance3D" parent="Littleguy/Armature/Skeleton3D/RightHandAttachment/Flashlight/SpotLight3D" unique_id=2080014772]
-transform = Transform3D(1, 0, 1.3159717e-14, 0, 1, 0, 1.3159717e-14, 0, 1, 0, -1.4510704e-10, 0.0014345348)
-mesh = SubResource("SphereMesh_5obxw")
-
-=======
->>>>>>> Stashed changes
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Littleguy" unique_id=415624093]
 libraries/ = SubResource("AnimationLibrary_c8b38")
+speed_scale = 3.375
 
 [node name="IK_Target" type="Node3D" parent="." unique_id=1271152205]
 
