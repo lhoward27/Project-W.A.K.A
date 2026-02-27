@@ -330,6 +330,19 @@ text = "Exit Game"
 libraries/ = SubResource("AnimationLibrary_rgh2o")
 speed_scale = 0.8
 
+[node name="SpawnPoints" type="Node3D" parent="." unique_id=1768558997]
+
+[node name="SpawnLocation1" type="Node3D" parent="SpawnPoints" unique_id=1557541053]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.28828, 0, 0)
+
+[node name="SpawnLocation2" type="Node3D" parent="SpawnPoints" unique_id=695494080]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.275175, 0, 0)
+
+[node name="SpawnLocation3" type="Node3D" parent="SpawnPoints" unique_id=1331033026]
+
+[node name="SpawnLocation4" type="Node3D" parent="SpawnPoints" unique_id=1880516471]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.7407675, 0, 0)
+
 [connection signal="pressed" from="StartScreen/VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
 [connection signal="pressed" from="StartScreen/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
 [connection signal="text_changed" from="StartScreen/VBoxContainer/ServerIPLine" to="." method="_on_server_ip_line_text_changed"]

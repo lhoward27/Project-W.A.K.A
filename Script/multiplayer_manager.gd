@@ -8,6 +8,7 @@ var multiplayer_scene = preload("res://Scenes/multiplayer_player.tscn")
 # Tracks active player nodes by their unique Peer ID: { id: Node }
 var players = {}
 var error
+var player_count = 0
 
 
 var host_mode_enabled = false
@@ -72,6 +73,7 @@ func _add_player_to_game(id: int):
 	
 	# Add to the scene tree. 'true' for 'force_readable_name' helps with debugging.
 	_get_spawn_node().add_child(player_to_add, true)
+	player_count += 1
 
 func _remove_player_from_game(id: int):
 	print("Player %s left the game" % id)
