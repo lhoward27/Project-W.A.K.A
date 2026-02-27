@@ -13,6 +13,9 @@ var player_count = 0
 
 var host_mode_enabled = false
 
+func _ready() -> void:
+	_get_spawn_node().spawn_function = _spawn_player
+
 # Initializes the game as a Server (Host)
 func become_host():
 	print("Starting host")
@@ -37,6 +40,7 @@ func become_host():
 	multiplayer.peer_connected.connect(_add_player_to_game)
 	multiplayer.peer_disconnected.connect(_remove_player_from_game)
 	
+	
 	# Add the host themselves to the game (Host ID is always 1)
 	_add_player_to_game(1)
 
@@ -44,13 +48,13 @@ func become_host():
 func join_server(server_ip):
 	print("Player is joining")
 	
-	#if multiplayer.multiplayer_peer:
-		#multiplayer.multiplayer_peer.close()
-		#multiplayer.multiplayer_peer = null
-		#print("i clean")
+	if multiplayer.multiplayer_peer:
+		multiplayer.multiplayer_peer.close()
+		multiplayer.multiplayer_peer = null
 	
 	var client_peer = ENetMultiplayerPeer.new()
 	error = client_peer.create_client(server_ip, SERVER_PORT)
+	
 	
 	if error != OK:
 		print("Failed to connect: ", error)
@@ -58,27 +62,25 @@ func join_server(server_ip):
 	else:
 		multiplayer.multiplayer_peer = client_peer
 
+func _spawn_player(data):
+	var player_to_add = multiplayer_scene.instantiate()
+	player_to_add.player_id = data.id
+	player_to_add.name = str(data.id)
+	player_to_add.player_spawn_index = data.spawn_index
+	players[data.id] = player_to_add
+	return player_to_add
+
 # Instantiates a player scene and adds it to the world
 func _add_player_to_game(id: int):
+	if not multiplayer.is_server(): return
 	print("Player %s joined the game" % id)
-	
-	var player_to_add = multiplayer_scene.instantiate()
-	
-	# Set the player_id so the character script knows who has authority
-	player_to_add.player_id = id
-	# Set node name to ID for easy searching via get_node()
-	player_to_add.name = str(id)
-	
-	# Track the node in our dictionary
-	players[id] = player_to_add
-	
-	# Add to the scene tree. 'true' for 'force_readable_name' helps with debugging.
-	_get_spawn_node().add_child(player_to_add, true)
-	prints(player_count, "server")
+
+	_get_spawn_node().spawn({"id": id, "spawn_index": player_count})
 	player_count += 1
 	
 
 func _remove_player_from_game(id: int):
+	if not multiplayer.is_server(): return
 	print("Player %s left the game" % id)
 	if not players.has(id):
 		return
@@ -118,4 +120,4 @@ func _cleanup():
 
 # Find the node where player instances will be added
 func _get_spawn_node():
-	return get_tree().current_scene.get_node("Players")
+	return get_tree().current_scene.get_node("Players").get_node("MultiplayerSpawner")

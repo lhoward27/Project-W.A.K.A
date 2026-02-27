@@ -76,9 +76,9 @@ var ik_update_counter = 0
 const IK_UPDATE_INTERVAL = 2
 
 
-
 var is_paused = false
 
+@export var player_spawn_index := 0
 @export var player_id := 1:
 	set(id):
 		player_id = id
@@ -86,20 +86,18 @@ var is_paused = false
 func _enter_tree() -> void:
 	# Set authority based on node name (usually the peer ID in multiplayer)
 	set_multiplayer_authority(str(name).to_int())
+	
 
 
 func _ready() -> void:
-	
 	if is_multiplayer_authority():
 		var spawn_points_node = get_tree().current_scene.get_node("SpawnPoints")
 		var spawn_points = spawn_points_node.get_children()
-		print(spawn_points[MultiplayerManager.player_count].global_position)
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 		camera_3d.current = true
 		head_mesh.visible = false # Hide own head to prevent clipping into camera
 		pause_menu.visible = false
-		self.global_position = spawn_points[MultiplayerManager.player_count].global_position
-	prints(MultiplayerManager.player_count, "client")
+		self.global_position = spawn_points[player_spawn_index].global_position
 
 	
 	# Initialize IK for arm aiming
@@ -267,13 +265,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			head.rotate_x(deg_to_rad(-event.relative.y * mouse_sens))
 			head.rotation.x = clamp(head.rotation.x,deg_to_rad(-45), deg_to_rad(65))
 			update_camera_rotation.rpc_id(1, rotation.y, head.rotation.x)
-	
-	# Sync input state to server
-	#for action in actions_to_sync:
-		#if event.is_action_pressed(action) or event.is_action_released(action):
-			#var is_pressed = Input.is_action_pressed(action)
-			#update_single_action_rpc.rpc_id(1, action, is_pressed)
-	
+
 	# Toggle Flashlight
 	if event.is_action_pressed("Flashlight"):
 		if flashlight.light_energy > 0:
@@ -320,11 +312,6 @@ func _update_ik_pose():
 func update_camera_rotation(body_rotation, camera_rotation):
 	rotation.y = body_rotation
 	head.rotation.x = camera_rotation
-
-#@rpc("any_peer", "call_local", "reliable")
-#func update_single_action_rpc(action, is_pressed):
-	#if action in keyboard_input_state:
-		#keyboard_input_state[action] = is_pressed
 
 func _on_exit_button_pressed() -> void:
 	get_tree().quit()
