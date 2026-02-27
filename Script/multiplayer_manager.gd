@@ -76,6 +76,7 @@ func _add_player_to_game(id: int):
 	_get_spawn_node().spawn({"id": id, "spawn_index": player_count})
 	player_count += 1
 	
+	_sync_role_counts.rpc_id(id, role_counts)
 
 func _remove_player_from_game(id: int):
 	if not multiplayer.is_server(): return
@@ -119,3 +120,18 @@ func _cleanup():
 # Find the node where player instances will be added
 func _get_spawn_node():
 	return get_tree().current_scene.get_node("Players").get_node("MultiplayerSpawner")
+
+var role_counts = {"assault": 0, "medic": 0, "defender": 0, "trapper": 0, "waka": 0, "ready": 0}
+
+@rpc("any_peer", "call_local")
+func _update_role_count(role: String, count: int):
+	role_counts[role] += count
+	role_count_changed.emit(role, role_counts[role])
+
+signal role_count_changed(role, count)
+
+@rpc("authority")
+func _sync_role_counts(counts: Dictionary):
+	role_counts = counts
+	for role in role_counts:
+		role_count_changed.emit(role, role_counts[role])

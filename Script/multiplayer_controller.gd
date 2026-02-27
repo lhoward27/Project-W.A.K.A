@@ -17,6 +17,18 @@ extends CharacterBody3D
 @onready var flashlight: SpotLight3D = $littleguyywithlb/Armature/Skeleton3D/RightHandAttachment/Flashlight/SpotLight3D
 @onready var light_bulb: MeshInstance3D = $littleguyywithlb/Armature/Skeleton3D/RightHandAttachment/Flashlight/SpotLight3D/LightBulb
 @onready var animation_player: AnimationPlayer = $Littleguy/AnimationPlayer
+@onready var assault_button_label: Label = $RoleSelect/RoleSelectButtons/SurvivorSelectButtons/AssaultButton/CurrentSelected
+@onready var medic_button_label: Label = $RoleSelect/RoleSelectButtons/SurvivorSelectButtons/MedicButton/CurrentSelected
+@onready var defender_button_label: Label = $RoleSelect/RoleSelectButtons/SurvivorSelectButtons/DefenderButton/CurrentSelected
+@onready var trapper_button_label: Label = $RoleSelect/RoleSelectButtons/SurvivorSelectButtons/TrapperButton/CurrentSelected
+@onready var waka_button_label: Label = $RoleSelect/RoleSelectButtons/WAKASelectButton/CurrentSelected
+@onready var ready_button_label: Label = $RoleSelect/RoleSelectButtons/ReadyUpButton/CurrentSelected
+
+
+
+
+
+
 
 # Speed Vars
 var current_speed = 5.0
@@ -74,11 +86,21 @@ var shoulder_bone_id
 var ik_update_counter = 0
 const IK_UPDATE_INTERVAL = 2
 
-var ik_update_counter = 0
-const IK_UPDATE_INTERVAL = 2
-
-
+var current_count = 0
+@export var role_count: Dictionary
+var pressed = false
 var is_paused = false
+
+#var role_count = MultiplayerManager.role_counts["assault"]:
+	#set(value):
+		#role_count = value
+		#$RoleSelect/RoleSelectButtons/SurvivorSelectButtons/AssaultButton/CurrentSelected.text = str(value)
+		#print(value)
+
+#var current_selected := 0:
+	#set(value):
+		#current_selected = value
+		#$RoleSelect/RoleSelectButtons/SurvivorSelectButtons/AssaultButton/CurrentSelected.text = str(current_selected)
 
 @export var player_spawn_index := 0
 @export var player_id := 1:
@@ -88,18 +110,22 @@ var is_paused = false
 func _enter_tree() -> void:
 	# Set authority based on node name (usually the peer ID in multiplayer)
 	set_multiplayer_authority(str(name).to_int())
-	
-
 
 func _ready() -> void:
+	MultiplayerManager.role_count_changed.connect(_on_role_count_changed)
+	
+	if not is_multiplayer_authority():
+		$RoleSelect.visible = false
+	
 	if is_multiplayer_authority():
 		var spawn_points_node = get_tree().current_scene.get_node("SpawnPoints")
 		var spawn_points = spawn_points_node.get_children()
-		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		#Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 		camera_3d.current = true
 		head_mesh.visible = false # Hide own head to prevent clipping into camera
 		pause_menu.visible = false
 		self.global_position = spawn_points[player_spawn_index].global_position
+
 
 	
 	# Initialize IK for arm aiming
@@ -324,3 +350,110 @@ func _on_resume_button_pressed() -> void:
 func _on_start_screen_button_pressed() -> void:
 	MultiplayerManager.rpc("_remove_player_request")
 	get_tree().change_scene_to_file("res://Scenes/Main.tscn")
+
+func _on_role_count_changed(role, count):
+	if role == "assault":
+		assault_button_label.text = str(count)
+		var new_stylebox_normal = $RoleSelect/RoleSelectButtons/SurvivorSelectButtons/AssaultButton.get_theme_stylebox("normal").duplicate()
+		if count > 1:
+			new_stylebox_normal.bg_color = Color("6e0a09")
+		elif count == 1:
+			new_stylebox_normal.bg_color = Color("0d5021")
+		else:
+			new_stylebox_normal.bg_color = Color("1c1c1c99")
+		$RoleSelect/RoleSelectButtons/SurvivorSelectButtons/AssaultButton.add_theme_stylebox_override("normal", new_stylebox_normal)
+		$RoleSelect/RoleSelectButtons/SurvivorSelectButtons/AssaultButton.add_theme_stylebox_override("pressed", new_stylebox_normal)
+	if role == "medic":
+		medic_button_label.text = str(count)
+		var new_stylebox_normal = $RoleSelect/RoleSelectButtons/SurvivorSelectButtons/MedicButton.get_theme_stylebox("normal").duplicate()
+		if count > 1:
+			new_stylebox_normal.bg_color = Color("6e0a09")
+		elif count == 1:
+			new_stylebox_normal.bg_color = Color("0d5021")
+		else:
+			new_stylebox_normal.bg_color = Color("1c1c1c99")
+		$RoleSelect/RoleSelectButtons/SurvivorSelectButtons/MedicButton.add_theme_stylebox_override("normal", new_stylebox_normal)
+		$RoleSelect/RoleSelectButtons/SurvivorSelectButtons/MedicButton.add_theme_stylebox_override("pressed", new_stylebox_normal)
+	if role == "defender":
+		defender_button_label.text = str(count)
+		var new_stylebox_normal = $RoleSelect/RoleSelectButtons/SurvivorSelectButtons/DefenderButton.get_theme_stylebox("normal").duplicate()
+		if count > 1:
+			new_stylebox_normal.bg_color = Color("6e0a09")
+		elif count == 1:
+			new_stylebox_normal.bg_color = Color("0d5021")
+		else:
+			new_stylebox_normal.bg_color = Color("1c1c1c99")
+		$RoleSelect/RoleSelectButtons/SurvivorSelectButtons/DefenderButton.add_theme_stylebox_override("normal", new_stylebox_normal)
+		$RoleSelect/RoleSelectButtons/SurvivorSelectButtons/DefenderButton.add_theme_stylebox_override("pressed", new_stylebox_normal)
+	if role == "trapper":
+		trapper_button_label.text = str(count)
+		var new_stylebox_normal = $RoleSelect/RoleSelectButtons/SurvivorSelectButtons/TrapperButton.get_theme_stylebox("normal").duplicate()
+		if count > 1:
+			new_stylebox_normal.bg_color = Color("6e0a09")
+		elif count == 1:
+			new_stylebox_normal.bg_color = Color("0d5021")
+		else:
+			new_stylebox_normal.bg_color = Color("1c1c1c99")
+		$RoleSelect/RoleSelectButtons/SurvivorSelectButtons/TrapperButton.add_theme_stylebox_override("normal", new_stylebox_normal)
+		$RoleSelect/RoleSelectButtons/SurvivorSelectButtons/TrapperButton.add_theme_stylebox_override("pressed", new_stylebox_normal)
+	if role == "waka":
+		waka_button_label.text = str(count)
+		var new_stylebox_normal = $RoleSelect/RoleSelectButtons/WAKASelectButton.get_theme_stylebox("normal").duplicate()
+		if count > 1:
+			new_stylebox_normal.bg_color = Color("6e0a09")
+		elif count == 1:
+			new_stylebox_normal.bg_color = Color("0d5021")
+		else:
+			new_stylebox_normal.bg_color = Color("1c1c1c99")
+		$RoleSelect/RoleSelectButtons/WAKASelectButton.add_theme_stylebox_override("normal", new_stylebox_normal)
+		$RoleSelect/RoleSelectButtons/WAKASelectButton.add_theme_stylebox_override("pressed", new_stylebox_normal)
+	if role == "ready":
+		ready_button_label.text = str(count)
+		var new_stylebox_normal = $RoleSelect/RoleSelectButtons/ReadyUpButton.get_theme_stylebox("normal").duplicate()
+		if count < 5:
+			new_stylebox_normal.bg_color = Color("6e0a09")
+		elif count == 5:
+			new_stylebox_normal.bg_color = Color("0d5021")
+		#else:
+			#new_stylebox_normal.bg_color = Color("1c1c1c99")
+		$RoleSelect/RoleSelectButtons/ReadyUpButton.add_theme_stylebox_override("normal", new_stylebox_normal)
+		$RoleSelect/RoleSelectButtons/ReadyUpButton.add_theme_stylebox_override("pressed", new_stylebox_normal)
+
+func _on_assault_button_toggled(toggled_on: bool) -> void:
+	if not is_multiplayer_authority(): return
+	
+	var count = 1 if toggled_on else -1
+	MultiplayerManager.rpc("_update_role_count", "assault", count)
+
+func _on_medic_button_toggled(toggled_on: bool) -> void:
+	if not is_multiplayer_authority(): return
+	
+	var count = 1 if toggled_on else -1
+	MultiplayerManager.rpc("_update_role_count", "medic", count)
+
+func _on_defender_button_toggled(toggled_on: bool) -> void:
+	if not is_multiplayer_authority(): return
+	
+	var count = 1 if toggled_on else -1
+	MultiplayerManager.rpc("_update_role_count", "defender", count)
+
+func _on_trapper_button_toggled(toggled_on: bool) -> void:
+	if not is_multiplayer_authority(): return
+	
+	var count = 1 if toggled_on else -1
+	MultiplayerManager.rpc("_update_role_count", "trapper", count)
+
+func _on_waka_select_button_toggled(toggled_on: bool) -> void:
+	if not is_multiplayer_authority(): return
+	
+	var count = 1 if toggled_on else -1
+	MultiplayerManager.rpc("_update_role_count", "waka", count)
+
+func _on_ready_up_button_toggled(toggled_on: bool) -> void:
+	if not is_multiplayer_authority(): return
+	if toggled_on:
+		$RoleSelect/RoleSelectButtons/ReadyUpButton.text = "Ready"
+	else:
+		$RoleSelect/RoleSelectButtons/ReadyUpButton.text = "Unready"
+	var count = 1 if toggled_on else -1
+	MultiplayerManager.rpc("_update_role_count", "ready", count)
