@@ -246,6 +246,7 @@ skeleton = NodePath("")
 surface_material_override/0 = SubResource("StandardMaterial3D_v1gob")
 
 [node name="roof" type="MeshInstance3D" parent="Maze" unique_id=1511427614]
+visible = false
 mesh = SubResource("ArrayMesh_jw32o")
 skeleton = NodePath("")
 
@@ -344,8 +345,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
 [node name="SpawnLocation4" type="Node3D" parent="SpawnPoints" unique_id=1880516471]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 0)
 
-[node name="SpawnLocation5" type="Node3D" parent="SpawnPoints" unique_id=1560198213]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, 0)
+[node name="WAKASpawnPoints" type="Node3D" parent="." unique_id=821609028]
+
+[node name="SpawnLocation1" type="Node3D" parent="WAKASpawnPoints" unique_id=1937120081]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37, 0, -44)
+
+[node name="SpawnLocation2" type="Node3D" parent="WAKASpawnPoints" unique_id=1125536240]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, 0, -44)
+
+[node name="SpawnLocation3" type="Node3D" parent="WAKASpawnPoints" unique_id=235958983]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37, 0, 46)
+
+[node name="SpawnLocation4" type="Node3D" parent="WAKASpawnPoints" unique_id=870115678]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, 0, 46)
 
 [connection signal="pressed" from="StartScreen/VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
 [connection signal="pressed" from="StartScreen/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
