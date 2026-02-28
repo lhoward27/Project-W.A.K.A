@@ -64,7 +64,8 @@ func _spawn_player(data):
 	var player_to_add = multiplayer_scene.instantiate()
 	player_to_add.player_id = data.id
 	player_to_add.name = str(data.id)
-	player_to_add.player_spawn_index = data.spawn_index
+	#player_to_add.player_spawn_index = data.spawn_index
+	player_to_add.set_multiplayer_authority(data.id)
 	players[data.id] = player_to_add
 	return player_to_add
 
@@ -73,8 +74,8 @@ func _add_player_to_game(id: int):
 	if not multiplayer.is_server(): return
 	print("Player %s joined the game" % id)
 
-	_get_spawn_node().spawn({"id": id, "spawn_index": player_count})
-	player_count += 1
+	_get_spawn_node().spawn({"id": id})
+	#player_count += 1
 	
 	_sync_role_counts.rpc_id(id, role_counts)
 

@@ -251,6 +251,8 @@ mesh = SubResource("ArrayMesh_jw32o")
 skeleton = NodePath("")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Maze" unique_id=1078274162]
+collision_layer = 2
+collision_mask = 3
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Maze/StaticBody3D" unique_id=1834744361]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
