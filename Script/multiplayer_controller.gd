@@ -100,6 +100,7 @@ var is_paused = false
 var role_chosen = 0
 var role_properties
 
+var role_index = 0
 @export var player_spawn_index := 0
 @export var player_id := 1:
 	set(id):
@@ -329,11 +330,29 @@ func _set_player_properties():
 		"assault":
 			body_mesh.material_override = BLUE_PLAYER_MAT
 			head_mesh.material_override = GREEN_HEAD_MAT 
+			role_index = "survivors"
 			player_spawn_index = 0
 		"medic":
 			body_mesh.material_override = BLUE_PLAYER_MAT
 			head_mesh.material_override = LIGHT_BLUE_HEAD_MAT
+			role_index = "survivors"
 			player_spawn_index = 1
+		"defender":
+			body_mesh.material_override = BLUE_PLAYER_MAT
+			head_mesh.material_override = ORANGE_HEAD_MAT
+			role_index = "survivors"
+			player_spawn_index = 2
+		"trapper":
+			body_mesh.material_override = BLUE_PLAYER_MAT
+			head_mesh.material_override = YELLOW_HEAD_MAT
+			role_index = "survivors"
+			player_spawn_index = 3
+		"waka":
+			body_mesh.material_override = RED_PLAYER_MAT
+			head_mesh.material_override = RED_PLAYER_MAT
+			role_index = "waka"
+			player_spawn_index = randi_range(0,3)
+
 
 
 func _on_exit_button_pressed() -> void:
@@ -389,6 +408,7 @@ func _on_defender_button_toggled(_toggled_on: bool) -> void:
 		role_chosen = 3
 		count = 1
 		MultiplayerManager.rpc("_update_role_count", "defender", count)
+		role_properties = "defender"
 
 func _on_trapper_button_toggled(_toggled_on: bool) -> void:
 	if not is_multiplayer_authority(): return
@@ -402,6 +422,7 @@ func _on_trapper_button_toggled(_toggled_on: bool) -> void:
 		role_chosen = 4
 		count = 1
 		MultiplayerManager.rpc("_update_role_count", "trapper", count)
+		role_properties = "trapper"
 
 func _on_waka_select_button_toggled(_toggled_on: bool) -> void:
 	if not is_multiplayer_authority(): return
@@ -415,6 +436,7 @@ func _on_waka_select_button_toggled(_toggled_on: bool) -> void:
 		role_chosen = 5
 		count = 1
 		MultiplayerManager.rpc("_update_role_count", "waka", count)
+		role_properties = "waka"
 
 func _on_ready_up_button_toggled(toggled_on: bool) -> void:
 	if not is_multiplayer_authority(): return
@@ -502,7 +524,18 @@ func _game_start():
 	_set_player_properties()
 	role_select_menu.visible = false
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	var spawn_points_node = get_tree().current_scene.get_node("SpawnPoints")
-	var spawn_points = spawn_points_node.get_children()
-	self.global_position = spawn_points[player_spawn_index].global_position
+	#var spawn_points_node = get_tree().current_scene.get_node("SpawnPoints")
+	#var spawn_points = spawn_points_node.get_children()
+	#var waka_spawn_points_node = get_tree().current_scene.get_node("WAKASpawnPoints")
+	#var waka_spawn_points = waka_spawn_points_node.get_children()
+	var spawn_point_nodes = {
+		"survivors": get_tree().current_scene.get_node("SpawnPoints"),
+		"waka": get_tree().current_scene.get_node("WAKASpawnPoints")
+	}
+	var spawn_points = {
+		"survivors": spawn_point_nodes["survivors"].get_children(),
+		"waka": spawn_point_nodes["waka"].get_children()
+	}
+	var spawn_point_set = spawn_points[role_index]
+	self.global_position = spawn_point_set[player_spawn_index].global_position
 	self.set_collision_mask_value(1, true)
