@@ -128,6 +128,7 @@ var role_counts = {"assault": 0, "medic": 0, "defender": 0, "trapper": 0, "waka"
 func _update_role_count(role: String, count: int):
 	role_counts[role] += count
 	role_count_changed.emit(role, role_counts[role])
+	prints(role, role_counts[role])
 
 signal role_count_changed(role, count)
 

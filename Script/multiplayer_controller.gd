@@ -30,6 +30,7 @@ extends CharacterBody3D
 @onready var trapper_button: Button = $RoleSelect/RoleSelectButtons/SurvivorSelectButtons/TrapperButton
 @onready var waka_select_button: Button = $RoleSelect/RoleSelectButtons/WAKASelectButton
 @onready var ready_up_button: Button = $RoleSelect/RoleSelectButtons/ReadyUpButton
+
 const BLUE_PLAYER_MAT = preload("uid://van6okct3p66")
 const GREEN_HEAD_MAT = preload("uid://cmex25x32muqy")
 const LIGHT_BLUE_HEAD_MAT = preload("uid://cc1v0vsokxj40")
@@ -99,6 +100,8 @@ var pressed = false
 var is_paused = false
 var role_chosen = 0
 var role_properties
+var timer = Timer.new()
+var _has_timer_started = false
 
 var role_index = 0
 @export var player_spawn_index := 0
@@ -440,11 +443,13 @@ func _on_waka_select_button_toggled(_toggled_on: bool) -> void:
 
 func _on_ready_up_button_toggled(toggled_on: bool) -> void:
 	if not is_multiplayer_authority(): return
+	var count
 	if toggled_on:
+		count = 1
 		ready_up_button.text = "Ready"
 	else:
 		ready_up_button.text = "Ready Up"
-	var count = 1 if toggled_on else -1
+		count = -1
 	MultiplayerManager.rpc("_update_role_count", "ready", count)
 
 func _on_role_count_changed(role, count):
@@ -460,6 +465,7 @@ func _on_role_count_changed(role, count):
 			new_stylebox_normal.bg_color = Color("1c1c1c99")
 		assault_button.add_theme_stylebox_override("normal", new_stylebox_normal)
 		assault_button.add_theme_stylebox_override("pressed", new_stylebox_normal)
+		prints(role,count)
 		
 	if role == "medic":
 		medic_button_label.text = str(count)
@@ -509,25 +515,36 @@ func _on_role_count_changed(role, count):
 	if role == "ready":
 		ready_button_label.text = str(count)
 		var new_stylebox_normal = ready_up_button.get_theme_stylebox("normal").duplicate()
-		if count < 2:
+		if count < 1:
 			new_stylebox_normal.bg_color = Color("6e0a09")
-		elif count == 2:
+		elif count == 1:
 			new_stylebox_normal.bg_color = Color("0d5021")
-			_game_start()
+		_countdown(count)
+		prints(role,count)
 		#else:
 			#new_stylebox_normal.bg_color = Color("1c1c1c99")
 		ready_up_button.add_theme_stylebox_override("normal", new_stylebox_normal)
 		ready_up_button.add_theme_stylebox_override("pressed", new_stylebox_normal)
+
+func _countdown(count):
+	if not _has_timer_started:
+		add_child(timer)
+		timer.connect("timeout", _game_start)
+		timer.one_shot = true
+	if count == 1:
+		print("start")
+		timer.start(3)
+		_has_timer_started = true
+	else:
+		print("stop")
+		timer.stop()
+
 
 func _game_start():
 	if not is_multiplayer_authority(): return
 	_set_player_properties()
 	role_select_menu.visible = false
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	#var spawn_points_node = get_tree().current_scene.get_node("SpawnPoints")
-	#var spawn_points = spawn_points_node.get_children()
-	#var waka_spawn_points_node = get_tree().current_scene.get_node("WAKASpawnPoints")
-	#var waka_spawn_points = waka_spawn_points_node.get_children()
 	var spawn_point_nodes = {
 		"survivors": get_tree().current_scene.get_node("SpawnPoints"),
 		"waka": get_tree().current_scene.get_node("WAKASpawnPoints")
