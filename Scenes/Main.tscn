@@ -264,6 +264,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2944329, 6, -2.1475246)
 light_energy = 0.5
 omni_range = 9.634009
 
+[node name="DecalDump" type="Node3D" parent="." unique_id=17750335]
+
 [node name="Players" type="Node3D" parent="." unique_id=130084441]
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="Players" unique_id=1448362948]
