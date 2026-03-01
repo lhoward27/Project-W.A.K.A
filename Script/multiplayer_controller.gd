@@ -30,6 +30,7 @@ extends CharacterBody3D
 @onready var trapper_button: Button = $RoleSelect/RoleSelectButtons/SurvivorSelectButtons/TrapperButton
 @onready var waka_select_button: Button = $RoleSelect/RoleSelectButtons/WAKASelectButton
 @onready var ready_up_button: Button = $RoleSelect/RoleSelectButtons/ReadyUpButton
+
 const BLUE_PLAYER_MAT = preload("uid://van6okct3p66")
 const GREEN_HEAD_MAT = preload("uid://cmex25x32muqy")
 const LIGHT_BLUE_HEAD_MAT = preload("uid://cc1v0vsokxj40")
@@ -509,9 +510,9 @@ func _on_role_count_changed(role, count):
 	if role == "ready":
 		ready_button_label.text = str(count)
 		var new_stylebox_normal = ready_up_button.get_theme_stylebox("normal").duplicate()
-		if count < 2:
+		if count < 5:
 			new_stylebox_normal.bg_color = Color("6e0a09")
-		elif count == 2:
+		elif count == 5:
 			new_stylebox_normal.bg_color = Color("0d5021")
 			_game_start()
 		#else:
@@ -524,10 +525,6 @@ func _game_start():
 	_set_player_properties()
 	role_select_menu.visible = false
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	#var spawn_points_node = get_tree().current_scene.get_node("SpawnPoints")
-	#var spawn_points = spawn_points_node.get_children()
-	#var waka_spawn_points_node = get_tree().current_scene.get_node("WAKASpawnPoints")
-	#var waka_spawn_points = waka_spawn_points_node.get_children()
 	var spawn_point_nodes = {
 		"survivors": get_tree().current_scene.get_node("SpawnPoints"),
 		"waka": get_tree().current_scene.get_node("WAKASpawnPoints")
