@@ -179,9 +179,6 @@ material = SubResource("StandardMaterial3D_tq1mk")
 radius = 0.01
 height = 0.02
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7kmab"]
-bg_color = Color(0.050980393, 0.3137255, 0.12941177, 1)
-
 [node name="MultiplayerPlayer" type="CharacterBody3D" unique_id=109561205]
 process_priority = 1
 collision_mask = 3
@@ -724,7 +721,6 @@ offset_bottom = 553.0
 grow_horizontal = 0
 grow_vertical = 0
 theme_override_font_sizes/font_size = 50
-theme_override_styles/pressed = SubResource("StyleBoxFlat_7kmab")
 toggle_mode = true
 text = "Ready Up"
 
@@ -759,6 +755,35 @@ grow_vertical = 0
 theme_override_font_sizes/font_size = 25
 text = "0"
 horizontal_alignment = 2
+
+[node name="CountdownLabel" type="Label" parent="RoleSelect" unique_id=1866837726]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -275.75
+offset_right = 93.25
+offset_bottom = 69.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 50
+text = "Game start in..."
+
+[node name="CountdownNumber" type="Label" parent="RoleSelect/CountdownLabel" unique_id=1581510854]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 11.75
+offset_top = -34.5
+offset_right = 44.75
+offset_bottom = 34.5
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_font_sizes/font_size = 50
+text = "5"
 
 [connection signal="pressed" from="PauseMenu/VBoxContainer/ResumeButton" to="." method="_on_resume_button_pressed"]
 [connection signal="pressed" from="PauseMenu/VBoxContainer/StartScreenButton" to="." method="_on_start_screen_button_pressed"]
