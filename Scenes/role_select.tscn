@@ -1,0 +1,342 @@
+[gd_scene format=3 uid="uid://muafydc6pqca"]
+
+[ext_resource type="Script" uid="uid://dab7ssmfsoqcs" path="res://Scenes/role_select.gd" id="1_gqjfd"]
+
+[node name="RoleSelect" type="Control" unique_id=352074570]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_gqjfd")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1779154413]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.2159017, 0.21590173, 0.2159017, 1)
+
+[node name="RoleSelectButtons" type="Control" parent="." unique_id=1194318840]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="SurvivorSelectButtons" type="HBoxContainer" parent="RoleSelectButtons" unique_id=839671255]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 169.0
+offset_top = 95.0
+offset_right = 943.0
+offset_bottom = 172.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="AssaultButton" type="Button" parent="RoleSelectButtons/SurvivorSelectButtons" unique_id=1485988574]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+toggle_mode = true
+text = "Assault"
+
+[node name="MaxSelected" type="Label" parent="RoleSelectButtons/SurvivorSelectButtons/AssaultButton" unique_id=1496738416]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -24.0
+offset_top = 1.0
+offset_bottom = 36.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 25
+text = "/1"
+
+[node name="CurrentSelected" type="Label" parent="RoleSelectButtons/SurvivorSelectButtons/AssaultButton" unique_id=2024582219]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -41.0
+offset_top = 1.0
+offset_right = -26.0
+offset_bottom = 36.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 25
+text = "0"
+horizontal_alignment = 2
+
+[node name="MedicButton" type="Button" parent="RoleSelectButtons/SurvivorSelectButtons" unique_id=1136937114]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+toggle_mode = true
+text = "Medic"
+
+[node name="MaxSelected" type="Label" parent="RoleSelectButtons/SurvivorSelectButtons/MedicButton" unique_id=1634555096]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -24.0
+offset_top = 1.0
+offset_bottom = 36.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 25
+text = "/1"
+
+[node name="CurrentSelected" type="Label" parent="RoleSelectButtons/SurvivorSelectButtons/MedicButton" unique_id=2062871678]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -41.0
+offset_top = 1.0
+offset_right = -26.0
+offset_bottom = 36.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 25
+text = "0"
+horizontal_alignment = 2
+
+[node name="DefenderButton" type="Button" parent="RoleSelectButtons/SurvivorSelectButtons" unique_id=939244267]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+toggle_mode = true
+text = "Defender"
+
+[node name="MaxSelected" type="Label" parent="RoleSelectButtons/SurvivorSelectButtons/DefenderButton" unique_id=1108269014]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -24.0
+offset_top = 1.0
+offset_bottom = 36.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 25
+text = "/1"
+
+[node name="CurrentSelected" type="Label" parent="RoleSelectButtons/SurvivorSelectButtons/DefenderButton" unique_id=882699627]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -41.0
+offset_top = 1.0
+offset_right = -26.0
+offset_bottom = 36.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 25
+text = "0"
+horizontal_alignment = 2
+
+[node name="TrapperButton" type="Button" parent="RoleSelectButtons/SurvivorSelectButtons" unique_id=551977807]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+toggle_mode = true
+text = "Trapper
+"
+
+[node name="MaxSelected" type="Label" parent="RoleSelectButtons/SurvivorSelectButtons/TrapperButton" unique_id=1178599529]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -24.0
+offset_top = 1.0
+offset_bottom = 36.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 25
+text = "/1"
+
+[node name="CurrentSelected" type="Label" parent="RoleSelectButtons/SurvivorSelectButtons/TrapperButton" unique_id=217654921]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -41.0
+offset_top = 1.0
+offset_right = -26.0
+offset_bottom = 36.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 25
+text = "0"
+horizontal_alignment = 2
+
+[node name="WAKASelectButton" type="Button" parent="RoleSelectButtons" unique_id=463220892]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 459.0
+offset_top = 321.0
+offset_right = 653.0
+offset_bottom = 398.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 50
+toggle_mode = true
+text = "W.A.K.A"
+
+[node name="MaxSelected" type="Label" parent="RoleSelectButtons/WAKASelectButton" unique_id=366230318]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -24.0
+offset_top = 1.0
+offset_bottom = 36.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 25
+text = "/1"
+
+[node name="CurrentSelected" type="Label" parent="RoleSelectButtons/WAKASelectButton" unique_id=836212768]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -41.0
+offset_top = 1.0
+offset_right = -26.0
+offset_bottom = 36.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 25
+text = "0"
+horizontal_alignment = 2
+
+[node name="ReadyUpButton" type="Button" parent="RoleSelectButtons" unique_id=228975957]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 843.0
+offset_top = 476.0
+offset_right = 1057.0
+offset_bottom = 553.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 50
+toggle_mode = true
+text = "Ready Up"
+
+[node name="MaxSelected" type="Label" parent="RoleSelectButtons/ReadyUpButton" unique_id=1052910742]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -24.0
+offset_top = 1.0
+offset_bottom = 36.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 25
+text = "/5"
+
+[node name="CurrentSelected" type="Label" parent="RoleSelectButtons/ReadyUpButton" unique_id=1924530622]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -41.0
+offset_top = 1.0
+offset_right = -26.0
+offset_bottom = 36.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 25
+text = "0"
+horizontal_alignment = 2
+
+[node name="CountdownLabel" type="Label" parent="." unique_id=451473614]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -275.75
+offset_right = 93.25
+offset_bottom = 69.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 50
+text = "Game start in..."
+
+[node name="CountdownNumber" type="Label" parent="CountdownLabel" unique_id=1060146810]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 11.75
+offset_top = -34.5
+offset_right = 44.75
+offset_bottom = 34.5
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_font_sizes/font_size = 50
+text = "5"
+
+[node name="StartScreenButton" type="Button" parent="." unique_id=345451315]
+layout_mode = 0
+theme_override_font_sizes/font_size = 30
+text = "Main Menu"
+
+[node name="Players" type="Control" parent="." unique_id=185987872]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="Players" unique_id=710232679]
+_spawnable_scenes = PackedStringArray("uid://muafydc6pqca")
+spawn_path = NodePath("..")
+
+[connection signal="toggled" from="RoleSelectButtons/SurvivorSelectButtons/AssaultButton" to="." method="_on_assault_button_toggled"]
+[connection signal="toggled" from="RoleSelectButtons/SurvivorSelectButtons/MedicButton" to="." method="_on_medic_button_toggled"]
+[connection signal="toggled" from="RoleSelectButtons/SurvivorSelectButtons/DefenderButton" to="." method="_on_defender_button_toggled"]
+[connection signal="toggled" from="RoleSelectButtons/SurvivorSelectButtons/TrapperButton" to="." method="_on_trapper_button_toggled"]
+[connection signal="toggled" from="RoleSelectButtons/WAKASelectButton" to="." method="_on_waka_select_button_toggled"]
+[connection signal="toggled" from="RoleSelectButtons/ReadyUpButton" to="." method="_on_ready_up_button_toggled"]
+[connection signal="pressed" from="StartScreenButton" to="." method="_on_start_screen_button_pressed"]

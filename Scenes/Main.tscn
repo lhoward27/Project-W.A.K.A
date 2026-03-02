@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://by6b1ng8lw46q" path="res://assets/textures/dev/grids/Dark/texture_07.png" id="1_idj7w"]
 [ext_resource type="Script" uid="uid://dyjtmhqf4umcp" path="res://Script/world.gd" id="1_kln2b"]
 [ext_resource type="Texture2D" uid="uid://d3b2las2qe285" path="res://assets/hdris/kloofendal_48d_partly_cloudy_puresky_2k.hdr" id="2_kln2b"]
+[ext_resource type="PackedScene" uid="uid://dq3ncx65y8fu8" path="res://Scenes/start_screen.tscn" id="4_rgh2o"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rgh2o"]
 albedo_texture = ExtResource("1_idj7w")
@@ -273,63 +274,7 @@ _spawnable_scenes = PackedStringArray("uid://dfmmvxqef4b6b")
 spawn_path = NodePath("..")
 spawn_limit = 5
 
-[node name="StartScreen" type="Control" parent="." unique_id=1497430148]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -1.0
-offset_bottom = -1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="ColorRect" type="ColorRect" parent="StartScreen" unique_id=863453423]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.2159017, 0.21590173, 0.2159017, 1)
-
-[node name="VBoxContainer" type="VBoxContainer" parent="StartScreen" unique_id=1810941608]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -69.577515
-offset_top = -70.182495
-offset_right = 69.577515
-offset_bottom = 70.182495
-grow_horizontal = 2
-grow_vertical = 2
-alignment = 1
-
-[node name="HostButton" type="Button" parent="StartScreen/VBoxContainer" unique_id=1355824331]
-layout_mode = 2
-theme_override_font_sizes/font_size = 30
-text = "Host Game"
-
-[node name="JoinButton" type="Button" parent="StartScreen/VBoxContainer" unique_id=43405097]
-layout_mode = 2
-theme_override_font_sizes/font_size = 30
-text = "Join Game"
-
-[node name="ServerIPLine" type="LineEdit" parent="StartScreen/VBoxContainer" unique_id=1937879576]
-layout_mode = 2
-placeholder_text = "IP Address Here..."
-max_length = 15
-
-[node name="InputError" type="Label" parent="StartScreen/VBoxContainer" unique_id=2124710726]
-layout_mode = 2
-text = "Invalid IP Address..."
-
-[node name="ExitButton" type="Button" parent="StartScreen/VBoxContainer" unique_id=966875254]
-layout_mode = 2
-theme_override_font_sizes/font_size = 30
-text = "Exit Game"
+[node name="StartScreen" parent="." unique_id=808391546 instance=ExtResource("4_rgh2o")]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1603832741]
 libraries/ = SubResource("AnimationLibrary_rgh2o")
@@ -362,8 +307,3 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37, 0, 46)
 
 [node name="SpawnLocation4" type="Node3D" parent="WAKASpawnPoints" unique_id=870115678]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, 0, 46)
-
-[connection signal="pressed" from="StartScreen/VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
-[connection signal="pressed" from="StartScreen/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
-[connection signal="text_changed" from="StartScreen/VBoxContainer/ServerIPLine" to="." method="_on_server_ip_line_text_changed"]
-[connection signal="pressed" from="StartScreen/VBoxContainer/ExitButton" to="." method="_on_exit_button_pressed"]

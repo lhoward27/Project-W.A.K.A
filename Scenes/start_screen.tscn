@@ -1,0 +1,108 @@
+[gd_scene format=3 uid="uid://dq3ncx65y8fu8"]
+
+[ext_resource type="Script" uid="uid://78c1mrp85mxs" path="res://Scenes/start_screen.gd" id="1_i8r30"]
+
+[sub_resource type="Animation" id="Animation_i8r30"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("VBoxContainer/InputError:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_ainjc"]
+resource_name = "text_fade"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("VBoxContainer/InputError:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.7, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_60ddj"]
+_data = {
+&"RESET": SubResource("Animation_i8r30"),
+&"text_fade": SubResource("Animation_ainjc")
+}
+
+[node name="StartScreen" type="Control" unique_id=808391546]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -1.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_i8r30")
+debug_mode = true
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=2053816020]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.2159017, 0.21590173, 0.2159017, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1714845334]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -69.577515
+offset_top = -70.182495
+offset_right = 69.577515
+offset_bottom = 70.182495
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="HostButton" type="Button" parent="VBoxContainer" unique_id=390204356]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Host Game"
+
+[node name="JoinButton" type="Button" parent="VBoxContainer" unique_id=1314911333]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Join Game"
+
+[node name="ServerIPLine" type="LineEdit" parent="VBoxContainer" unique_id=696662119]
+layout_mode = 2
+placeholder_text = "IP Address Here..."
+max_length = 15
+
+[node name="InputError" type="Label" parent="VBoxContainer" unique_id=75329369]
+layout_mode = 2
+text = "Invalid IP Address..."
+
+[node name="ExitButton" type="Button" parent="VBoxContainer" unique_id=1369045391]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Exit Game"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=752289711]
+libraries/ = SubResource("AnimationLibrary_60ddj")
+speed_scale = 0.8
+
+[connection signal="pressed" from="VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
+[connection signal="text_changed" from="VBoxContainer/ServerIPLine" to="." method="_on_server_ip_line_text_changed"]
+[connection signal="pressed" from="VBoxContainer/ExitButton" to="." method="_on_exit_button_pressed"]
