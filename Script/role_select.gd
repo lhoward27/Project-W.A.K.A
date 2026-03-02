@@ -262,7 +262,7 @@ func _on_role_count_changed(role, count):
 			new_stylebox_normal.bg_color = Color("6e0a09")
 		elif count == 5:
 			new_stylebox_normal.bg_color = Color("0d5021")
-		if not role_overfilled && count > 2:
+		if not role_overfilled && count > 0:
 			_countdown(count)
 		#else:
 			#new_stylebox_normal.bg_color = Color("1c1c1c99")
@@ -275,9 +275,9 @@ func _countdown(count):
 		add_child(timer)
 		timer.connect("timeout", _game_start)
 		timer.one_shot = true
-	if count == 3:
+	if count == 1:
 		has_timer_started = true
-		timer.start(4)
+		timer.start(1)
 		$CountdownLabel.visible = true
 	else:
 		timer.stop()
@@ -285,6 +285,7 @@ func _countdown(count):
 
 func _game_start():
 	print("i starting")
+	get_tree().change_scene_to_file("res://Scenes/Main.tscn")
 	#if not is_multiplayer_authority(): return
 	#_set_player_properties()
 	#Input.mouse_mode = Input.MOUSE_MODE_CAPTURED

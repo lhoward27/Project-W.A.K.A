@@ -3,7 +3,7 @@ extends Node
 const SERVER_PORT = 25567
 
 # The player scene that will be instantiated for every connected peer
-var multiplayer_scene = preload("res://Scenes/role_select.tscn")
+var multiplayer_scene = preload("res://Scenes/multiplayer_player.tscn")
 
 # Tracks active player nodes by their unique Peer ID: { id: Node }
 var players = {}

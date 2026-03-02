@@ -3,7 +3,6 @@
 [ext_resource type="Texture2D" uid="uid://by6b1ng8lw46q" path="res://assets/textures/dev/grids/Dark/texture_07.png" id="1_idj7w"]
 [ext_resource type="Script" uid="uid://dyjtmhqf4umcp" path="res://Script/world.gd" id="1_kln2b"]
 [ext_resource type="Texture2D" uid="uid://d3b2las2qe285" path="res://assets/hdris/kloofendal_48d_partly_cloudy_puresky_2k.hdr" id="2_kln2b"]
-[ext_resource type="PackedScene" uid="uid://bclr0f5a6gasw" path="res://Scenes/start_screen.tscn" id="4_rgh2o"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rgh2o"]
 albedo_texture = ExtResource("1_idj7w")
@@ -107,33 +106,9 @@ data = PackedVector3Array(50, -1, 48.718, 50, 1, 51.282097, 50, 1, 48.718, 50, -
 
 [sub_resource type="Animation" id="Animation_idj7w"]
 length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("StartScreen/VBoxContainer/InputError:self_modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
 
 [sub_resource type="Animation" id="Animation_rgh2o"]
 resource_name = "text_fade"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("StartScreen/VBoxContainer/InputError:self_modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.7, 1),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_rgh2o"]
 _data = {
@@ -143,7 +118,6 @@ _data = {
 
 [node name="World" type="Node3D" unique_id=364456515]
 script = ExtResource("1_kln2b")
-debug_mode = true
 
 [node name="Stage" type="Node3D" parent="." unique_id=713326975]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -68.81575)
@@ -273,8 +247,6 @@ omni_range = 9.634009
 _spawnable_scenes = PackedStringArray("uid://dfmmvxqef4b6b")
 spawn_path = NodePath("..")
 spawn_limit = 5
-
-[node name="StartScreen" parent="." unique_id=808391546 instance=ExtResource("4_rgh2o")]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1603832741]
 libraries/ = SubResource("AnimationLibrary_rgh2o")

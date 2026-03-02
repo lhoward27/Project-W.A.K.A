@@ -1,6 +1,6 @@
-[gd_scene format=3 uid="uid://dq3ncx65y8fu8"]
+[gd_scene format=3 uid="uid://bclr0f5a6gasw"]
 
-[ext_resource type="Script" uid="uid://78c1mrp85mxs" path="res://Script/start_screen.gd" id="1_i8r30"]
+[ext_resource type="Script" path="res://Script/start_screen.gd" id="1_i8r30"]
 
 [sub_resource type="Animation" id="Animation_i8r30"]
 length = 0.001
