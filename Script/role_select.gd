@@ -56,16 +56,16 @@ var role_index = 0
 
 func _ready() -> void:
 	MultiplayerManager.role_count_changed.connect(_on_role_count_changed)
-	if not is_multiplayer_authority():
-		self.visible = false
+	#if not is_multiplayer_authority():
+		#self.visible = false
 
 func _process(_delta: float) -> void:
-	if is_multiplayer_authority():
-		if has_timer_started:
-			$RoleSelect/CountdownLabel/CountdownNumber.text = str(timer.time_left)[0]
+	#if is_multiplayer_authority():
+	if has_timer_started:
+		$CountdownLabel/CountdownNumber.text = str(timer.time_left)[0]
 
 func _set_player_properties():
-	if not is_multiplayer_authority(): return
+	#if not is_multiplayer_authority(): return
 	match role_properties:
 		"assault":
 			rpc("_sync_material_change", 0)
@@ -98,7 +98,7 @@ func _on_start_screen_button_pressed() -> void:
 	get_tree().change_scene_to_file("res://Scenes/Main.tscn")
 
 func _on_assault_button_toggled(_toggled_on: bool) -> void:
-	if not is_multiplayer_authority(): return
+	#if not is_multiplayer_authority(): return
 	var count
 	if role_chosen == 1:
 		ready_up_button.button_pressed = false
@@ -113,7 +113,7 @@ func _on_assault_button_toggled(_toggled_on: bool) -> void:
 		role_properties = "assault"
 
 func _on_medic_button_toggled(_toggled_on: bool) -> void:
-	if not is_multiplayer_authority(): return
+	#if not is_multiplayer_authority(): return
 	var count
 	if role_chosen == 2:
 		ready_up_button.button_pressed = false
@@ -128,7 +128,7 @@ func _on_medic_button_toggled(_toggled_on: bool) -> void:
 		role_properties = "medic"
 
 func _on_defender_button_toggled(_toggled_on: bool) -> void:
-	if not is_multiplayer_authority(): return
+	#if not is_multiplayer_authority(): return
 	var count
 	if role_chosen == 3:
 		ready_up_button.button_pressed = false
@@ -143,7 +143,7 @@ func _on_defender_button_toggled(_toggled_on: bool) -> void:
 		role_properties = "defender"
 
 func _on_trapper_button_toggled(_toggled_on: bool) -> void:
-	if not is_multiplayer_authority(): return
+	#if not is_multiplayer_authority(): return
 	var count
 	if role_chosen == 4:
 		ready_up_button.button_pressed = false
@@ -158,7 +158,7 @@ func _on_trapper_button_toggled(_toggled_on: bool) -> void:
 		role_properties = "trapper"
 
 func _on_waka_select_button_toggled(_toggled_on: bool) -> void:
-	if not is_multiplayer_authority(): return
+	#if not is_multiplayer_authority(): return
 	var count
 	if role_chosen == 5:
 		ready_up_button.button_pressed = false
@@ -173,7 +173,7 @@ func _on_waka_select_button_toggled(_toggled_on: bool) -> void:
 		role_properties = "waka"
 
 func _on_ready_up_button_toggled(toggled_on: bool) -> void:
-	if not is_multiplayer_authority(): return
+	#if not is_multiplayer_authority(): return
 	var count
 	if role_chosen != 0:
 		if toggled_on:
@@ -187,7 +187,7 @@ func _on_ready_up_button_toggled(toggled_on: bool) -> void:
 		ready_up_button.button_pressed = false
 
 func _on_role_count_changed(role, count):
-	if not is_multiplayer_authority(): return
+	#if not is_multiplayer_authority(): return
 	if role == "assault":
 		assault_button_label.text = str(count)
 		var new_stylebox_normal = assault_button.get_theme_stylebox("normal").duplicate()
@@ -270,7 +270,7 @@ func _on_role_count_changed(role, count):
 		ready_up_button.add_theme_stylebox_override("pressed", new_stylebox_normal)
 
 func _countdown(count):
-	if not is_multiplayer_authority(): return
+	#if not is_multiplayer_authority(): return
 	if not has_timer_started:
 		add_child(timer)
 		timer.connect("timeout", _game_start)
@@ -278,25 +278,26 @@ func _countdown(count):
 	if count == 3:
 		has_timer_started = true
 		timer.start(4)
-		$RoleSelect/CountdownLabel.visible = true
+		$CountdownLabel.visible = true
 	else:
 		timer.stop()
-		$RoleSelect/CountdownLabel.visible = false
+		$CountdownLabel.visible = false
 
 func _game_start():
-	if not is_multiplayer_authority(): return
-	_set_player_properties()
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	var spawn_point_nodes = {
-		"survivors": get_tree().current_scene.get_node("SpawnPoints"),
-		"waka": get_tree().current_scene.get_node("WAKASpawnPoints")
-	}
-	var spawn_points = {
-		"survivors": spawn_point_nodes["survivors"].get_children(),
-		"waka": spawn_point_nodes["waka"].get_children()
-	}
-	var spawn_point_set = spawn_points[role_index]
-	self.global_position = spawn_point_set[player_spawn_index].global_position
+	print("i starting")
+	#if not is_multiplayer_authority(): return
+	#_set_player_properties()
+	#Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	#var spawn_point_nodes = {
+		#"survivors": get_tree().current_scene.get_node("SpawnPoints"),
+		#"waka": get_tree().current_scene.get_node("WAKASpawnPoints")
+	#}
+	#var spawn_points = {
+		#"survivors": spawn_point_nodes["survivors"].get_children(),
+		#"waka": spawn_point_nodes["waka"].get_children()
+	#}
+	#var spawn_point_set = spawn_points[role_index]
+	#self.global_position = spawn_point_set[player_spawn_index].global_position
 
 #
 #@rpc("any_peer","call_local", "reliable")

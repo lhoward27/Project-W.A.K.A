@@ -1,6 +1,11 @@
-[gd_scene format=3 uid="uid://muafydc6pqca"]
+[gd_scene format=3 uid="uid://5rdt8ielqxsg"]
 
-[ext_resource type="Script" uid="uid://dab7ssmfsoqcs" path="res://Scenes/role_select.gd" id="1_gqjfd"]
+[ext_resource type="Script" uid="uid://dab7ssmfsoqcs" path="res://Script/role_select.gd" id="1_gqjfd"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_gqjfd"]
+properties/0/path = NodePath(".:player_id")
+properties/0/spawn = true
+properties/0/replication_mode = 1
 
 [node name="RoleSelect" type="Control" unique_id=352074570]
 layout_mode = 3
@@ -10,6 +15,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_gqjfd")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=875163770]
+replication_config = SubResource("SceneReplicationConfig_gqjfd")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=1779154413]
 layout_mode = 1
@@ -323,15 +331,6 @@ text = "5"
 layout_mode = 0
 theme_override_font_sizes/font_size = 30
 text = "Main Menu"
-
-[node name="Players" type="Control" parent="." unique_id=185987872]
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="Players" unique_id=710232679]
-_spawnable_scenes = PackedStringArray("uid://muafydc6pqca")
-spawn_path = NodePath("..")
 
 [connection signal="toggled" from="RoleSelectButtons/SurvivorSelectButtons/AssaultButton" to="." method="_on_assault_button_toggled"]
 [connection signal="toggled" from="RoleSelectButtons/SurvivorSelectButtons/MedicButton" to="." method="_on_medic_button_toggled"]
