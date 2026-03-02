@@ -11,12 +11,8 @@ extends Node3D
 
 
 func _ready() -> void:
-	MultiplayerManager._get_spawn_node().spawn_function = MultiplayerManager._spawn_player
-	MultiplayerManager._add_player_to_game(_get_player_node())
-	
+	pass
 
-func _get_player_node():
-	return $Players.get_child(-1).name.to_int()
 
 ## Start hosting a multiplayer session and remove the start screen
 #func _on_host_button_pressed() -> void:

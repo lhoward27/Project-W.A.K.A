@@ -34,10 +34,12 @@ func become_host():
 	multiplayer.multiplayer_peer = server_peer
 	
 	# Connect signals to handle players joining and leaving dynamically
-	#multiplayer.peer_connected.connect(_add_player_to_game)
+	multiplayer.peer_connected.connect(_new_peer_data)
 	multiplayer.peer_disconnected.connect(_remove_player_from_game)
 	
 	get_tree().change_scene_to_file("res://Scenes/role_select.tscn")
+	
+	_new_peer_data(1)
 	#await get_tree().process_frame
 	#await get_tree().process_frame
 	##_get_spawn_node().spawn_function = _spawn_player
@@ -63,11 +65,22 @@ func join_server(server_ip):
 	#await get_tree().process_frame
 	#await get_tree().process_frame
 
+func _new_peer_data(id: int):
+	var player_to_add = {}
+	player_to_add.player_id = id
+	player_to_add.name = str(id)
+	players[id] = player_to_add
+
 # Instantiates a player scene and adds it to the world
-func _add_player_to_game(id: int):
-	if not multiplayer.is_server(): return
-	print("Player %s joined the game" % id)
+func _add_player_to_game(id):
+	get_tree().change_scene_to_file("res://Scenes/Main.tscn")
+	#if not multiplayer.is_server(): return
+	await get_tree().process_frame
+	await get_tree().process_frame
+	_get_spawn_node().spawn_function = _spawn_player
 	_get_spawn_node().spawn({"id": id})
+	print("Player %s joined the game" % id)
+	
 	##player_count += 1
 	#
 	#_sync_role_counts.rpc_id(id, role_counts)

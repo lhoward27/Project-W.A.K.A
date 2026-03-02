@@ -345,34 +345,34 @@ func _update_ik_pose():
 	if not free_looking:
 		ik_target.global_transform = Transform3D(cam_transform.basis, hand_target_pos)
 
-func _set_player_properties():
-	if not is_multiplayer_authority(): return
-	match role_properties:
-		"assault":
-			rpc("_sync_material_change", 0)
-			rpc("_sync_material_change", 2)
-			role_index = "survivors"
-			player_spawn_index = 0
-		"medic":
-			rpc("_sync_material_change", 0)
-			rpc("_sync_material_change", 3)
-			role_index = "survivors"
-			player_spawn_index = 1
-		"defender":
-			rpc("_sync_material_change", 0)
-			rpc("_sync_material_change", 4)
-			role_index = "survivors"
-			player_spawn_index = 2
-		"trapper":
-			rpc("_sync_material_change", 0)
-			rpc("_sync_material_change", 5)
-			role_index = "survivors"
-			player_spawn_index = 3
-		"waka":
-			rpc("_sync_material_change", 1)
-			rpc("_sync_material_change", 6)
-			role_index = "waka"
-			player_spawn_index = randi_range(0,3)
+#func _set_player_properties():
+	#if not is_multiplayer_authority(): return
+	#match role_properties:
+		#"assault":
+			#rpc("_sync_material_change", 0)
+			#rpc("_sync_material_change", 2)
+			#role_index = "survivors"
+			#player_spawn_index = 0
+		#"medic":
+			#rpc("_sync_material_change", 0)
+			#rpc("_sync_material_change", 3)
+			#role_index = "survivors"
+			#player_spawn_index = 1
+		#"defender":
+			#rpc("_sync_material_change", 0)
+			#rpc("_sync_material_change", 4)
+			#role_index = "survivors"
+			#player_spawn_index = 2
+		#"trapper":
+			#rpc("_sync_material_change", 0)
+			#rpc("_sync_material_change", 5)
+			#role_index = "survivors"
+			#player_spawn_index = 3
+		#"waka":
+			#rpc("_sync_material_change", 1)
+			#rpc("_sync_material_change", 6)
+			#role_index = "waka"
+			#player_spawn_index = randi_range(0,3)
 
 
 func _on_exit_button_pressed() -> void:
