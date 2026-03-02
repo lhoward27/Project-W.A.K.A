@@ -1,6 +1,7 @@
 [gd_scene format=4 uid="uid://dfmmvxqef4b6b"]
 
 [ext_resource type="Script" uid="uid://c7ojjiwt8b8cy" path="res://Script/multiplayer_controller.gd" id="1_tq1mk"]
+[ext_resource type="Script" uid="uid://cttymgm2k6vbd" path="res://Scenes/HitScan_Shooting.gd" id="2_5obxw"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_5obxw"]
 properties/0/path = NodePath(".:player_id")
@@ -210,6 +211,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5202065, -0.07900569)
 [node name="Camera3D" type="Camera3D" parent="Neck/Head/Eyes" unique_id=996973476]
 environment = SubResource("Environment_tq1mk")
 fov = 80.0
+script = ExtResource("2_5obxw")
 
 [node name="IK_Target" type="Node3D" parent="." unique_id=1271152205]
 
@@ -470,6 +472,7 @@ theme_override_font_sizes/font_size = 30
 text = "Exit Game"
 
 [node name="RoleSelect" type="Control" parent="." unique_id=1003189478]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
