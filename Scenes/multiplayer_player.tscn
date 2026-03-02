@@ -1,7 +1,7 @@
 [gd_scene format=4 uid="uid://dfmmvxqef4b6b"]
 
 [ext_resource type="Script" uid="uid://c7ojjiwt8b8cy" path="res://Script/multiplayer_controller.gd" id="1_tq1mk"]
-[ext_resource type="Script" uid="uid://cttymgm2k6vbd" path="res://Scenes/HitScan_Shooting.gd" id="2_5obxw"]
+[ext_resource type="Script" uid="uid://cttymgm2k6vbd" path="res://Script/HitScan_Shooting.gd" id="2_5obxw"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_5obxw"]
 properties/0/path = NodePath(".:player_id")
