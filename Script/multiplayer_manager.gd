@@ -11,6 +11,9 @@ var error
 var player_count = 0
 var players_ready = false
 var ready_client_count = 0
+var has_timer_started
+var timer = Timer.new()
+var timer_created = false
 
 #func _ready() -> void:
 	#_get_spawn_node().spawn_function = _spawn_player
@@ -72,25 +75,24 @@ func _new_peer_data(id: int):
 		"name": str(id),
 		"role_properties": {}
 	}
-	if id != 1:
-		_sync_role_counts.rpc_id(id, role_counts)
+	_sync_role_counts.rpc_id(id, role_counts)
 
 # Instantiates a player scene and adds it to the world
+@rpc("any_peer", "call_local")
 func _add_player_to_game(id: int, role: Dictionary):
 	if not players.has(id):
 		_new_peer_data(id)
 	players[id]["role_properties"] = role
 
 
+@rpc("any_peer", "call_local")
 func _start_game():
 	if players_ready:
 		_change_scene.rpc()
 
+
+@rpc("call_local")
 func _do_spawn():
-	#var spawn_node = _get_spawn_node()
-	#while spawn_node ==  null:
-		#await get_tree().process_frame
-		#spawn_node = _get_spawn_node()
 	print("spawning")
 	
 	_get_spawn_node().spawn_function = _spawn_player
@@ -165,6 +167,7 @@ func _update_role_count(role: String, count: int):
 	role_count_changed.emit(role, role_counts[role])
 	if role_counts["ready"] == 2:
 		players_ready = true
+	_countdown(role_counts["ready"])
 signal role_count_changed(role, count)
 
 @rpc("authority")
@@ -178,6 +181,7 @@ func _change_scene():
 	get_tree().change_scene_to_file("res://Scenes/Main.tscn")
 	await get_tree().process_frame
 	await get_tree().process_frame
+	_on_client_ready.rpc()
 
 @rpc("any_peer")
 func _on_client_ready():
@@ -185,4 +189,18 @@ func _on_client_ready():
 	ready_client_count += 1
 	print(ready_client_count)
 	if ready_client_count == 2:
-		_do_spawn()
+		_do_spawn().rpc()
+		
+@rpc("any_peer", "call_local")
+func _countdown(count):
+	#if not is_multiplayer_authority(): return
+	if not has_timer_started and not timer_created:
+		add_child(timer)
+		timer.connect("timeout", _change_scene)
+		timer.one_shot = true
+		timer_created = true
+	if count == 2:
+		has_timer_started = true
+		timer.start(1)
+	else:
+		timer.stop()

@@ -112,7 +112,6 @@ func _ready() -> void:
 	#MultiplayerManager.role_count_changed.connect(_on_role_count_changed)
 	#if not is_multiplayer_authority():
 		#role_select_menu.visible = false
-	
 	if is_multiplayer_authority():
 		camera_3d.current = true
 		head_mesh.visible = false # Hide own head to prevent clipping into camera
@@ -342,7 +341,7 @@ func _on_start_screen_button_pressed() -> void:
 	MultiplayerManager.rpc("_remove_player_request")
 	get_tree().change_scene_to_file("res://Scenes/Main.tscn")
 
-@rpc("any_peer","call_local", "reliable")
+@rpc("any_peer","call_local","reliable")
 func _sync_material_change(new_index: int):
 	material_index = new_index
 	if material_index <= 1:

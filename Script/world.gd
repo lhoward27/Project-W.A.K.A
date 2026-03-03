@@ -11,8 +11,9 @@ extends Node3D
 
 
 func _ready() -> void:
-	print("ready")
-	MultiplayerManager.rpc_id(1, "_on_client_ready")
+	pass
+	#print("ready")
+	#MultiplayerManager.rpc("_on_client_ready")
 
 
 ## Start hosting a multiplayer session and remove the start screen

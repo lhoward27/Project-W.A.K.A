@@ -133,6 +133,9 @@ func _on_ready_up_button_toggled(toggled_on: bool) -> void:
 			ready_up_button.text = "Ready Up"
 			count = -1
 		MultiplayerManager.rpc("_update_role_count", "ready", count)
+		MultiplayerManager.rpc("_add_player_to_game", multiplayer.get_unique_id(), _set_player_properties())
+		#MultiplayerManager._add_player_to_game(multiplayer.get_unique_id(), _set_player_properties())
+
 	else:
 		ready_up_button.button_pressed = false
 
@@ -215,9 +218,9 @@ func _update_role_counter(count, button, label):
 	
 
 func _game_start():
-	MultiplayerManager._add_player_to_game(multiplayer.get_unique_id(), _set_player_properties())
+	pass
 	#if not is_multiplayer_authority(): return
-	MultiplayerManager._start_game()
+	#MultiplayerManager._start_game()
 	#_set_player_properties()
 	#Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	#var spawn_point_nodes = {
