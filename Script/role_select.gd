@@ -37,7 +37,7 @@ var role_overfilled = false
 var timer = Timer.new()
 var has_timer_started = false
 
-var role_index = 0
+var role_name = 0
 @export var player_spawn_index := 0
 @export var player_id := 1:
 	set(id):
@@ -67,31 +67,36 @@ func _process(_delta: float) -> void:
 func _set_player_properties():
 	#if not is_multiplayer_authority(): return
 	match role_properties:
-		"assault":
-			rpc("_sync_material_change", 0)
-			rpc("_sync_material_change", 2)
-			role_index = "survivors"
-			player_spawn_index = 0
-		"medic":
-			rpc("_sync_material_change", 0)
-			rpc("_sync_material_change", 3)
-			role_index = "survivors"
-			player_spawn_index = 1
+		"assault": return {
+			"role": "asault",
+			"body_material": 0,
+			"head_material": 2,
+			"role_group": "survivors",
+			"player_spawn_index": 0
+			}
+		"medic": return {
+			"role": "medic",
+			"body_material": 0,
+			"head_material": 3,
+			"role_group": "survivors",
+			"player_spawn_index": 1
+			}
 		"defender":
 			rpc("_sync_material_change", 0)
 			rpc("_sync_material_change", 4)
-			role_index = "survivors"
+			role_name = "survivors"
 			player_spawn_index = 2
 		"trapper":
 			rpc("_sync_material_change", 0)
 			rpc("_sync_material_change", 5)
-			role_index = "survivors"
+			role_name = "survivors"
 			player_spawn_index = 3
 		"waka":
 			rpc("_sync_material_change", 1)
 			rpc("_sync_material_change", 6)
-			role_index = "waka"
+			role_name = "waka"
 			player_spawn_index = randi_range(0,3)
+
 
 func _on_start_screen_button_pressed() -> void:
 	MultiplayerManager.rpc("_remove_player_request")
@@ -99,78 +104,23 @@ func _on_start_screen_button_pressed() -> void:
 
 func _on_assault_button_toggled(_toggled_on: bool) -> void:
 	#if not is_multiplayer_authority(): return
-	var count
-	if role_chosen == 1:
-		ready_up_button.button_pressed = false
-		role_chosen = 0
-		count = -1
-		MultiplayerManager.rpc("_update_role_count", "assault", count)
-		return
-	if role_chosen == 0:
-		role_chosen = 1
-		count = 1
-		MultiplayerManager.rpc("_update_role_count", "assault", count)
-		role_properties = "assault"
+	_update_role_selection("assault", 1)
 
 func _on_medic_button_toggled(_toggled_on: bool) -> void:
 	#if not is_multiplayer_authority(): return
-	var count
-	if role_chosen == 2:
-		ready_up_button.button_pressed = false
-		role_chosen = 0
-		count = -1
-		MultiplayerManager.rpc("_update_role_count", "medic", count)
-		return
-	if role_chosen == 0:
-		role_chosen = 2
-		count = 1
-		MultiplayerManager.rpc("_update_role_count", "medic", count)
-		role_properties = "medic"
+	_update_role_selection("medic", 2)
 
 func _on_defender_button_toggled(_toggled_on: bool) -> void:
 	#if not is_multiplayer_authority(): return
-	var count
-	if role_chosen == 3:
-		ready_up_button.button_pressed = false
-		role_chosen = 0
-		count = -1
-		MultiplayerManager.rpc("_update_role_count", "defender", count)
-		return
-	if role_chosen == 0:
-		role_chosen = 3
-		count = 1
-		MultiplayerManager.rpc("_update_role_count", "defender", count)
-		role_properties = "defender"
+	_update_role_selection("defender", 3)
 
 func _on_trapper_button_toggled(_toggled_on: bool) -> void:
 	#if not is_multiplayer_authority(): return
-	var count
-	if role_chosen == 4:
-		ready_up_button.button_pressed = false
-		role_chosen = 0
-		count = -1
-		MultiplayerManager.rpc("_update_role_count", "trapper", count)
-		return
-	if role_chosen == 0:
-		role_chosen = 4
-		count = 1
-		MultiplayerManager.rpc("_update_role_count", "trapper", count)
-		role_properties = "trapper"
+	_update_role_selection("trapper", 4)
 
 func _on_waka_select_button_toggled(_toggled_on: bool) -> void:
 	#if not is_multiplayer_authority(): return
-	var count
-	if role_chosen == 5:
-		ready_up_button.button_pressed = false
-		role_chosen = 0
-		count = -1
-		MultiplayerManager.rpc("_update_role_count", "waka", count)
-		return
-	if role_chosen == 0:
-		role_chosen = 5
-		count = 1
-		MultiplayerManager.rpc("_update_role_count", "waka", count)
-		role_properties = "waka"
+	_update_role_selection("waka", 5)
 
 func _on_ready_up_button_toggled(toggled_on: bool) -> void:
 	#if not is_multiplayer_authority(): return
@@ -186,75 +136,32 @@ func _on_ready_up_button_toggled(toggled_on: bool) -> void:
 	else:
 		ready_up_button.button_pressed = false
 
+func _update_role_selection(role: String, role_index: int):
+	var count
+	if role_chosen == role_index:
+		ready_up_button.button_pressed = false
+		role_chosen = 0
+		count = -1
+		MultiplayerManager.rpc("_update_role_count", role, count)
+		return
+	if role_chosen == 0:
+		role_chosen = role_index
+		count = 1
+		MultiplayerManager.rpc("_update_role_count", role, count)
+		role_properties = role
+
 func _on_role_count_changed(role, count):
 	#if not is_multiplayer_authority(): return
 	if role == "assault":
-		assault_button_label.text = str(count)
-		var new_stylebox_normal = assault_button.get_theme_stylebox("normal").duplicate()
-		if count > 1:
-			new_stylebox_normal.bg_color = Color("6e0a09")
-			role_overfilled = true
-		elif count == 1:
-			new_stylebox_normal.bg_color = Color("0d5021")
-			role_overfilled = false
-		else:
-			new_stylebox_normal.bg_color = Color("1c1c1c99")
-		assault_button.add_theme_stylebox_override("normal", new_stylebox_normal)
-		assault_button.add_theme_stylebox_override("pressed", new_stylebox_normal)
-		
+		_update_role_counter(count, assault_button, assault_button_label)
 	if role == "medic":
-		medic_button_label.text = str(count)
-		var new_stylebox_normal = medic_button.get_theme_stylebox("normal").duplicate()
-		if count > 1:
-			new_stylebox_normal.bg_color = Color("6e0a09")
-			role_overfilled = true
-		elif count == 1:
-			new_stylebox_normal.bg_color = Color("0d5021")
-			role_overfilled = false
-		else:
-			new_stylebox_normal.bg_color = Color("1c1c1c99")
-		medic_button.add_theme_stylebox_override("normal", new_stylebox_normal)
-		medic_button.add_theme_stylebox_override("pressed", new_stylebox_normal)
-		
+		_update_role_counter(count, medic_button, medic_button_label)
 	if role == "defender":
-		defender_button_label.text = str(count)
-		var new_stylebox_normal = defender_button.get_theme_stylebox("normal").duplicate()
-		if count > 1:
-			new_stylebox_normal.bg_color = Color("6e0a09")
-			role_overfilled = true
-		elif count == 1:
-			new_stylebox_normal.bg_color = Color("0d5021")
-			role_overfilled = false
-		else:
-			new_stylebox_normal.bg_color = Color("1c1c1c99")
-		defender_button.add_theme_stylebox_override("normal", new_stylebox_normal)
-		defender_button.add_theme_stylebox_override("pressed", new_stylebox_normal)
+		_update_role_counter(count, defender_button, defender_button_label)
 	if role == "trapper":
-		trapper_button_label.text = str(count)
-		var new_stylebox_normal = trapper_button.get_theme_stylebox("normal").duplicate()
-		if count > 1:
-			new_stylebox_normal.bg_color = Color("6e0a09")
-			role_overfilled = true
-		elif count == 1:
-			new_stylebox_normal.bg_color = Color("0d5021")
-			role_overfilled = false
-		else:
-			new_stylebox_normal.bg_color = Color("1c1c1c99")
-		trapper_button.add_theme_stylebox_override("normal", new_stylebox_normal)
-		trapper_button.add_theme_stylebox_override("pressed", new_stylebox_normal)
+		_update_role_counter(count, trapper_button, trapper_button_label)
 	if role == "waka":
-		waka_button_label.text = str(count)
-		var new_stylebox_normal = waka_select_button.get_theme_stylebox("normal").duplicate()
-		if count > 1:
-			new_stylebox_normal.bg_color = Color("6e0a09")
-			role_overfilled = true
-		elif count == 1:
-			new_stylebox_normal.bg_color = Color("0d5021")
-			role_overfilled = false
-		else:
-			new_stylebox_normal.bg_color = Color("1c1c1c99")
-		waka_select_button.add_theme_stylebox_override("normal", new_stylebox_normal)
-		waka_select_button.add_theme_stylebox_override("pressed", new_stylebox_normal)
+		_update_role_counter(count, waka_select_button, waka_button_label)
 	if role == "ready":
 		ready_button_label.text = str(count)
 		var new_stylebox_normal = ready_up_button.get_theme_stylebox("normal").duplicate()
@@ -282,18 +189,35 @@ func _countdown(count):
 	else:
 		timer.stop()
 		$CountdownLabel.visible = false
+#
+func _update_role_counter(count, button, label):
+	label.text = str(count)
+	var new_stylebox_normal = button.get_theme_stylebox("normal").duplicate()
+	if count > 1:
+		new_stylebox_normal.bg_color = Color("6e0a09")
+		role_overfilled = true
+	elif count == 1:
+		new_stylebox_normal.bg_color = Color("0d5021")
+		role_overfilled = false
+	else:
+		new_stylebox_normal.bg_color = Color("1c1c1c99")
+	button.add_theme_stylebox_override("normal", new_stylebox_normal)
+	button.add_theme_stylebox_override("pressed", new_stylebox_normal)
 
-func _get_unique_id():
-	var key_array: Array = MultiplayerManager.players.keys()
-	if key_array.size() == 0:
-		return 1
-	var last_key = key_array[-1]
-	return MultiplayerManager.players[last_key].player_id
+
+#func _get_unique_id():
+	#var key_array: Array = MultiplayerManager.players.keys()
+	#if key_array.size() == 0:
+		#return 1
+	#else:
+		#var last_key = key_array[-1]
+		#return MultiplayerManager.players[last_key].player_id
 	
 
 func _game_start():
-	MultiplayerManager._add_player_to_game(_get_unique_id())
+	MultiplayerManager._add_player_to_game(multiplayer.get_unique_id(), _set_player_properties())
 	#if not is_multiplayer_authority(): return
+	MultiplayerManager._start_game()
 	#_set_player_properties()
 	#Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	#var spawn_point_nodes = {
