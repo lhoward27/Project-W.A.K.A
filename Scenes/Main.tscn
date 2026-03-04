@@ -1,12 +1,7 @@
 [gd_scene format=4 uid="uid://b5m6l3hj8a28g"]
 
-[ext_resource type="Texture2D" uid="uid://by6b1ng8lw46q" path="res://assets/textures/dev/grids/Dark/texture_07.png" id="1_idj7w"]
 [ext_resource type="Script" uid="uid://dyjtmhqf4umcp" path="res://Script/world.gd" id="1_kln2b"]
 [ext_resource type="Texture2D" uid="uid://d3b2las2qe285" path="res://assets/hdris/kloofendal_48d_partly_cloudy_puresky_2k.hdr" id="2_kln2b"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rgh2o"]
-albedo_texture = ExtResource("1_idj7w")
-uv1_triplanar = true
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_pbw6q"]
 panorama = ExtResource("2_kln2b")
@@ -106,33 +101,9 @@ data = PackedVector3Array(50, -1, 48.718, 50, 1, 51.282097, 50, 1, 48.718, 50, -
 
 [sub_resource type="Animation" id="Animation_idj7w"]
 length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("StartScreen/VBoxContainer/InputError:self_modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
 
 [sub_resource type="Animation" id="Animation_rgh2o"]
 resource_name = "text_fade"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("StartScreen/VBoxContainer/InputError:self_modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.7, 1),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_rgh2o"]
 _data = {
@@ -142,89 +113,6 @@ _data = {
 
 [node name="World" type="Node3D" unique_id=364456515]
 script = ExtResource("1_kln2b")
-debug_mode = true
-
-[node name="Stage" type="Node3D" parent="." unique_id=713326975]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -68.81575)
-visible = false
-
-[node name="CSGBox3D" type="CSGBox3D" parent="Stage" unique_id=1728645710]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
-use_collision = true
-size = Vector3(20, 1, 20)
-material = SubResource("StandardMaterial3D_rgh2o")
-
-[node name="CSGBox3D2" type="CSGBox3D" parent="Stage" unique_id=1344004196]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7376, -11.6663)
-use_collision = true
-size = Vector3(20, 1, 20)
-material = SubResource("StandardMaterial3D_rgh2o")
-
-[node name="CSGBox3D3" type="CSGBox3D" parent="Stage" unique_id=845180664]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.0844, 0.086062, 0)
-use_collision = true
-size = Vector3(20, 1, 20)
-material = SubResource("StandardMaterial3D_rgh2o")
-
-[node name="CSGBox3D4" type="CSGBox3D" parent="Stage" unique_id=1689868318]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.1584, 0.983532, -2.98511)
-use_collision = true
-size = Vector3(20, 1, 20)
-material = SubResource("StandardMaterial3D_rgh2o")
-
-[node name="CSGBox3D5" type="CSGBox3D" parent="Stage" unique_id=796455192]
-transform = Transform3D(1.6203, 0.21369, -0.139105, -0.292574, 1.37755, -0.123489, 0.231922, 0.24488, 0.816063, -11.9874, 0.851878, -8.01896)
-use_collision = true
-size = Vector3(20, 1, 20)
-material = SubResource("StandardMaterial3D_rgh2o")
-
-[node name="CSGBox3D6" type="CSGBox3D" parent="Stage" unique_id=39272718]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.76253, -28.9337)
-use_collision = true
-size = Vector3(20, 1, 15.1577)
-material = SubResource("StandardMaterial3D_rgh2o")
-
-[node name="CSGBox3D7" type="CSGBox3D" parent="Stage" unique_id=374005354]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -6.02095, -21.1975)
-use_collision = true
-size = Vector3(20, 1, 15.1577)
-material = SubResource("StandardMaterial3D_rgh2o")
-
-[node name="CSGBox3D8" type="CSGBox3D" parent="Stage" unique_id=714485020]
-transform = Transform3D(1, 0, 0, 0, -1, -8.74228e-08, 0, 8.74228e-08, -1, -0.303, 1.74779, -26.7142)
-use_collision = true
-size = Vector3(3.3291, 1, 3.63501)
-material = SubResource("StandardMaterial3D_rgh2o")
-
-[node name="CSGBox3D9" type="CSGBox3D" parent="Stage" unique_id=1293359148]
-transform = Transform3D(1, 0, 0, 0, -1, -8.74228e-08, 0, 8.74228e-08, -1, 3.35365, 1.74779, -31.54)
-use_collision = true
-size = Vector3(3.3291, 1, 3.63501)
-material = SubResource("StandardMaterial3D_rgh2o")
-
-[node name="CSGBox3D10" type="CSGBox3D" parent="Stage" unique_id=466837602]
-transform = Transform3D(1, 0, 0, 0, -1, -8.74228e-08, 0, 8.74228e-08, -1, -0.546872, 1.74779, -36.4591)
-use_collision = true
-size = Vector3(3.3291, 1, 3.63501)
-material = SubResource("StandardMaterial3D_rgh2o")
-
-[node name="CSGBox3D11" type="CSGBox3D" parent="Stage" unique_id=1881291309]
-transform = Transform3D(1, 0, 0, 0, -1, -8.74228e-08, 0, 8.74228e-08, -1, -4.97357, 2.59295, -32.52)
-use_collision = true
-size = Vector3(3.3291, 1, 3.63501)
-material = SubResource("StandardMaterial3D_rgh2o")
-
-[node name="CSGBox3D12" type="CSGBox3D" parent="Stage" unique_id=1063028373]
-transform = Transform3D(1, 0, 0, 0, -1, -8.74228e-08, 0, 8.74228e-08, -1, -4.97357, 3.17843, -26.2962)
-use_collision = true
-size = Vector3(3.3291, 1, 3.63501)
-material = SubResource("StandardMaterial3D_rgh2o")
-
-[node name="CSGBox3D13" type="CSGBox3D" parent="Stage" unique_id=435693711]
-transform = Transform3D(0.738543, -0.201103, 0.583872, -0.00556447, -0.68299, -0.354868, 0.708329, 0.204316, -0.611565, -15.7338, 0.242392, -24.6201)
-use_collision = true
-size = Vector3(2.68555, 1, 22.5665)
-material = SubResource("StandardMaterial3D_rgh2o")
 
 [node name="Env" type="Node3D" parent="." unique_id=1797497390]
 
@@ -264,70 +152,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2944329, 6, -2.1475246)
 light_energy = 0.5
 omni_range = 9.634009
 
+[node name="DecalDump" type="Node3D" parent="." unique_id=17750335]
+
 [node name="Players" type="Node3D" parent="." unique_id=130084441]
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="Players" unique_id=1448362948]
 _spawnable_scenes = PackedStringArray("uid://dfmmvxqef4b6b")
 spawn_path = NodePath("..")
 spawn_limit = 5
-
-[node name="StartScreen" type="Control" parent="." unique_id=1497430148]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -1.0
-offset_bottom = -1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="ColorRect" type="ColorRect" parent="StartScreen" unique_id=863453423]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.2159017, 0.21590173, 0.2159017, 1)
-
-[node name="VBoxContainer" type="VBoxContainer" parent="StartScreen" unique_id=1810941608]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -69.577515
-offset_top = -70.182495
-offset_right = 69.577515
-offset_bottom = 70.182495
-grow_horizontal = 2
-grow_vertical = 2
-alignment = 1
-
-[node name="HostButton" type="Button" parent="StartScreen/VBoxContainer" unique_id=1355824331]
-layout_mode = 2
-theme_override_font_sizes/font_size = 30
-text = "Host Game"
-
-[node name="JoinButton" type="Button" parent="StartScreen/VBoxContainer" unique_id=43405097]
-layout_mode = 2
-theme_override_font_sizes/font_size = 30
-text = "Join Game"
-
-[node name="ServerIPLine" type="LineEdit" parent="StartScreen/VBoxContainer" unique_id=1937879576]
-layout_mode = 2
-placeholder_text = "IP Address Here..."
-max_length = 15
-
-[node name="InputError" type="Label" parent="StartScreen/VBoxContainer" unique_id=2124710726]
-layout_mode = 2
-text = "Invalid IP Address..."
-
-[node name="ExitButton" type="Button" parent="StartScreen/VBoxContainer" unique_id=966875254]
-layout_mode = 2
-theme_override_font_sizes/font_size = 30
-text = "Exit Game"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1603832741]
 libraries/ = SubResource("AnimationLibrary_rgh2o")
@@ -360,8 +192,3 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37, 0, 46)
 
 [node name="SpawnLocation4" type="Node3D" parent="WAKASpawnPoints" unique_id=870115678]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, 0, 46)
-
-[connection signal="pressed" from="StartScreen/VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
-[connection signal="pressed" from="StartScreen/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
-[connection signal="text_changed" from="StartScreen/VBoxContainer/ServerIPLine" to="." method="_on_server_ip_line_text_changed"]
-[connection signal="pressed" from="StartScreen/VBoxContainer/ExitButton" to="." method="_on_exit_button_pressed"]

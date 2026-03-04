@@ -17,26 +17,17 @@ extends CharacterBody3D
 @onready var flashlight: SpotLight3D = $littleguyywithlb/Armature/Skeleton3D/RightHandAttachment/Flashlight/SpotLight3D
 @onready var light_bulb: MeshInstance3D = $littleguyywithlb/Armature/Skeleton3D/RightHandAttachment/Flashlight/SpotLight3D/LightBulb
 @onready var pause_menu: Control = $PauseMenu
-@onready var role_select_menu: Control = $RoleSelect
-@onready var assault_button_label: Label = $RoleSelect/RoleSelectButtons/SurvivorSelectButtons/AssaultButton/CurrentSelected
-@onready var medic_button_label: Label = $RoleSelect/RoleSelectButtons/SurvivorSelectButtons/MedicButton/CurrentSelected
-@onready var defender_button_label: Label = $RoleSelect/RoleSelectButtons/SurvivorSelectButtons/DefenderButton/CurrentSelected
-@onready var trapper_button_label: Label = $RoleSelect/RoleSelectButtons/SurvivorSelectButtons/TrapperButton/CurrentSelected
-@onready var waka_button_label: Label = $RoleSelect/RoleSelectButtons/WAKASelectButton/CurrentSelected
-@onready var ready_button_label: Label = $RoleSelect/RoleSelectButtons/ReadyUpButton/CurrentSelected
-@onready var assault_button: Button = $RoleSelect/RoleSelectButtons/SurvivorSelectButtons/AssaultButton
-@onready var medic_button: Button = $RoleSelect/RoleSelectButtons/SurvivorSelectButtons/MedicButton
-@onready var defender_button: Button = $RoleSelect/RoleSelectButtons/SurvivorSelectButtons/DefenderButton
-@onready var trapper_button: Button = $RoleSelect/RoleSelectButtons/SurvivorSelectButtons/TrapperButton
-@onready var waka_select_button: Button = $RoleSelect/RoleSelectButtons/WAKASelectButton
-@onready var ready_up_button: Button = $RoleSelect/RoleSelectButtons/ReadyUpButton
 
-const BLUE_PLAYER_MAT = preload("uid://van6okct3p66")
-const GREEN_HEAD_MAT = preload("uid://cmex25x32muqy")
-const LIGHT_BLUE_HEAD_MAT = preload("uid://cc1v0vsokxj40")
-const ORANGE_HEAD_MAT = preload("uid://b4cpqxwmwox0a")
-const RED_PLAYER_MAT = preload("uid://fwb3q3xqa28w")
-const YELLOW_HEAD_MAT = preload("uid://cqgryetal08l")
+
+@export var player_materials = [
+preload("uid://van6okct3p66"),  #blue player material
+preload("uid://fwb3q3xqa28w"),  #red player material
+preload("uid://cmex25x32muqy"), #green head material
+preload("uid://cc1v0vsokxj40"), #light blue head material
+preload("uid://b4cpqxwmwox0a"), #orange head material
+preload("uid://cqgryetal08l"),   #yellow head material
+preload("uid://fwb3q3xqa28w")  #red player material
+]
 
 # Speed Vars
 var current_speed = 5.0
@@ -94,30 +85,36 @@ var shoulder_bone_id
 var ik_update_counter = 0
 const IK_UPDATE_INTERVAL = 2
 
-var current_count = 0
-@export var role_count: Dictionary
-var pressed = false
 var is_paused = false
-var role_chosen = 0
-var role_properties
 
-var role_index = 0
-@export var player_spawn_index := 0
 @export var player_id := 1:
 	set(id):
 		player_id = id
 
+@export var role_properties: Dictionary:
+	set(role):
+		role_properties = role
+
+		
+
+@export var material_index: int = 0:
+	set(value):
+		if material_index == value:
+			return
+		material_index = value
+		if is_node_ready():
+			if value <= 1:
+				_apply_material_change(body_mesh)
+			else:
+				_apply_material_change(head_mesh)
+
 func _ready() -> void:
-	MultiplayerManager.role_count_changed.connect(_on_role_count_changed)
-	if not is_multiplayer_authority():
-		role_select_menu.visible = false
-	
 	if is_multiplayer_authority():
 		camera_3d.current = true
 		head_mesh.visible = false # Hide own head to prevent clipping into camera
 		pause_menu.visible = false
 		self.set_collision_mask_value(1, false)
-		
+		_set_spawn_location(role_properties["role_group"], role_properties["player_spawn_index"])
 	
 	# Initialize IK for arm aiming
 	right_arm_ik.start()
@@ -131,7 +128,9 @@ func _ready() -> void:
 	if not is_multiplayer_authority():
 		player_synchronizer.synchronized.connect(_update_ik_pose)
 		set_process_unhandled_input(false)
-
+	await get_tree().process_frame
+	rpc("_sync_material_change", role_properties["body_material"])
+	rpc("_sync_material_change", role_properties["head_material"])
 
 func _process(_delta: float) -> void:
 	if is_multiplayer_authority():
@@ -266,8 +265,8 @@ func _physics_process(delta: float) -> void:
 		#animation_player.play("Walk",-1,2)
 	#if sprinting && input_dir != Vector2.ZERO:
 		#animation_player.play("Walk",-1,3.25)
-	
-	move_and_slide()
+	if not is_paused:
+		move_and_slide()
 
 func _unhandled_input(event: InputEvent) -> void:	 
 	if not is_multiplayer_authority(): return
@@ -284,7 +283,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			head.rotation.x = clamp(head.rotation.x,deg_to_rad(-45), deg_to_rad(65))
 	
 	# Toggle Flashlight
-	if event.is_action_pressed("Flashlight"):
+	if event.is_action_pressed("Flashlight") and not is_paused:
 		if flashlight.light_energy > 0:
 			light_bulb.visible = false
 			flashlight.light_energy = 0
@@ -325,36 +324,6 @@ func _update_ik_pose():
 	if not free_looking:
 		ik_target.global_transform = Transform3D(cam_transform.basis, hand_target_pos)
 
-func _set_player_properties():
-	if not is_multiplayer_authority(): return
-	match role_properties:
-		"assault":
-			body_mesh.material_override = BLUE_PLAYER_MAT
-			head_mesh.material_override = GREEN_HEAD_MAT 
-			role_index = "survivors"
-			player_spawn_index = 0
-		"medic":
-			body_mesh.material_override = BLUE_PLAYER_MAT
-			head_mesh.material_override = LIGHT_BLUE_HEAD_MAT
-			role_index = "survivors"
-			player_spawn_index = 1
-		"defender":
-			body_mesh.material_override = BLUE_PLAYER_MAT
-			head_mesh.material_override = ORANGE_HEAD_MAT
-			role_index = "survivors"
-			player_spawn_index = 2
-		"trapper":
-			body_mesh.material_override = BLUE_PLAYER_MAT
-			head_mesh.material_override = YELLOW_HEAD_MAT
-			role_index = "survivors"
-			player_spawn_index = 3
-		"waka":
-			body_mesh.material_override = RED_PLAYER_MAT
-			head_mesh.material_override = RED_PLAYER_MAT
-			role_index = "waka"
-			player_spawn_index = randi_range(0,3)
-
-
 
 func _on_exit_button_pressed() -> void:
 	get_tree().quit()
@@ -366,164 +335,20 @@ func _on_resume_button_pressed() -> void:
 
 func _on_start_screen_button_pressed() -> void:
 	MultiplayerManager.rpc("_remove_player_request")
-	get_tree().change_scene_to_file("res://Scenes/Main.tscn")
+	get_tree().change_scene_to_file("res://Scenes/start_screen.tscn")
 
-func _on_assault_button_toggled(_toggled_on: bool) -> void:
-	if not is_multiplayer_authority(): return
-	var count
-	if role_chosen == 1:
-		role_chosen = 0
-		count = -1
-		MultiplayerManager.rpc("_update_role_count", "assault", count)
-		return
-	if role_chosen == 0:
-		role_chosen = 1
-		count = 1
-		MultiplayerManager.rpc("_update_role_count", "assault", count)
-		role_properties = "assault"
-
-
-func _on_medic_button_toggled(_toggled_on: bool) -> void:
-	if not is_multiplayer_authority(): return
-	var count
-	if role_chosen == 2:
-		role_chosen = 0
-		count = -1
-		MultiplayerManager.rpc("_update_role_count", "medic", count)
-		return
-	if role_chosen == 0:
-		role_chosen = 2
-		count = 1
-		MultiplayerManager.rpc("_update_role_count", "medic", count)
-		role_properties = "medic"
-
-func _on_defender_button_toggled(_toggled_on: bool) -> void:
-	if not is_multiplayer_authority(): return
-	var count
-	if role_chosen == 3:
-		role_chosen = 0
-		count = -1
-		MultiplayerManager.rpc("_update_role_count", "defender", count)
-		return
-	if role_chosen == 0:
-		role_chosen = 3
-		count = 1
-		MultiplayerManager.rpc("_update_role_count", "defender", count)
-		role_properties = "defender"
-
-func _on_trapper_button_toggled(_toggled_on: bool) -> void:
-	if not is_multiplayer_authority(): return
-	var count
-	if role_chosen == 4:
-		role_chosen = 0
-		count = -1
-		MultiplayerManager.rpc("_update_role_count", "trapper", count)
-		return
-	if role_chosen == 0:
-		role_chosen = 4
-		count = 1
-		MultiplayerManager.rpc("_update_role_count", "trapper", count)
-		role_properties = "trapper"
-
-func _on_waka_select_button_toggled(_toggled_on: bool) -> void:
-	if not is_multiplayer_authority(): return
-	var count
-	if role_chosen == 5:
-		role_chosen = 0
-		count = -1
-		MultiplayerManager.rpc("_update_role_count", "waka", count)
-		return
-	if role_chosen == 0:
-		role_chosen = 5
-		count = 1
-		MultiplayerManager.rpc("_update_role_count", "waka", count)
-		role_properties = "waka"
-
-func _on_ready_up_button_toggled(toggled_on: bool) -> void:
-	if not is_multiplayer_authority(): return
-	if toggled_on:
-		ready_up_button.text = "Ready"
+@rpc("any_peer","call_local","reliable")
+func _sync_material_change(new_index: int):
+	material_index = new_index
+	if material_index <= 1:
+		_apply_material_change(body_mesh)
 	else:
-		ready_up_button.text = "Ready Up"
-	var count = 1 if toggled_on else -1
-	MultiplayerManager.rpc("_update_role_count", "ready", count)
+		_apply_material_change(head_mesh)
 
-func _on_role_count_changed(role, count):
-	if not is_multiplayer_authority(): return
-	if role == "assault":
-		assault_button_label.text = str(count)
-		var new_stylebox_normal = assault_button.get_theme_stylebox("normal").duplicate()
-		if count > 1:
-			new_stylebox_normal.bg_color = Color("6e0a09")
-		elif count == 1:
-			new_stylebox_normal.bg_color = Color("0d5021")
-		else:
-			new_stylebox_normal.bg_color = Color("1c1c1c99")
-		assault_button.add_theme_stylebox_override("normal", new_stylebox_normal)
-		assault_button.add_theme_stylebox_override("pressed", new_stylebox_normal)
-		
-	if role == "medic":
-		medic_button_label.text = str(count)
-		var new_stylebox_normal = medic_button.get_theme_stylebox("normal").duplicate()
-		if count > 1:
-			new_stylebox_normal.bg_color = Color("6e0a09")
-		elif count == 1:
-			new_stylebox_normal.bg_color = Color("0d5021")
-		else:
-			new_stylebox_normal.bg_color = Color("1c1c1c99")
-		medic_button.add_theme_stylebox_override("normal", new_stylebox_normal)
-		medic_button.add_theme_stylebox_override("pressed", new_stylebox_normal)
-		
-	if role == "defender":
-		defender_button_label.text = str(count)
-		var new_stylebox_normal = defender_button.get_theme_stylebox("normal").duplicate()
-		if count > 1:
-			new_stylebox_normal.bg_color = Color("6e0a09")
-		elif count == 1:
-			new_stylebox_normal.bg_color = Color("0d5021")
-		else:
-			new_stylebox_normal.bg_color = Color("1c1c1c99")
-		defender_button.add_theme_stylebox_override("normal", new_stylebox_normal)
-		defender_button.add_theme_stylebox_override("pressed", new_stylebox_normal)
-	if role == "trapper":
-		trapper_button_label.text = str(count)
-		var new_stylebox_normal = trapper_button.get_theme_stylebox("normal").duplicate()
-		if count > 1:
-			new_stylebox_normal.bg_color = Color("6e0a09")
-		elif count == 1:
-			new_stylebox_normal.bg_color = Color("0d5021")
-		else:
-			new_stylebox_normal.bg_color = Color("1c1c1c99")
-		trapper_button.add_theme_stylebox_override("normal", new_stylebox_normal)
-		trapper_button.add_theme_stylebox_override("pressed", new_stylebox_normal)
-	if role == "waka":
-		waka_button_label.text = str(count)
-		var new_stylebox_normal = waka_select_button.get_theme_stylebox("normal").duplicate()
-		if count > 1:
-			new_stylebox_normal.bg_color = Color("6e0a09")
-		elif count == 1:
-			new_stylebox_normal.bg_color = Color("0d5021")
-		else:
-			new_stylebox_normal.bg_color = Color("1c1c1c99")
-		waka_select_button.add_theme_stylebox_override("normal", new_stylebox_normal)
-		waka_select_button.add_theme_stylebox_override("pressed", new_stylebox_normal)
-	if role == "ready":
-		ready_button_label.text = str(count)
-		var new_stylebox_normal = ready_up_button.get_theme_stylebox("normal").duplicate()
-		if count < 5:
-			new_stylebox_normal.bg_color = Color("6e0a09")
-		elif count == 5:
-			new_stylebox_normal.bg_color = Color("0d5021")
-			_game_start()
-		#else:
-			#new_stylebox_normal.bg_color = Color("1c1c1c99")
-		ready_up_button.add_theme_stylebox_override("normal", new_stylebox_normal)
-		ready_up_button.add_theme_stylebox_override("pressed", new_stylebox_normal)
-
-func _game_start():
-	if not is_multiplayer_authority(): return
-	_set_player_properties()
-	role_select_menu.visible = false
+func _apply_material_change(mesh):
+	mesh.set_surface_override_material(0, player_materials[material_index])
+	
+func _set_spawn_location(group: String, index: int):
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	var spawn_point_nodes = {
 		"survivors": get_tree().current_scene.get_node("SpawnPoints"),
@@ -533,6 +358,6 @@ func _game_start():
 		"survivors": spawn_point_nodes["survivors"].get_children(),
 		"waka": spawn_point_nodes["waka"].get_children()
 	}
-	var spawn_point_set = spawn_points[role_index]
-	self.global_position = spawn_point_set[player_spawn_index].global_position
+	var spawn_point_set = spawn_points[group]
+	self.global_position = spawn_point_set[index].global_position
 	self.set_collision_mask_value(1, true)

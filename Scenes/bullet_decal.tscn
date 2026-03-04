@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://bytp1njdro0al"]
+
+[ext_resource type="Texture2D" uid="uid://cavyca2tsy6lu" path="res://assets/pacman-512.webp" id="1_fedit"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_q27hx"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mfh3f"]
+transparency = 1
+albedo_color = Color(5.686428, 5.686428, 4.427273, 1)
+albedo_texture = ExtResource("1_fedit")
+
+[node name="BulletDecal" type="Node3D" unique_id=1527370759]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1650957487]
+transform = Transform3D(-0.05, 0, 7.54979e-09, 0, 0.05, 0, -7.54979e-09, 0, -0.05, 0, 0, -0.02)
+mesh = SubResource("QuadMesh_q27hx")
+surface_material_override/0 = SubResource("StandardMaterial3D_mfh3f")
