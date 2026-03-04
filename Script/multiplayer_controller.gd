@@ -109,18 +109,16 @@ var is_paused = false
 				_apply_material_change(head_mesh)
 
 func _ready() -> void:
-	#MultiplayerManager.role_count_changed.connect(_on_role_count_changed)
-	#if not is_multiplayer_authority():
-		#role_select_menu.visible = false
+	await get_tree().process_frame
+	await get_tree().process_frame
+	rpc("_sync_material_change", role_properties["body_material"])
+	rpc("_sync_material_change", role_properties["head_material"])
 	if is_multiplayer_authority():
 		camera_3d.current = true
 		head_mesh.visible = false # Hide own head to prevent clipping into camera
 		pause_menu.visible = false
 		self.set_collision_mask_value(1, false)
-		rpc("_sync_material_change", role_properties["body_material"])
-		rpc("_sync_material_change", role_properties["head_material"])
 		_set_spawn_location(role_properties["role_group"], role_properties["player_spawn_index"])
-		#print(role_properties)
 	
 	# Initialize IK for arm aiming
 	right_arm_ik.start()
@@ -339,7 +337,7 @@ func _on_resume_button_pressed() -> void:
 
 func _on_start_screen_button_pressed() -> void:
 	MultiplayerManager.rpc("_remove_player_request")
-	get_tree().change_scene_to_file("res://Scenes/Main.tscn")
+	get_tree().change_scene_to_file("res://Scenes/start_screen.tscn")
 
 @rpc("any_peer","call_local","reliable")
 func _sync_material_change(new_index: int):
@@ -364,3 +362,4 @@ func _set_spawn_location(group: String, index: int):
 	}
 	var spawn_point_set = spawn_points[group]
 	self.global_position = spawn_point_set[index].global_position
+	self.set_collision_mask_value(1, true)
