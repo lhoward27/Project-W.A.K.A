@@ -320,6 +320,7 @@ theme_override_font_sizes/font_size = 50
 text = "5"
 
 [node name="StartScreenButton" type="Button" parent="." unique_id=345451315]
+visible = false
 layout_mode = 0
 theme_override_font_sizes/font_size = 30
 text = "Main Menu"

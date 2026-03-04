@@ -72,14 +72,12 @@ func _add_player_data(id: int, role: Dictionary):
 @rpc("call_local")
 func _start_game():
 	get_tree().change_scene_to_file("res://Scenes/Main.tscn")
-	#await get_tree().process_frame
-	#await get_tree().process_frame
 	
+	# Check if multiplayer spawner has been fully loaded, only proceed when it has
 	var spawn_node = _get_spawn_node()
 	while spawn_node == null:
 		await get_tree().process_frame
 		spawn_node = _get_spawn_node()
-		
 	
 	#_get_spawn_node().spawn_function = _spawn_player
 	if not multiplayer.is_server(): return
@@ -116,7 +114,7 @@ func _countdown(count):
 		timer_created = true
 		if multiplayer.is_server():
 			timer.connect("timeout", _start_game.rpc)
-	if count == 2:
+	if count == 5:
 		has_timer_started = true
 		timer.start(duration)
 		timer_changed.emit(true, duration)
