@@ -7,17 +7,10 @@ var multiplayer_scene = preload("res://Scenes/multiplayer_player.tscn")
 
 # Tracks active player nodes by their unique Peer ID: { id: Node }
 var players = {}
-var spawned_players = {}
 var error
-var player_count = 0
-var players_ready = false
-var ready_client_count = 0
 var has_timer_started
 var timer = Timer.new()
 var timer_created = false
-
-#func _ready() -> void:
-	#_get_spawn_node().spawn_function = _spawn_player
 
 # Initializes the game as a Server (Host)
 func become_host():
@@ -61,7 +54,6 @@ func join_server(server_ip):
 		return
 	multiplayer.multiplayer_peer = client_peer
 	get_tree().change_scene_to_file("res://Scenes/role_select.tscn")
-	
 
 func _new_peer_data(id: int):
 	players[id] = {
@@ -69,28 +61,43 @@ func _new_peer_data(id: int):
 		"name": str(id),
 		"role_properties": {}
 	}
-	_sync_role_counts.rpc_id(id, role_counts)
+	if id!= 1:
+		_sync_role_counts.rpc_id(id, role_counts)
 
 # Instantiates a player scene and adds it to the world
 @rpc("any_peer", "call_local")
 func _add_player_data(id: int, role: Dictionary):
-	if not players.has(id):
-		_new_peer_data(id)
 	players[id]["role_properties"] = role
 
 @rpc("call_local")
 func _start_game():
 	get_tree().change_scene_to_file("res://Scenes/Main.tscn")
-	await get_tree().process_frame
-	await get_tree().process_frame
+	#await get_tree().process_frame
+	#await get_tree().process_frame
 	
-	_get_spawn_node().spawn_function = _spawn_player
+	var spawn_node = _get_spawn_node()
+	while spawn_node == null:
+		await get_tree().process_frame
+		spawn_node = _get_spawn_node()
+		
+	
+	#_get_spawn_node().spawn_function = _spawn_player
+	if not multiplayer.is_server(): return
+	
 	for player in players:
 		_get_spawn_node().spawn({
 			"id": players[player]["player_id"],
 			"role": players[player]["role_properties"]
 			})
 		print("Player %s joined the game" % players[player].player_id)
+
+# Find the node where player instances will be added
+func _get_spawn_node():
+	var scene = get_tree().current_scene
+	if scene == null: return null
+	var players_node = scene.get_node_or_null("Players")
+	if players_node == null: return null
+	return players_node.get_node_or_null("MultiplayerSpawner")
 
 func _spawn_player(data):
 	var player_to_add = multiplayer_scene.instantiate()
@@ -101,9 +108,44 @@ func _spawn_player(data):
 	players[data.id] = player_to_add
 	return player_to_add
 
-# Find the node where player instances will be added
-func _get_spawn_node():
-	return get_tree().current_scene.get_node("Players").get_node("MultiplayerSpawner")
+func _countdown(count):
+	var duration = 3
+	if not has_timer_started and not timer_created:
+		add_child(timer)
+		timer.one_shot = true
+		timer_created = true
+		if multiplayer.is_server():
+			timer.connect("timeout", _start_game.rpc)
+	if count == 2:
+		has_timer_started = true
+		timer.start(duration)
+		timer_changed.emit(true, duration)
+	else:
+		timer.stop()
+		timer_changed.emit(false, 0)
+
+signal timer_changed(started, duration)
+
+var role_counts = {"assault": 0, "medic": 0, "defender": 0, "trapper": 0, "waka": 0, "ready": 0}
+
+@rpc("any_peer", "call_local")
+func _update_role_count(role: String, count: int):
+	role_counts[role] += count
+	role_count_changed.emit(role, role_counts[role])
+	# Checks if any roles have two players selected, else does countdown to start game
+	var role_counts_array = role_counts.values()
+	role_counts_array.remove_at(-1)
+	if not role_counts_array.has(2):
+		_countdown(role_counts["ready"])
+signal role_count_changed(role, count)
+
+@rpc("authority")
+func _sync_role_counts(counts: Dictionary):
+	role_counts = counts
+	for role in role_counts:
+		role_count_changed.emit(role, role_counts[role])
+
+
 
 func _remove_player_from_game(id: int):
 	if not multiplayer.is_server(): return
@@ -141,32 +183,3 @@ func _cleanup():
 		multiplayer.peer_connected.disconnect(_new_peer_data)
 	if multiplayer.peer_disconnected.is_connected(_remove_player_from_game):
 		multiplayer.peer_disconnected.disconnect(_remove_player_from_game)
-
-var role_counts = {"assault": 0, "medic": 0, "defender": 0, "trapper": 0, "waka": 0, "ready": 0}
-
-@rpc("any_peer", "call_local")
-func _update_role_count(role: String, count: int):
-	role_counts[role] += count
-	role_count_changed.emit(role, role_counts[role])
-	if multiplayer.is_server():
-		_countdown(role_counts["ready"])
-signal role_count_changed(role, count)
-
-@rpc("authority")
-func _sync_role_counts(counts: Dictionary):
-	role_counts = counts
-	for role in role_counts:
-		role_count_changed.emit(role, role_counts[role])
-
-func _countdown(count):
-	#if not is_multiplayer_authority(): return
-	if not has_timer_started and not timer_created:
-		add_child(timer)
-		timer.connect("timeout", _start_game.rpc)
-		timer.one_shot = true
-		timer_created = true
-	if count == 2:
-		has_timer_started = true
-		timer.start(1)
-	else:
-		timer.stop()

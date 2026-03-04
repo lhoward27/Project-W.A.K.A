@@ -109,10 +109,6 @@ var is_paused = false
 				_apply_material_change(head_mesh)
 
 func _ready() -> void:
-	await get_tree().process_frame
-	await get_tree().process_frame
-	rpc("_sync_material_change", role_properties["body_material"])
-	rpc("_sync_material_change", role_properties["head_material"])
 	if is_multiplayer_authority():
 		camera_3d.current = true
 		head_mesh.visible = false # Hide own head to prevent clipping into camera
@@ -132,7 +128,9 @@ func _ready() -> void:
 	if not is_multiplayer_authority():
 		player_synchronizer.synchronized.connect(_update_ik_pose)
 		set_process_unhandled_input(false)
-
+	await get_tree().process_frame
+	rpc("_sync_material_change", role_properties["body_material"])
+	rpc("_sync_material_change", role_properties["head_material"])
 
 func _process(_delta: float) -> void:
 	if is_multiplayer_authority():
@@ -267,8 +265,8 @@ func _physics_process(delta: float) -> void:
 		#animation_player.play("Walk",-1,2)
 	#if sprinting && input_dir != Vector2.ZERO:
 		#animation_player.play("Walk",-1,3.25)
-	
-	move_and_slide()
+	if not is_paused:
+		move_and_slide()
 
 func _unhandled_input(event: InputEvent) -> void:	 
 	if not is_multiplayer_authority(): return
@@ -285,7 +283,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			head.rotation.x = clamp(head.rotation.x,deg_to_rad(-45), deg_to_rad(65))
 	
 	# Toggle Flashlight
-	if event.is_action_pressed("Flashlight"):
+	if event.is_action_pressed("Flashlight") and not is_paused:
 		if flashlight.light_energy > 0:
 			light_bulb.visible = false
 			flashlight.light_energy = 0

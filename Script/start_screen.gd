@@ -1,6 +1,5 @@
 extends Control
 
-# Nodes
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var input_error: Label = $VBoxContainer/InputError
 

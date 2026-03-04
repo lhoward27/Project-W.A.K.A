@@ -20,7 +20,7 @@ var ray_range: float = 2000.0
 # User input handler
 func _input(event: InputEvent) -> void:
 	# Only react when the "Shoot" action is pressed (Currently Left Click)
-	if event.is_action_pressed("Shoot"):
+	if event.is_action_pressed("Shoot") && Input.mouse_mode == 2:
 		get_camera_collision()
 
 # Main function: shoots a ray from the center of the screen and places a decal where it hits
