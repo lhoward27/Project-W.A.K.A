@@ -1299,7 +1299,7 @@ states/Start/position = Vector2(177, 100)
 "states/Walk Animation/node" = SubResource("AnimationNodeAnimation_7kmab")
 "states/Walk Animation/position" = Vector2(709, 100)
 transitions = ["Idle", "Walk Animation", SubResource("AnimationNodeStateMachineTransition_sxj10"), "Walk Animation", "Idle", SubResource("AnimationNodeStateMachineTransition_r5668"), "Idle", "Crouch Down", SubResource("AnimationNodeStateMachineTransition_y481q"), "Crouch Down", "Crouch Idle", SubResource("AnimationNodeStateMachineTransition_lenjf"), "Walk Animation", "Run Animation", SubResource("AnimationNodeStateMachineTransition_g683q"), "Run Animation", "Walk Animation", SubResource("AnimationNodeStateMachineTransition_5obxw"), "Crouch Idle", "Crouchwalk Animation", SubResource("AnimationNodeStateMachineTransition_a0dua"), "Walk Animation", "Crouchwalk Animation", SubResource("AnimationNodeStateMachineTransition_wl1nn"), "Crouchwalk Animation", "Walk Animation", SubResource("AnimationNodeStateMachineTransition_7kmab"), "Crouchwalk Animation", "Crouch Idle", SubResource("AnimationNodeStateMachineTransition_bqinh"), "Crouch Idle", "Idle", SubResource("AnimationNodeStateMachineTransition_fux7b")]
-graph_offset = Vector2(-89.18486, -152)
+graph_offset = Vector2(-81.18486, 5)
 
 [node name="MultiplayerPlayer" type="CharacterBody3D" unique_id=109561205]
 process_priority = 1
@@ -1568,7 +1568,7 @@ bones/0/name = "spine"
 bones/0/parent = -1
 bones/0/rest = Transform3D(1, 6.217249e-15, 2.384186e-07, -2.8351653e-08, 0.99290437, 0.11891541, -2.3672688e-07, -0.11891541, 0.99290437, -0.0032256898, 1.846342, -0.0757549)
 bones/0/enabled = true
-bones/0/position = Vector3(-0.0032256898, 1.846342, -0.0757549)
+bones/0/position = Vector3(-0.0032256888, 1.1715534, -0.07575491)
 bones/0/rotation = Quaternion(-0.059563454, 1.1899765e-07, -7.100522e-09, 0.99822456)
 bones/0/scale = Vector3(1, 1, 1)
 bones/1/name = "spine.001"
@@ -1735,7 +1735,7 @@ use_magnet = true
 target_node = NodePath("../../../../IK_Target/AimOffset")
 
 [node name="RightHandAttachment" type="BoneAttachment3D" parent="PlayerModel/Armature/Skeleton3D" unique_id=891611549]
-transform = Transform3D(1, 1.1251524e-07, -2.0040908e-07, -9.6217086e-08, -1.2335404e-07, 0.9999998, 9.106179e-08, -0.99999976, -7.045324e-08, -0.48425803, 1.5606635, -3.4219192e-07)
+transform = Transform3D(1, 1.1251524e-07, -2.0040908e-07, -9.6217086e-08, -1.2335404e-07, 0.9999998, 9.106179e-08, -0.99999976, -7.045324e-08, -0.48425803, 0.8858747, -3.4219192e-07)
 bone_name = "shoulder.L.002_leaf"
 bone_idx = 9
 

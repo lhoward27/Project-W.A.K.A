@@ -89,9 +89,15 @@ const IK_UPDATE_INTERVAL = 2
 
 var is_paused = false
 
+@export var player_id := 1:
+	set(id):
+		player_id = id
+
 @export var role_properties: Dictionary:
 	set(role):
 		role_properties = role
+
+		
 
 @export var material_index: int = 0:
 	set(value):
