@@ -23,7 +23,7 @@ func _on_join_button_pressed() -> void:
 			input_error.visible = true
 			animation_player.play("text_fade", 0.5)
 		else:
-			get_tree().change_scene_to_file("res://Scenes/role_select.tscn")
+			pass
 	#This is only for local testing
 	elif debug_mode:
 		MultiplayerManager.join_server("localhost")

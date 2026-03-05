@@ -114,7 +114,7 @@ func _countdown(count):
 		timer_created = true
 		if multiplayer.is_server():
 			timer.connect("timeout", _start_game.rpc)
-	if count == 5:
+	if count == 2:
 		has_timer_started = true
 		timer.start(duration)
 		timer_changed.emit(true, duration)
