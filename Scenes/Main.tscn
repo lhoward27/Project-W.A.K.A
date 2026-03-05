@@ -134,6 +134,7 @@ skeleton = NodePath("")
 surface_material_override/0 = SubResource("StandardMaterial3D_v1gob")
 
 [node name="roof" type="MeshInstance3D" parent="Maze" unique_id=1511427614]
+visible = false
 mesh = SubResource("ArrayMesh_jw32o")
 skeleton = NodePath("")
 

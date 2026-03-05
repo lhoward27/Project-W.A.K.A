@@ -8,16 +8,17 @@ extends CharacterBody3D
 @onready var ray_cast_3d: RayCast3D = $RayCast3D # Used to check for ceiling when uncrouching
 @onready var camera_3d: Camera3D = $Neck/Head/Eyes/Camera3D
 @onready var eyes: Node3D = $Neck/Head/Eyes
-@onready var body_mesh: MeshInstance3D = $littleguyywithlb/Armature/Skeleton3D/body
-@onready var head_mesh: MeshInstance3D = $littleguyywithlb/Armature/Skeleton3D/head
+@onready var body_mesh: MeshInstance3D = $PlayerModel/Armature/Skeleton3D/body
+@onready var head_mesh: MeshInstance3D = $PlayerModel/Armature/Skeleton3D/head
+@onready var player_animation: AnimationTree = $AnimationTree
+@onready var animation_state_machine = player_animation["parameters/playback"]
 @onready var ik_target: Node3D = $IK_Target
-@onready var right_arm_ik: SkeletonIK3D = $littleguyywithlb/Armature/Skeleton3D/RightArm_IK
-@onready var skeleton: Skeleton3D = $littleguyywithlb/Armature/Skeleton3D
+@onready var right_arm_ik: SkeletonIK3D = $PlayerModel/Armature/Skeleton3D/RightArm_IK
+@onready var skeleton: Skeleton3D = $PlayerModel/Armature/Skeleton3D
 @onready var player_synchronizer: MultiplayerSynchronizer = $PlayerSynchronizer
-@onready var flashlight: SpotLight3D = $littleguyywithlb/Armature/Skeleton3D/RightHandAttachment/Flashlight/SpotLight3D
-@onready var light_bulb: MeshInstance3D = $littleguyywithlb/Armature/Skeleton3D/RightHandAttachment/Flashlight/SpotLight3D/LightBulb
+@onready var flashlight: SpotLight3D = $PlayerModel/Armature/Skeleton3D/RightHandAttachment/Flashlight/SpotLight3D
+@onready var light_bulb: MeshInstance3D = $PlayerModel/Armature/Skeleton3D/RightHandAttachment/Flashlight/SpotLight3D/LightBulb
 @onready var pause_menu: Control = $PauseMenu
-
 
 @export var player_materials = [
 preload("uid://van6okct3p66"),  #blue player material
@@ -36,7 +37,7 @@ var current_speed = 5.0
 @export var crouching_speed = 3.0
 @export var mouse_sens = 0.4
 var lerp_speed = 25
-var crouch_lerp_speed = 10
+var crouch_lerp_speed = 8
 var free_look_lerp_speed = 10
 var slide_free_look_lerp_speed = 10
 var head_bobbing_lerp_speed = 10
@@ -45,6 +46,7 @@ var head_bobbing_lerp_speed = 10
 const jump_velocity = 6.5
 var direction = Vector3()
 var crouching_depth = -0.5
+var crouchind_forward_depth = -0.3
 var free_look_tilt_amount = 10
 
 #States
@@ -87,15 +89,9 @@ const IK_UPDATE_INTERVAL = 2
 
 var is_paused = false
 
-@export var player_id := 1:
-	set(id):
-		player_id = id
-
 @export var role_properties: Dictionary:
 	set(role):
 		role_properties = role
-
-		
 
 @export var material_index: int = 0:
 	set(value):
@@ -144,7 +140,7 @@ func _physics_process(delta: float) -> void:
 	if not is_multiplayer_authority(): return
 	
 	var input_dir = Input.get_vector("Left", "Right", "Forward", "Backward")
-
+	
 	if velocity.y < 0:
 		is_rising = true
 	else:
@@ -167,6 +163,7 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_pressed("Crouch") || sliding:
 		current_speed = crouching_speed
 		head.position.y = lerp(head.position.y, crouching_depth, delta * crouch_lerp_speed)
+		head.position.z = lerp(head.position.z, crouchind_forward_depth, delta * crouch_lerp_speed)
 		standing_cs.disabled = true
 		crouching_cs.disabled = false
 		
@@ -186,7 +183,7 @@ func _physics_process(delta: float) -> void:
 		standing_cs.disabled = false
 		crouching_cs.disabled = true
 		head.position.y = lerp(head.position.y, 0.0, delta * lerp_speed)
-		
+		head.position.z = lerp(head.position.z, 0.0, delta * lerp_speed)
 		if Input.is_action_pressed("Sprint"):
 			current_speed = sprinting_speed
 			walking = false
@@ -261,16 +258,30 @@ func _physics_process(delta: float) -> void:
 		velocity.z = move_toward(velocity.z, 0, current_speed)
 	
 	# Handle animation
-	#if walking && input_dir != Vector2.ZERO:
-		#animation_player.play("Walk",-1,2)
-	#if sprinting && input_dir != Vector2.ZERO:
-		#animation_player.play("Walk",-1,3.25)
+	if not crouching:
+		if walking && input_dir != Vector2.ZERO:
+			_sync_player_animation.rpc("Walk Animation")
+		else:
+			_sync_player_animation.rpc("Idle")
+		if sprinting && input_dir != Vector2.ZERO:
+			_sync_player_animation.rpc("Run Animation")
+	elif crouching:
+		if input_dir != Vector2.ZERO:
+			_sync_player_animation.rpc("Crouchwalk Animation")
+		else:
+			_sync_player_animation.rpc("Crouch Idle")
+	
 	if not is_paused:
 		move_and_slide()
 
 func _unhandled_input(event: InputEvent) -> void:	 
 	if not is_multiplayer_authority(): return
-		  
+	  
+	if event.is_action_pressed("Crouch"):
+		_sync_player_animation.rpc("Crouch Down")
+	if event.is_action_released("Crouch"):
+		_sync_player_animation.rpc("Idle")
+	
 	# Mouse looking logic
 	if event is InputEventMouseMotion and not is_paused:
 		if free_looking:
@@ -336,6 +347,10 @@ func _on_resume_button_pressed() -> void:
 func _on_start_screen_button_pressed() -> void:
 	MultiplayerManager.rpc("_remove_player_request")
 	get_tree().change_scene_to_file("res://Scenes/start_screen.tscn")
+
+@rpc("any_peer", "call_local")
+func _sync_player_animation(animation: String):
+	animation_state_machine.travel(animation)
 
 @rpc("any_peer","call_local","reliable")
 func _sync_material_change(new_index: int):

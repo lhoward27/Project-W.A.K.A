@@ -11,6 +11,7 @@ var error
 var has_timer_started
 var timer = Timer.new()
 var timer_created = false
+var players_to_start = 2
 
 # Initializes the game as a Server (Host)
 func become_host():
@@ -114,7 +115,7 @@ func _countdown(count):
 		timer_created = true
 		if multiplayer.is_server():
 			timer.connect("timeout", _start_game.rpc)
-	if count == 2:
+	if count == players_to_start:
 		has_timer_started = true
 		timer.start(duration)
 		timer_changed.emit(true, duration)

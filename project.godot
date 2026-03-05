@@ -14,7 +14,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 
 [application]
 
-config/name="3d Movment test"
+config/name="Project-W.A.K.A"
 run/main_scene="uid://dq3ncx65y8fu8"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
