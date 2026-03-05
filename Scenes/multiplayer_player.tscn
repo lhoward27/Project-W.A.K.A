@@ -422,8 +422,6 @@ transform = Transform3D(1, 0, 1.3159717e-14, 0, 1, 0, 1.3159717e-14, 0, 1, 0, -1
 mesh = SubResource("SphereMesh_5obxw")
 
 [node name="PauseMenu" type="Control" parent="." unique_id=1730473292]
-process_mode = 2
-visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -444,17 +442,16 @@ color = Color(0.2159017, 0.21590173, 0.2159017, 1)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PauseMenu" unique_id=2111766488]
 layout_mode = 1
-anchors_preset = 8
+anchors_preset = -1
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -69.577515
+offset_left = -100.0
 offset_top = -70.182495
-offset_right = 69.577515
-offset_bottom = 70.182495
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(1.5, 1.5)
 alignment = 1
 
 [node name="ResumeButton" type="Button" parent="PauseMenu/VBoxContainer" unique_id=77538555]
