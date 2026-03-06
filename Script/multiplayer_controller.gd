@@ -11,14 +11,20 @@ extends CharacterBody3D
 @onready var body_mesh: MeshInstance3D = $PlayerModel/Armature/Skeleton3D/body
 @onready var head_mesh: MeshInstance3D = $PlayerModel/Armature/Skeleton3D/head
 @onready var player_animation: AnimationTree = $AnimationTree
-@onready var animation_state_machine = player_animation["parameters/playback"]
+@onready var animation_state_machine = player_animation["parameters/AnimationNodeStateMachine/playback"]
 @onready var ik_target: Node3D = $IK_Target
 @onready var right_arm_ik: SkeletonIK3D = $PlayerModel/Armature/Skeleton3D/RightArm_IK
 @onready var skeleton: Skeleton3D = $PlayerModel/Armature/Skeleton3D
 @onready var player_synchronizer: MultiplayerSynchronizer = $PlayerSynchronizer
-@onready var flashlight: SpotLight3D = $PlayerModel/Armature/Skeleton3D/RightHandAttachment/Flashlight/SpotLight3D
+@onready var pistol: Node3D = $PlayerModel/Armature/Skeleton3D/RightHandAttachment/Pistol
+@onready var flashlight: Node3D = $PlayerModel/Armature/Skeleton3D/RightHandAttachment/Flashlight
+@onready var flashlight_light: SpotLight3D = $PlayerModel/Armature/Skeleton3D/RightHandAttachment/Flashlight/SpotLight3D
 @onready var light_bulb: MeshInstance3D = $PlayerModel/Armature/Skeleton3D/RightHandAttachment/Flashlight/SpotLight3D/LightBulb
 @onready var pause_menu: Control = $PauseMenu
+@onready var player_hud: Control = $PlayerHUD
+@onready var pistol_highlight_hud: ColorRect = $PlayerHUD/PistolBorderHUD/PistolHighlightHUD
+@onready var flashlight_highlight_hud: ColorRect = $PlayerHUD/FlashlightBorderHUD/FlashlightHighlightHUD
+
 
 @export var player_materials = [
 preload("uid://van6okct3p66"),  #blue player material
@@ -55,6 +61,21 @@ var sprinting = false
 var crouching = false
 var free_looking = false
 var sliding = false
+
+# Equipped held item states
+var flashlight_equipped: bool = false:
+	set(is_equipped):
+		flashlight_equipped = is_equipped
+		flashlight.visible = is_equipped
+		flashlight_highlight_hud.visible = is_equipped
+
+var pistol_equipped: bool = false:
+	set(is_equipped):
+		pistol_equipped = is_equipped
+		pistol.visible = is_equipped
+		pistol_highlight_hud.visible = is_equipped
+
+
 
 #Slide vars
 var slide_timer = 0.0
@@ -97,7 +118,6 @@ var is_paused = false
 	set(role):
 		role_properties = role
 
-		
 
 @export var material_index: int = 0:
 	set(value):
@@ -115,6 +135,7 @@ func _ready() -> void:
 		camera_3d.current = true
 		head_mesh.visible = false # Hide own head to prevent clipping into camera
 		pause_menu.visible = false
+		player_hud.visible = true
 		self.set_collision_mask_value(1, false)
 		_set_spawn_location(role_properties["role_group"], role_properties["player_spawn_index"])
 	
@@ -133,6 +154,10 @@ func _ready() -> void:
 	await get_tree().process_frame
 	rpc("_sync_material_change", role_properties["body_material"])
 	rpc("_sync_material_change", role_properties["head_material"])
+	
+	pistol_equipped = false
+	flashlight_equipped = true
+
 
 func _process(_delta: float) -> void:
 	if is_multiplayer_authority():
@@ -169,7 +194,9 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_pressed("Crouch") || sliding:
 		current_speed = crouching_speed
 		head.position.y = lerp(head.position.y, crouching_depth, delta * crouch_lerp_speed)
-		head.position.z = lerp(head.position.z, crouchind_forward_depth, delta * crouch_lerp_speed)
+		# Only move head forward if crouching
+		if not sliding:
+			head.position.z = lerp(head.position.z, crouchind_forward_depth, delta * crouch_lerp_speed)
 		standing_cs.disabled = true
 		crouching_cs.disabled = false
 		
@@ -216,14 +243,7 @@ func _physics_process(delta: float) -> void:
 		neck.rotation.y = lerp(neck.rotation.y, 0.0, delta * free_look_lerp_speed)
 		camera_3d.rotation.z = lerp(neck.rotation.z, 0.0, delta * free_look_lerp_speed)
 
-	if sliding:
-		slide_timer -= delta
-		if slide_timer <= 0:
-			sliding = false
-			free_looking = false
-		# Manual cancel
-		if slide_timer <= slide_timer_max * 0.65 && Input.is_action_just_pressed("Player Controls"):
-			sliding = false
+
 	
 	# Handle Headbobbing
 	if sprinting:
@@ -262,7 +282,17 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity.x = move_toward(velocity.x, 0, current_speed)
 		velocity.z = move_toward(velocity.z, 0, current_speed)
-	
+		
+	if sliding:
+		slide_timer -= delta
+		if slide_timer <= 0:
+			sliding = false
+			free_looking = false
+			_sync_player_animation.rpc("Slide End Animation")
+		# Manual cancel
+		if slide_timer <= slide_timer_max * 0.65 && Input.is_action_just_pressed("Player Controls"):
+			sliding = false
+			_sync_player_animation.rpc("Slide End Animation")
 	# Handle animation
 	if not crouching:
 		if walking && input_dir != Vector2.ZERO:
@@ -271,11 +301,14 @@ func _physics_process(delta: float) -> void:
 			_sync_player_animation.rpc("Idle")
 		if sprinting && input_dir != Vector2.ZERO:
 			_sync_player_animation.rpc("Run Animation")
-	elif crouching:
+	elif crouching and not sliding:
 		if input_dir != Vector2.ZERO:
 			_sync_player_animation.rpc("Crouchwalk Animation")
 		else:
 			_sync_player_animation.rpc("Crouch Idle")
+			
+	# Debug to see what animation is playing
+	#print(animation_state_machine.get_current_node())
 	
 	if not is_paused:
 		move_and_slide()
@@ -283,8 +316,11 @@ func _physics_process(delta: float) -> void:
 func _unhandled_input(event: InputEvent) -> void:	 
 	if not is_multiplayer_authority(): return
 	  
-	if event.is_action_pressed("Crouch"):
-		_sync_player_animation.rpc("Crouch Down")
+	if event.is_action_pressed("Crouch") && sprinting:
+		_sync_player_animation.rpc("Sliding Animation")
+	
+	if event.is_action_pressed("Crouch") && not sprinting:
+		_sync_player_animation.rpc("Crouch Idle")
 	if event.is_action_released("Crouch"):
 		_sync_player_animation.rpc("Idle")
 	
@@ -300,19 +336,34 @@ func _unhandled_input(event: InputEvent) -> void:
 			head.rotation.x = clamp(head.rotation.x,deg_to_rad(-45), deg_to_rad(65))
 	
 	# Toggle Flashlight
-	if event.is_action_pressed("Flashlight") and not is_paused:
-		if flashlight.light_energy > 0:
+	if event.is_action_pressed("Flashlight") and not is_paused and flashlight_equipped:
+		if flashlight_light.light_energy > 0:
 			light_bulb.visible = false
-			flashlight.light_energy = 0
+			flashlight_light.light_energy = 0
 		else:
 			light_bulb.visible = true
-			flashlight.light_energy = 1
-
+			flashlight_light.light_energy = 1
+	
+	if (event.is_action_pressed("Scroll Down") or event.is_action_pressed("Scroll Up")) and not is_paused:
+		flashlight_equipped = not flashlight_equipped
+		pistol_equipped = not pistol_equipped
+	
+	if event.is_action_pressed("Equip One"):
+		pistol_equipped = true
+		flashlight_equipped = false
+	
+	if event.is_action_pressed("Equip Two"):
+		pistol_equipped = false
+		flashlight_equipped = true
+	
+	if event.is_action_pressed("Shoot") and pistol_equipped:
+		_sync_player_animation.rpc("Shoot")
 	# Pause Menu
 	if event.is_action_pressed("ui_cancel"):
 		is_paused = true
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 		pause_menu.visible = true
+		player_hud.visible = false
 
 # Updates the arm IK to point toward where the camera is looking
 func _update_ik_pose():
@@ -348,6 +399,7 @@ func _on_exit_button_pressed() -> void:
 func _on_resume_button_pressed() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	pause_menu.visible = false
+	player_hud.visible = true
 	is_paused = false
 
 func _on_start_screen_button_pressed() -> void:
@@ -356,7 +408,10 @@ func _on_start_screen_button_pressed() -> void:
 
 @rpc("any_peer", "call_local")
 func _sync_player_animation(animation: String):
-	animation_state_machine.travel(animation)
+	if animation == "Shoot":
+		player_animation["parameters/OneShot/request"] = AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE
+	else:
+		animation_state_machine.travel(animation)
 
 @rpc("any_peer","call_local","reliable")
 func _sync_material_change(new_index: int):

@@ -1,0 +1,103 @@
+[gd_resource type="AnimationNodeStateMachine" format=3 uid="uid://dwo05uejilr10"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_bqinh"]
+animation = &"Crouch Animation"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_sxj10"]
+animation = &"Crouch Idle Animation"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lenjf"]
+animation = &"Crouchwalk Animation"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_5obxw"]
+animation = &"Stand Idle Animation"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_r5668"]
+animation = &"Run Animation"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_y481q"]
+animation = &"Slide End Animation"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_fux7b"]
+animation = &"Slide Start Animation"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_c8b38"]
+animation = &"Sliding Animation"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_7kmab"]
+animation = &"Walk Animation"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_sxj10"]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_r5668"]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_y481q"]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_lenjf"]
+xfade_time = 0.2
+switch_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_g683q"]
+xfade_time = 0.4
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_5obxw"]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_a0dua"]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_wl1nn"]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_7kmab"]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_bqinh"]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_fux7b"]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_c8b38"]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_c7vkq"]
+xfade_time = 0.2
+switch_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_e5hbt"]
+xfade_time = 0.2
+switch_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_3sb36"]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_oltvb"]
+xfade_time = 0.2
+
+[resource]
+"states/Crouch Animation/node" = SubResource("AnimationNodeAnimation_bqinh")
+"states/Crouch Animation/position" = Vector2(285, 318)
+"states/Crouch Idle/node" = SubResource("AnimationNodeAnimation_sxj10")
+"states/Crouch Idle/position" = Vector2(395, 395)
+"states/Crouchwalk Animation/node" = SubResource("AnimationNodeAnimation_lenjf")
+"states/Crouchwalk Animation/position" = Vector2(682, 395)
+states/End/position = Vector2(1210, 318)
+states/Idle/node = SubResource("AnimationNodeAnimation_5obxw")
+states/Idle/position = Vector2(395, 245)
+"states/Run Animation/node" = SubResource("AnimationNodeAnimation_r5668")
+"states/Run Animation/position" = Vector2(919, 245)
+"states/Slide End Animation/node" = SubResource("AnimationNodeAnimation_y481q")
+"states/Slide End Animation/position" = Vector2(807.8152, 318)
+"states/Slide Start Animation/node" = SubResource("AnimationNodeAnimation_fux7b")
+"states/Slide Start Animation/position" = Vector2(1026, 318)
+"states/Sliding Animation/node" = SubResource("AnimationNodeAnimation_c8b38")
+"states/Sliding Animation/position" = Vector2(919, 395)
+states/Start/position = Vector2(106, 318)
+"states/Walk Animation/node" = SubResource("AnimationNodeAnimation_7kmab")
+"states/Walk Animation/position" = Vector2(682, 245)
+transitions = ["Idle", "Walk Animation", SubResource("AnimationNodeStateMachineTransition_sxj10"), "Walk Animation", "Idle", SubResource("AnimationNodeStateMachineTransition_r5668"), "Idle", "Crouch Animation", SubResource("AnimationNodeStateMachineTransition_y481q"), "Crouch Animation", "Crouch Idle", SubResource("AnimationNodeStateMachineTransition_lenjf"), "Walk Animation", "Run Animation", SubResource("AnimationNodeStateMachineTransition_g683q"), "Run Animation", "Walk Animation", SubResource("AnimationNodeStateMachineTransition_5obxw"), "Crouch Idle", "Crouchwalk Animation", SubResource("AnimationNodeStateMachineTransition_a0dua"), "Walk Animation", "Crouchwalk Animation", SubResource("AnimationNodeStateMachineTransition_wl1nn"), "Crouchwalk Animation", "Walk Animation", SubResource("AnimationNodeStateMachineTransition_7kmab"), "Crouchwalk Animation", "Crouch Idle", SubResource("AnimationNodeStateMachineTransition_bqinh"), "Crouch Idle", "Idle", SubResource("AnimationNodeStateMachineTransition_fux7b"), "Run Animation", "Slide Start Animation", SubResource("AnimationNodeStateMachineTransition_c8b38"), "Slide End Animation", "Walk Animation", SubResource("AnimationNodeStateMachineTransition_c7vkq"), "Slide Start Animation", "Sliding Animation", SubResource("AnimationNodeStateMachineTransition_e5hbt"), "Sliding Animation", "Crouchwalk Animation", SubResource("AnimationNodeStateMachineTransition_3sb36"), "Sliding Animation", "Slide End Animation", SubResource("AnimationNodeStateMachineTransition_oltvb")]
+graph_offset = Vector2(-195.18488, 68)

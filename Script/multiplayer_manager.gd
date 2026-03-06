@@ -11,7 +11,7 @@ var error
 var has_timer_started
 var timer = Timer.new()
 var timer_created = false
-var players_to_start = 2
+var players_to_start = 1
 
 # Initializes the game as a Server (Host)
 func become_host():

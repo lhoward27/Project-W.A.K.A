@@ -1,15 +1,15 @@
 [remap]
 
-importer="scene"
+importer="animation_library"
 importer_version=1
-type="PackedScene"
-uid="uid://f8dida4amomw"
-path="res://.godot/imported/littleguyywithanimations.gltf-bca653fe0b99187900f98097d9cde605.scn"
+type="AnimationLibrary"
+uid="uid://3tanr6ebyrqx"
+path="res://.godot/imported/littleguyywithani2.gltf-ada7b5b51ceb3f9e446b926c78240cc4.res"
 
 [deps]
 
-source_file="res://assets/models/littleguyywithanimations.gltf"
-dest_files=["res://.godot/imported/littleguyywithanimations.gltf-bca653fe0b99187900f98097d9cde605.scn"]
+source_file="res://assets/models/littleguyywithani2.gltf"
+dest_files=["res://.godot/imported/littleguyywithani2.gltf-ada7b5b51ceb3f9e446b926c78240cc4.res"]
 
 [params]
 
