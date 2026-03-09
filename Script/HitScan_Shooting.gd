@@ -50,10 +50,6 @@ func get_camera_collision() -> void:
 	var intersection: Dictionary = space_state.intersect_ray(query)
 	intersection_name = intersection.collider.name
 	
-	# If the ray intersects a player, reduce their health by one
-	if spawned_players.has(str(intersection_name).to_int()):
-		_damage_enemy(str(intersection_name).to_int())
-		
 	# If nothing was hit (ray went into empty space / sky)
 	if intersection.is_empty():
 		print("Air")
@@ -70,9 +66,15 @@ func get_camera_collision() -> void:
 	var hit_pos: Vector3 = intersection.position
 	var hit_normal: Vector3 = intersection.normal
 	
-	# Add the decal as a child of DecalDump
-	decal_dump.add_child(decal)
 	
+	
+	# If the ray intersects a player, reduce their health by one
+	if spawned_players.has(str(intersection_name).to_int()):
+		_damage_enemy.rpc(str(intersection_name).to_int(), decal)
+	else:
+		# Add the decal as a child of DecalDump
+		decal_dump.add_child(decal)
+		
 	# Move decal exactly to the hit point
 	decal.global_position = hit_pos
 	
@@ -96,12 +98,16 @@ func get_camera_collision() -> void:
 	# Add our brand-new decal to the end of the tracking array
 	active_decals.append(decal)
 	
+
 	# Optional debug output — shows current number of managed decals
 	# print("Active decals now: ", active_decals.size())
 	# print("Hit object: ", intersection.collider.name)
 	# print(intersection)
 
-
-@rpc("call_local")
-func _damage_enemy(enemy):
+@rpc("any_peer", "call_local")
+func _damage_enemy(enemy, decal):
+	_get_enemy_node(enemy).add_child(decal)
 	MultiplayerManager.players[enemy].player_health -= 1
+
+func _get_enemy_node(enemy):
+	return get_tree().current_scene.get_node("Players").get_node(str(enemy)).get_node("PlayerModel/Armature/Skeleton3D/PlayerDecalDump")

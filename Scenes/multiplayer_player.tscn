@@ -1459,7 +1459,6 @@ filter_enabled = true
 filters = ["", "Armature/Skeleton3D/RightHandAttachment/Pistol:rotation"]
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_sxj10"]
-graph_offset = Vector2(-1085.7268, 171.0496)
 nodes/output/position = Vector2(-320, 360)
 nodes/AnimationNodeStateMachine/node = ExtResource("3_7kmab")
 nodes/AnimationNodeStateMachine/position = Vector2(-820, 220)
@@ -1475,6 +1474,7 @@ collision_mask = 3
 script = ExtResource("1_tq1mk")
 
 [node name="PlayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1187062537]
+replication_interval = 0.05
 replication_config = SubResource("SceneReplicationConfig_5obxw")
 
 [node name="Standing_CS" type="CollisionShape3D" parent="." unique_id=165579953]
@@ -1763,6 +1763,8 @@ transform = Transform3D(-8.388657e-09, -9.713642e-09, -0.11111114, -9.713642e-09
 [node name="Cube" type="MeshInstance3D" parent="PlayerModel/Armature/Skeleton3D/RightHandAttachment/Pistol" unique_id=1971720044]
 mesh = SubResource("ArrayMesh_7kmab")
 skeleton = NodePath("")
+
+[node name="PlayerDecalDump" type="Node3D" parent="PlayerModel/Armature/Skeleton3D" unique_id=1912126617]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="PlayerModel" unique_id=354192997]
 libraries/ = SubResource("AnimationLibrary_lenjf")

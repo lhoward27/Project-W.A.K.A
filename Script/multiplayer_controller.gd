@@ -32,8 +32,8 @@ preload("uid://fwb3q3xqa28w"),  #red player material
 preload("uid://cmex25x32muqy"), #green head material
 preload("uid://cc1v0vsokxj40"), #light blue head material
 preload("uid://b4cpqxwmwox0a"), #orange head material
-preload("uid://cqgryetal08l"),   #yellow head material
-preload("uid://fwb3q3xqa28w")  #red player material
+preload("uid://cqgryetal08l"),  #yellow head material
+preload("uid://fwb3q3xqa28w")   #red player material
 ]
 
 # Speed Vars
@@ -167,6 +167,8 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
+	if not multiplayer.has_multiplayer_peer(): return
+	if multiplayer.multiplayer_peer.get_connection_status() != MultiplayerPeer.CONNECTION_CONNECTED: return
 	if is_multiplayer_authority():
 		# Update the ik position every other frame
 		ik_update_counter += 1
@@ -175,6 +177,7 @@ func _process(_delta: float) -> void:
 			_update_ik_pose()
 
 func _physics_process(delta: float) -> void:
+	if multiplayer.multiplayer_peer.get_connection_status() != MultiplayerPeer.CONNECTION_CONNECTED: return
 	if not is_multiplayer_authority(): return
 	
 	var input_dir = Input.get_vector("Left", "Right", "Forward", "Backward")
@@ -321,6 +324,7 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 
 func _unhandled_input(event: InputEvent) -> void:	 
+	if multiplayer.multiplayer_peer.get_connection_status() != MultiplayerPeer.CONNECTION_CONNECTED: return
 	if not is_multiplayer_authority(): return
 	  
 	if event.is_action_pressed("Crouch") && sprinting:

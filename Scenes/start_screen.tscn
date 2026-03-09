@@ -84,11 +84,12 @@ text = "Join Game"
 [node name="ServerIPLine" type="LineEdit" parent="VBoxContainer" unique_id=696662119]
 layout_mode = 2
 placeholder_text = "IP Address Here..."
+alignment = 1
 max_length = 15
 
 [node name="InputError" type="Label" parent="VBoxContainer" unique_id=75329369]
 layout_mode = 2
-text = "Invalid IP Address..."
+text = "Connection Failed: Invalid IP Address..."
 
 [node name="ExitButton" type="Button" parent="VBoxContainer" unique_id=1369045391]
 layout_mode = 2
