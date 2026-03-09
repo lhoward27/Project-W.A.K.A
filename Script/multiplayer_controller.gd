@@ -118,6 +118,11 @@ var is_paused = false
 	set(role):
 		role_properties = role
 
+@export var player_health: int:
+	set(health):
+		player_health = health
+		if health == 0:
+			rpc("_sync_material_change", 1)
 
 @export var material_index: int = 0:
 	set(value):
@@ -131,11 +136,12 @@ var is_paused = false
 				_apply_material_change(head_mesh)
 
 func _ready() -> void:
+	pause_menu.visible = false
+	
 	if is_multiplayer_authority():
+		player_hud.visible = true
 		camera_3d.current = true
 		head_mesh.visible = false # Hide own head to prevent clipping into camera
-		pause_menu.visible = false
-		player_hud.visible = true
 		self.set_collision_mask_value(1, false)
 		_set_spawn_location(role_properties["role_group"], role_properties["player_spawn_index"])
 	
@@ -149,6 +155,7 @@ func _ready() -> void:
 		
 	# Disable input processing for puppets (other players)
 	if not is_multiplayer_authority():
+		player_hud.visible = false
 		player_synchronizer.synchronized.connect(_update_ik_pose)
 		set_process_unhandled_input(false)
 	await get_tree().process_frame
@@ -348,11 +355,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		flashlight_equipped = not flashlight_equipped
 		pistol_equipped = not pistol_equipped
 	
-	if event.is_action_pressed("Equip One"):
+	if event.is_action_pressed("Equip One") and not is_paused:
 		pistol_equipped = true
 		flashlight_equipped = false
 	
-	if event.is_action_pressed("Equip Two"):
+	if event.is_action_pressed("Equip Two") and not is_paused:
 		pistol_equipped = false
 		flashlight_equipped = true
 	
@@ -360,10 +367,13 @@ func _unhandled_input(event: InputEvent) -> void:
 		_sync_player_animation.rpc("Shoot")
 	# Pause Menu
 	if event.is_action_pressed("ui_cancel"):
-		is_paused = true
-		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-		pause_menu.visible = true
-		player_hud.visible = false
+		if is_paused:
+			_on_resume_button_pressed()
+		else:
+			player_hud.visible = false
+			is_paused = true
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+			pause_menu.visible = true
 
 # Updates the arm IK to point toward where the camera is looking
 func _update_ik_pose():
@@ -404,7 +414,6 @@ func _on_resume_button_pressed() -> void:
 
 func _on_start_screen_button_pressed() -> void:
 	MultiplayerManager.rpc("_remove_player_request")
-	get_tree().change_scene_to_file("res://Scenes/start_screen.tscn")
 
 @rpc("any_peer", "call_local")
 func _sync_player_animation(animation: String):

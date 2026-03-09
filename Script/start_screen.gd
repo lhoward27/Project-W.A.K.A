@@ -9,6 +9,7 @@ extends Control
 var server_ip = ""
 
 func _ready() -> void:
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	input_error.visible = false
 
 # Start hosting a multiplayer session and remove the start screen
@@ -32,7 +33,6 @@ func _on_join_button_pressed() -> void:
 			animation_player.play("text_fade",-1, 0.5)
 		else:
 			pass
-
 
 func _on_exit_button_pressed() -> void:
 	get_tree().quit()

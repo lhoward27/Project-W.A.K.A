@@ -8,20 +8,20 @@ var multiplayer_scene = preload("res://Scenes/multiplayer_player.tscn")
 # Tracks active player nodes by their unique Peer ID: { id: Node }
 var players = {}
 var error
-var has_timer_started
+var has_timer_started = false
 var timer = Timer.new()
 var timer_created = false
-var players_to_start = 1
+var players_to_start = 2
 
 # Initializes the game as a Server (Host)
 func become_host():
 	print("Starting host")
 	
 	# Cleanup configs from old host sessions
-	if multiplayer.multiplayer_peer:
-		multiplayer.multiplayer_peer.close()
-		multiplayer.multiplayer_peer = null
-	_cleanup()
+	#if multiplayer.multiplayer_peer:
+		#multiplayer.multiplayer_peer.close()
+		#multiplayer.multiplayer_peer = null
+	#_cleanup()
 	
 	# Initialize the ENet network peer as a server
 	var server_peer = ENetMultiplayerPeer.new()
@@ -60,7 +60,8 @@ func _new_peer_data(id: int):
 	players[id] = {
 		"player_id": id,
 		"name": str(id),
-		"role_properties": {}
+		"role_properties": {},
+		"player_health": 1
 	}
 	if id!= 1:
 		_sync_role_counts.rpc_id(id, role_counts)
@@ -86,7 +87,8 @@ func _start_game():
 	for player in players:
 		_get_spawn_node().spawn({
 			"id": players[player]["player_id"],
-			"role": players[player]["role_properties"]
+			"role": players[player]["role_properties"],
+			"health": players[player]["player_health"]
 			})
 		print("Player %s joined the game" % players[player].player_id)
 
@@ -104,11 +106,12 @@ func _spawn_player(data):
 	player_to_add.name = str(data.id)
 	player_to_add.set_multiplayer_authority(data.id)
 	player_to_add.role_properties = data.role
+	player_to_add.player_health = data.health
 	players[data.id] = player_to_add
 	return player_to_add
 
 func _countdown(count):
-	var duration = 3
+	var duration = 1
 	if not has_timer_started and not timer_created:
 		add_child(timer)
 		timer.one_shot = true
@@ -144,8 +147,6 @@ func _sync_role_counts(counts: Dictionary):
 	for role in role_counts:
 		role_count_changed.emit(role, role_counts[role])
 
-
-
 func _remove_player_from_game(id: int):
 	if not multiplayer.is_server(): return
 	print("Player %s left the game" % id)
@@ -171,14 +172,44 @@ func _remove_player_request():
 		# Ensure the node is still valid before trying to free it
 		if is_instance_valid(players[id]):
 			if id == 1:
-				_cleanup()
-			players[id].queue_free()
-			players.erase(id)
-		print("Player %s left the game via request" % id)
+				var players_array = players.keys()
+				players_array.reverse()
+				for player in players_array:
+					_cleanup.rpc(player)
+			else:
+				players[id].queue_free()
+				players.erase(id)
+				_cleanup.rpc_id(id, id)
+				print("Player %s left the game via request" % id)
 
 # Cleans up a player node when they disconnect
-func _cleanup():
-	if multiplayer.peer_connected.is_connected(_new_peer_data):
-		multiplayer.peer_connected.disconnect(_new_peer_data)
-	if multiplayer.peer_disconnected.is_connected(_remove_player_from_game):
-		multiplayer.peer_disconnected.disconnect(_remove_player_from_game)
+@rpc("call_local")
+func _cleanup(id):
+	get_tree().change_scene_to_file("res://Scenes/start_screen.tscn")
+	
+	var start_scene = _check_start_screen()
+	while start_scene == null:
+		await get_tree().process_frame
+		start_scene = _check_start_screen()
+		print(start_scene)
+	
+	players = {}
+	has_timer_started = false
+	for role in role_counts:
+		role_counts[role] = 0
+	
+	if multiplayer.multiplayer_peer:
+		multiplayer.multiplayer_peer.close()
+		multiplayer.multiplayer_peer = null
+	
+	if id == 1:
+		
+		if multiplayer.peer_connected.is_connected(_new_peer_data):
+			multiplayer.peer_connected.disconnect(_new_peer_data)
+		if multiplayer.peer_disconnected.is_connected(_remove_player_from_game):
+			multiplayer.peer_disconnected.disconnect(_remove_player_from_game)
+
+func _check_start_screen():
+	var scene = get_tree().current_scene
+	if scene == null : return null
+	return "scene loaded"

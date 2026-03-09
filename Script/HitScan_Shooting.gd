@@ -14,8 +14,15 @@ const MAX_DECALS: int = 30
 # Oldest decals are at index 0 → newest at the end
 var active_decals: Array[Node] = []
 
+@onready var pistol: Node3D = $"../../../../PlayerModel/Armature/Skeleton3D/RightHandAttachment/Pistol"
+
 # How far the ray should travel when checking for hits (in units)
 var ray_range: float = 2000.0
+
+var intersection_name
+
+# Get array of all players spawned by the server
+var spawned_players = MultiplayerManager.players.keys()
 
 # User input handler
 func _input(event: InputEvent) -> void:
@@ -25,6 +32,8 @@ func _input(event: InputEvent) -> void:
 
 # Main function: shoots a ray from the center of the screen and places a decal where it hits
 func get_camera_collision() -> void:
+	if not pistol.visible or not is_multiplayer_authority():
+		return
 	# Get the center of the current viewport
 	var center: Vector2 = get_viewport().get_size() / 2.0
 	
@@ -39,7 +48,12 @@ func get_camera_collision() -> void:
 	# Get direct access to the physics world and cast the ray
 	var space_state = get_world_3d().direct_space_state
 	var intersection: Dictionary = space_state.intersect_ray(query)
+	intersection_name = intersection.collider.name
 	
+	# If the ray intersects a player, reduce their health by one
+	if spawned_players.has(str(intersection_name).to_int()):
+		_damage_enemy(str(intersection_name).to_int())
+		
 	# If nothing was hit (ray went into empty space / sky)
 	if intersection.is_empty():
 		print("Air")
@@ -86,3 +100,8 @@ func get_camera_collision() -> void:
 	# print("Active decals now: ", active_decals.size())
 	# print("Hit object: ", intersection.collider.name)
 	# print(intersection)
+
+
+@rpc("call_local")
+func _damage_enemy(enemy):
+	MultiplayerManager.players[enemy].player_health -= 1

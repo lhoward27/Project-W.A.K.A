@@ -1459,7 +1459,7 @@ filter_enabled = true
 filters = ["", "Armature/Skeleton3D/RightHandAttachment/Pistol:rotation"]
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_sxj10"]
-graph_offset = Vector2(-946.19727, 37.943054)
+graph_offset = Vector2(-1085.7268, 171.0496)
 nodes/output/position = Vector2(-320, 360)
 nodes/AnimationNodeStateMachine/node = ExtResource("3_7kmab")
 nodes/AnimationNodeStateMachine/position = Vector2(-820, 220)
@@ -1508,7 +1508,6 @@ script = ExtResource("2_5obxw")
 transform = Transform3D(1, 0, 0, 0, -2.9802322e-08, 1.0000001, 0, -1.0000001, -2.9802322e-08, 0, 0, 0)
 
 [node name="PauseMenu" type="Control" parent="." unique_id=1730473292]
-visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -1738,7 +1737,6 @@ bone_idx = 9
 
 [node name="Flashlight" type="Node3D" parent="PlayerModel/Armature/Skeleton3D/RightHandAttachment" unique_id=174649447]
 transform = Transform3D(2.222222, 0, 0, 0, -9.713636e-08, -2.2222219, 0, 2.222221, -9.71364e-08, 0, 0, 0)
-visible = false
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="PlayerModel/Armature/Skeleton3D/RightHandAttachment/Flashlight" unique_id=262620946]
 transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0, 1, 0, 0, 0)
