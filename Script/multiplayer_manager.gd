@@ -11,7 +11,7 @@ var error
 var has_timer_started = false
 var timer = Timer.new()
 var timer_created = false
-var players_to_start = 2
+var players_to_start = 1
 var game_started = false
 
 # Initializes the game as a Server (Host)
