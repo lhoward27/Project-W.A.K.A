@@ -1899,6 +1899,86 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.43137255, 0.43137255, 0.43137255, 0.5254902)
 
+[node name="Item3HUD" type="TextureRect" parent="PlayerHUD" unique_id=1172157206]
+self_modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 402.0
+offset_top = -216.99994
+offset_right = 927.0
+offset_bottom = 133.0
+grow_vertical = 0
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("4_y481q")
+
+[node name="Item3LabelHUD" type="Label" parent="PlayerHUD/Item3HUD" unique_id=1732925739]
+layout_mode = 0
+offset_left = 143.33333
+offset_top = 41.666626
+offset_right = 194.33333
+offset_bottom = 124.666626
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 60
+text = "3"
+
+[node name="Item3HighlightHUD" type="ColorRect" parent="PlayerHUD/Item3HUD" unique_id=1962971153]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -140.0
+offset_top = -138.75
+offset_right = 138.75
+offset_bottom = 133.75
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.43137255, 0.43137255, 0.43137255, 0.5254902)
+
+[node name="FlashlightTextureHUD" type="TextureRect" parent="PlayerHUD/Item3HUD" unique_id=688105775]
+visible = false
+modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -256.0
+offset_top = -256.0
+offset_right = 256.0
+offset_bottom = 256.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+pivot_offset_ratio = Vector2(0.5, 0.5)
+texture = ExtResource("6_lenjf")
+flip_h = true
+
+[node name="PistolTextureHUD" type="TextureRect" parent="PlayerHUD/Item3HUD" unique_id=1607645350]
+visible = false
+self_modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -256.0
+offset_top = -256.0
+offset_right = 256.0
+offset_bottom = 256.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = -0.49741885
+scale = Vector2(0.5, 0.5)
+pivot_offset_ratio = Vector2(0.5, 0.5)
+texture = ExtResource("5_r5668")
+
 [node name="TextureRect" type="TextureRect" parent="PlayerHUD" unique_id=2051280679]
 self_modulate = Color(1, 1, 1, 0.4392157)
 layout_mode = 1
@@ -1915,6 +1995,9 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("7_r5668")
 
+[node name="Items" type="Node3D" parent="." unique_id=1302539684]
+
 [connection signal="pressed" from="PauseMenu/VBoxContainer/ResumeButton" to="." method="_on_resume_button_pressed"]
 [connection signal="pressed" from="PauseMenu/VBoxContainer/StartScreenButton" to="." method="_on_start_screen_button_pressed"]
 [connection signal="pressed" from="PauseMenu/VBoxContainer/ExitButton" to="." method="_on_exit_button_pressed"]
+[connection signal="child_entered_tree" from="Items" to="." method="_on_items_child_entered_tree"]

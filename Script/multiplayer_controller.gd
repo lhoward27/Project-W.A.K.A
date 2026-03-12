@@ -75,7 +75,11 @@ var pistol_equipped: bool = false:
 		pistol.visible = is_equipped
 		pistol_highlight_hud.visible = is_equipped
 
-
+var item3_equipped: bool = false:
+	set(is_equipped):
+		item3_equipped = is_equipped
+		pistol.visible = is_equipped
+		pistol_highlight_hud.visible = is_equipped
 
 #Slide vars
 var slide_timer = 0.0
@@ -459,3 +463,9 @@ func _set_spawn_location(group: String, index: int):
 	var spawn_point_set = spawn_points[group]
 	self.global_position = spawn_point_set[index].global_position
 	self.set_collision_mask_value(1, true)
+
+func _on_items_child_entered_tree(node: Node) -> void:
+	if node.name == "Flashlight":
+		print("Flashlight Equipped")
+	else:
+		print("Pistol Equipped")

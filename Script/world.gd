@@ -44,3 +44,14 @@ func _set_keypad_color(color):
 	elif color == "green":
 		access_light_material.emission = Color(0.0, 1.686, 0.0)
 		access_light_color = Color("00ff00")
+
+func _on_pistol_item_body_entered(body: Node3D) -> void:
+	var pistol_node = Node3D.new()
+	pistol_node.name = "Pistol"
+	body.get_node("Items").add_child(pistol_node)
+
+
+func _on_flashlight_item_body_entered(body: Node3D) -> void:
+	var flashlight_node = Node3D.new()
+	flashlight_node.name = "Flashlight"
+	body.get_node("Items").add_child(flashlight_node)
