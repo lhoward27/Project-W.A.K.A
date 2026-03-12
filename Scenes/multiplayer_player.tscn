@@ -1469,12 +1469,10 @@ nodes/OneShot/position = Vector2(-520, 280)
 node_connections = [&"output", 0, &"OneShot", &"OneShot", 0, &"AnimationNodeStateMachine", &"OneShot", 1, &"Animation"]
 
 [node name="MultiplayerPlayer" type="CharacterBody3D" unique_id=109561205]
-process_priority = 1
 collision_mask = 3
 script = ExtResource("1_tq1mk")
 
 [node name="PlayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1187062537]
-replication_interval = 0.05
 replication_config = SubResource("SceneReplicationConfig_5obxw")
 
 [node name="Standing_CS" type="CollisionShape3D" parent="." unique_id=165579953]

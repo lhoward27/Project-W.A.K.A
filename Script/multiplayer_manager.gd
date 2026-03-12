@@ -11,7 +11,7 @@ var error
 var has_timer_started = false
 var timer = Timer.new()
 var timer_created = false
-var players_to_start = 1
+var players_to_start = 2
 var game_started = false
 
 # Initializes the game as a Server (Host)
@@ -103,6 +103,13 @@ func _new_peer_data(id: int):
 @rpc()
 func _sync_data(counts: Dictionary):
 	get_tree().change_scene_to_file("res://Scenes/role_select.tscn")
+	
+	# Only continue sync after role select scene has been fully loaded
+	var role_scene = _check_scene_state()
+	while role_scene == null:
+		await get_tree().process_frame
+		role_scene = _check_scene_state()
+	
 	role_counts = counts
 	for role in role_counts:
 		role_count_changed.emit(role, role_counts[role])
@@ -191,6 +198,7 @@ func _remove_player_from_game(id: int):
 	if not is_instance_valid(players[id]):
 		players.erase(id)
 		return
+	
 	# Free the node and cleanup
 	players[id].queue_free()
 	if players.has(id):
@@ -198,8 +206,9 @@ func _remove_player_from_game(id: int):
 
 # Allows a peer to request their own removal from the server's tracking
 @rpc("any_peer", "call_local")
-func _remove_player_request():
+func _remove_player_request(request):
 	if not multiplayer.is_server(): return
+	print("requested")
 	# Identify which peer sent the request
 	var id = multiplayer.get_remote_sender_id()
 	
@@ -212,13 +221,27 @@ func _remove_player_request():
 			return
 		# Ensure the node is still valid before trying to free it
 		if is_instance_valid(players[id]):
+			print("is valid")
 			# If host leaves game, disconnect all peers
 			if id == 1:
 				var players_array = players.keys()
 				players_array.reverse()
 				for player in players_array:
-					_cleanup.rpc(player)
+					print(players_array)
+					print(player)
+					if request == "quit":
+						if player == 1:
+							prints(player, "quitting")
+							_cleanup(player, "quit")
+						else:
+							prints(player, "leaving")
+							_cleanup.rpc(player, "leave")
+					else:
+						print("dont do this")
+						_cleanup.rpc(player, "leave")
+					
 			else:
+				print("why here")
 				players[id].queue_free()
 				players.erase(id)
 				_cleanup.rpc_id(id, id)
@@ -226,16 +249,19 @@ func _remove_player_request():
 
 # Cleans up a player node when they disconnect
 @rpc("call_local")
-func _cleanup(id):
+func _cleanup(id, request):
+
 	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
-	
-	get_tree().change_scene_to_file("res://Scenes/start_screen.tscn")
+	if request == "quit":
+		get_tree().quit()
+	else:
+		get_tree().change_scene_to_file("res://Scenes/start_screen.tscn")
 	
 	# Only continue cleanup after start screen has been fully loaded
-	var start_scene = _check_start_screen()
-	while start_scene == null:
+	var scene_loaded = _check_scene_state()
+	while scene_loaded == null:
 		await get_tree().process_frame
-		start_scene = _check_start_screen()
+		scene_loaded = _check_scene_state()
 	
 	# Reset variables to default
 	players = {}
@@ -246,6 +272,7 @@ func _cleanup(id):
 	
 	multiplayer.multiplayer_peer = null
 	
+	print("Player %s was disconnected" % id)
 	# Disconnect multiplayer signals from host if they leave
 	if id == 1:
 		if multiplayer.peer_connected.is_connected(_new_peer_data):
@@ -255,7 +282,7 @@ func _cleanup(id):
 		if (multiplayer as SceneMultiplayer).peer_authenticating.is_connected(_on_new_peer_authenticating):
 			(multiplayer as SceneMultiplayer).peer_authenticating.disconnect(_on_new_peer_authenticating)
 
-func _check_start_screen():
+func _check_scene_state():
 	var scene = get_tree().current_scene
 	if scene == null : return null
 	return "scene loaded"

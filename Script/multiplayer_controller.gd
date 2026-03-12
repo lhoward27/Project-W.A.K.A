@@ -177,6 +177,7 @@ func _process(_delta: float) -> void:
 			_update_ik_pose()
 
 func _physics_process(delta: float) -> void:
+	if not multiplayer.has_multiplayer_peer(): return
 	if multiplayer.multiplayer_peer.get_connection_status() != MultiplayerPeer.CONNECTION_CONNECTED: return
 	if not is_multiplayer_authority(): return
 	
@@ -324,6 +325,7 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 
 func _unhandled_input(event: InputEvent) -> void:	 
+	if not multiplayer.has_multiplayer_peer(): return
 	if multiplayer.multiplayer_peer.get_connection_status() != MultiplayerPeer.CONNECTION_CONNECTED: return
 	if not is_multiplayer_authority(): return
 	  
@@ -408,7 +410,13 @@ func _update_ik_pose():
 
 
 func _on_exit_button_pressed() -> void:
-	get_tree().quit()
+	if not is_multiplayer_authority(): return
+	else:
+		print(multiplayer.get_unique_id())
+		if multiplayer.get_unique_id() == 1:
+			MultiplayerManager.rpc("_remove_player_request", "quit")
+		else:
+			get_tree().quit()
 
 func _on_resume_button_pressed() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -417,7 +425,8 @@ func _on_resume_button_pressed() -> void:
 	is_paused = false
 
 func _on_start_screen_button_pressed() -> void:
-	MultiplayerManager.rpc("_remove_player_request")
+	player_synchronizer.process_mode = Node.PROCESS_MODE_DISABLED
+	MultiplayerManager.rpc("_remove_player_request", "leave")
 
 @rpc("any_peer", "call_local")
 func _sync_player_animation(animation: String):

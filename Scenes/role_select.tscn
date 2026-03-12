@@ -2,6 +2,9 @@
 
 [ext_resource type="Script" uid="uid://dab7ssmfsoqcs" path="res://Script/role_select.gd" id="1_gqjfd"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gqjfd"]
+bg_color = Color(0.43137255, 0.039215688, 0.03529412, 1)
+
 [node name="RoleSelect" type="Control" unique_id=352074570]
 layout_mode = 3
 anchors_preset = 15
@@ -254,6 +257,7 @@ grow_horizontal = 0
 grow_vertical = 0
 scale = Vector2(1.5, 1.5)
 theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxFlat_gqjfd")
 toggle_mode = true
 text = "Ready Up"
 
