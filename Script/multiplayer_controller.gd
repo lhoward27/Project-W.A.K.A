@@ -25,6 +25,7 @@ extends CharacterBody3D
 @onready var player_hud: Control = $PlayerHUD
 @onready var pistol_highlight_hud: ColorRect = player_hud.get_node("PistolBorderHUD/PistolHighlightHUD")
 @onready var flashlight_highlight_hud: ColorRect = player_hud.get_node("FlashlightBorderHUD/FlashlightHighlightHUD")
+@onready var item_3_highlight_hud: ColorRect = player_hud.get_node("Item3HUD/Item3HighlightHUD")
 
 @export var player_materials = [
 preload("uid://van6okct3p66"),  #blue player material
@@ -75,11 +76,19 @@ var pistol_equipped: bool = false:
 		pistol.visible = is_equipped
 		pistol_highlight_hud.visible = is_equipped
 
+var item3: Node3D
+
 var item3_equipped: bool = false:
 	set(is_equipped):
 		item3_equipped = is_equipped
-		pistol.visible = is_equipped
-		pistol_highlight_hud.visible = is_equipped
+		if items.get_child_count() > 3:
+			item3.visible = is_equipped
+		item_3_highlight_hud.visible = is_equipped
+
+var items_equipped = []
+var equipped_item = 1:
+	set(item):
+		items_equipped[item]
 
 #Slide vars
 var slide_timer = 0.0
@@ -248,7 +257,7 @@ func _physics_process(delta: float) -> void:
 		free_looking = true
 		if sliding:
 			# Tilt camera during slide
-			camera_3d.rotation.z = lerp(camera_3d.rotation.z,-deg_to_rad(7.0), delta * slide_free_look_lerp_speed)	
+			camera_3d.rotation.z = lerp(camera_3d.rotation.z,-deg_to_rad(7.0), delta * slide_free_look_lerp_speed)
 		else:
 			# Tilt based on neck rotation
 			camera_3d.rotation.z = -deg_to_rad(neck.rotation.y * free_look_tilt_amount)
@@ -328,10 +337,11 @@ func _physics_process(delta: float) -> void:
 	if not is_paused:
 		move_and_slide()
 
-func _unhandled_input(event: InputEvent) -> void:	 
+func _unhandled_input(event: InputEvent) -> void:
 	if not multiplayer.has_multiplayer_peer(): return
 	if multiplayer.multiplayer_peer.get_connection_status() != MultiplayerPeer.CONNECTION_CONNECTED: return
 	if not is_multiplayer_authority(): return
+	if is_paused: return
 	  
 	if event.is_action_pressed("Crouch") && sprinting:
 		_sync_player_animation.rpc("Sliding Animation")
@@ -342,7 +352,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		_sync_player_animation.rpc("Idle")
 	
 	# Mouse looking logic
-	if event is InputEventMouseMotion and not is_paused:
+	if event is InputEventMouseMotion:
 		if free_looking:
 			neck.rotate_y(deg_to_rad(-event.relative.x * mouse_sens))
 			neck.rotation.y = clamp(neck.rotation.y,deg_to_rad(-120), deg_to_rad(120))
@@ -353,7 +363,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			head.rotation.x = clamp(head.rotation.x,deg_to_rad(-45), deg_to_rad(65))
 	
 	# Toggle Flashlight
-	if event.is_action_pressed("Flashlight") and not is_paused and flashlight_equipped:
+	if event.is_action_pressed("Flashlight") and flashlight_equipped:
 		if flashlight_light.light_energy > 0:
 			light_bulb.visible = false
 			flashlight_light.light_energy = 0
@@ -361,17 +371,28 @@ func _unhandled_input(event: InputEvent) -> void:
 			light_bulb.visible = true
 			flashlight_light.light_energy = 1
 	
-	if (event.is_action_pressed("Scroll Down") or event.is_action_pressed("Scroll Up")) and not is_paused:
+	if event.is_action_pressed("Scroll Down"):
+		
 		flashlight_equipped = not flashlight_equipped
 		pistol_equipped = not pistol_equipped
+	
+	if event.is_action_pressed("Scroll Up"):
+		equipped_item += 1
 	
 	if event.is_action_pressed("Equip One") and not is_paused:
 		pistol_equipped = true
 		flashlight_equipped = false
+		item3_equipped = false
 	
 	if event.is_action_pressed("Equip Two") and not is_paused:
 		pistol_equipped = false
 		flashlight_equipped = true
+		item3_equipped = false
+	
+	if event.is_action_pressed("Equip Three") and not is_paused:
+		pistol_equipped = false
+		flashlight_equipped = false
+		item3_equipped = true
 	
 	if event.is_action_pressed("Shoot") and pistol_equipped:
 		_sync_player_animation.rpc("Shoot")
@@ -465,8 +486,15 @@ func _set_spawn_location(group: String, index: int):
 	self.set_collision_mask_value(1, true)
 
 func _on_items_child_entered_tree(node: Node) -> void:
-	#node.
+	items_equipped.append(node.name)
+	print(items_equipped)
 	if node.name == "FlashlightItem":
-		print("Flashlight Equipped")
-	else:
-		print("Pistol Equipped")
+		_item3_equipped(node, flashlight)
+	elif node.name == "PistolItem":
+		_item3_equipped(node, pistol)
+
+func _item3_equipped(node, item):
+	node.visible = false
+	node.transform = item.transform
+	item3 = node
+	print("%s Equipped" % node.name)

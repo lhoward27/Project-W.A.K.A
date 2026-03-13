@@ -241,6 +241,35 @@ states/Start/position = Vector2(193, 97)
 transitions = ["Door Close", "Door Open", SubResource("AnimationNodeStateMachineTransition_rgh2o"), "Door Open", "Door Close", SubResource("AnimationNodeStateMachineTransition_pbw6q"), "Start", "Door Open", SubResource("AnimationNodeStateMachineTransition_idj7w")]
 graph_offset = Vector2(-231, 0)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rgh2o"]
+albedo_color = Color(0.13319641, 0.13319641, 0.13319638, 1)
+metallic = 0.77
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_pbw6q"]
+material = SubResource("StandardMaterial3D_rgh2o")
+top_radius = 0.02
+bottom_radius = 0.02
+height = 0.1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pbw6q"]
+albedo_color = Color(0.13333334, 0.13333334, 0.13333334, 1)
+metallic = 0.77
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_v1gob"]
+material = SubResource("StandardMaterial3D_pbw6q")
+top_radius = 0.02
+bottom_radius = 0.028
+height = 0.03
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tq1mk"]
+emission_enabled = true
+emission = Color(18.892157, 18.892157, 18.892157, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_jw32o"]
+material = SubResource("StandardMaterial3D_tq1mk")
+radius = 0.01
+height = 0.02
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_jw32o"]
 size = Vector3(0.25, 0.25, 0.25)
 
@@ -281,35 +310,6 @@ _surfaces = [{
 }]
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_c352c")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rgh2o"]
-albedo_color = Color(0.13319641, 0.13319641, 0.13319638, 1)
-metallic = 0.77
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_pbw6q"]
-material = SubResource("StandardMaterial3D_rgh2o")
-top_radius = 0.02
-bottom_radius = 0.02
-height = 0.1
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pbw6q"]
-albedo_color = Color(0.13333334, 0.13333334, 0.13333334, 1)
-metallic = 0.77
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_v1gob"]
-material = SubResource("StandardMaterial3D_pbw6q")
-top_radius = 0.02
-bottom_radius = 0.028
-height = 0.03
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tq1mk"]
-emission_enabled = true
-emission = Color(18.892157, 18.892157, 18.892157, 1)
-
-[sub_resource type="SphereMesh" id="SphereMesh_jw32o"]
-material = SubResource("StandardMaterial3D_tq1mk")
-radius = 0.01
-height = 0.02
 
 [node name="World" type="Node3D" unique_id=364456515]
 script = ExtResource("1_kln2b")
@@ -477,43 +477,43 @@ anim_player = NodePath("../AnimationPlayer")
 [node name="FlashlightItem" type="Area3D" parent="Items" unique_id=899265743]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1736089, -1.8177867, -3.1300554)
 
+[node name="FlashlightItem" type="Node3D" parent="Items/FlashlightItem" unique_id=297806165]
+transform = Transform3D(2.222222, 0, 0, 0, -9.713636e-08, -2.2222219, 0, 2.222221, -9.71364e-08, 0, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Items/FlashlightItem/FlashlightItem" unique_id=725687194]
+transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_pbw6q")
+skeleton = NodePath("../../../../../../..")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Items/FlashlightItem/FlashlightItem" unique_id=23139372]
+transform = Transform3D(0.99999994, -1.3658914e-16, 0, 5.716964e-15, 0.9999998, -1.4210855e-14, 5.684342e-14, 1.4210855e-14, 0.9999999, 0, -0.06479615, -1.1150689e-08)
+mesh = SubResource("CylinderMesh_v1gob")
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Items/FlashlightItem/FlashlightItem" unique_id=64045392]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, -0.081323385, -1.39948355e-08)
+light_energy = 1.5
+spot_range = 8.466755
+spot_angle = 33.56934
+
+[node name="LightBulb" type="MeshInstance3D" parent="Items/FlashlightItem/FlashlightItem/SpotLight3D" unique_id=860594785]
+transform = Transform3D(1, 0, 1.3159717e-14, 0, 1, 0, 1.3159717e-14, 0, 1, 0, -1.4510704e-10, 0.0014345348)
+mesh = SubResource("SphereMesh_jw32o")
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Items/FlashlightItem" unique_id=814092765]
 shape = SubResource("BoxShape3D_jw32o")
 
 [node name="PistolItem" type="Area3D" parent="Items" unique_id=1081600835]
 transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 0, -1.8177867, -3.1300554)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Items/PistolItem" unique_id=1874177917]
-shape = SubResource("BoxShape3D_jw32o")
+[node name="PistolItem" type="Node3D" parent="Items/PistolItem" unique_id=837269372]
+transform = Transform3D(-8.388657e-09, -9.713643e-09, -0.11111114, -9.713642e-09, -0.11111112, 9.713645e-09, -0.11111112, 9.713643e-09, 8.388658e-09, 0, 0, 0)
 
-[node name="PistolItem" type="Node3D" parent="." unique_id=837269372]
-transform = Transform3D(-9.713642e-09, -0.11111112, 1.45704675e-08, 8.388657e-09, 1.4570464e-08, 0.11111114, -0.11111112, 9.713643e-09, 8.388658e-09, 0, -1.8177867, -3.1300554)
-
-[node name="Cube" type="MeshInstance3D" parent="PistolItem" unique_id=334180667]
+[node name="Cube" type="MeshInstance3D" parent="Items/PistolItem/PistolItem" unique_id=334180667]
 mesh = SubResource("ArrayMesh_50glp")
 skeleton = NodePath("")
 
-[node name="FlashlightItem" type="Node3D" parent="." unique_id=297806165]
-transform = Transform3D(2.222222, 0, 0, 0, -9.713636e-08, -2.2222219, 0, 2.222221, -9.71364e-08, 1.1736089, -1.8177867, -3.1300554)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="FlashlightItem" unique_id=725687194]
-transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_pbw6q")
-skeleton = NodePath("../../../../..")
-
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="FlashlightItem" unique_id=23139372]
-transform = Transform3D(0.99999994, -1.3658914e-16, 0, 5.716964e-15, 0.9999998, -1.4210855e-14, 5.684342e-14, 1.4210855e-14, 0.9999999, 0, -0.06479615, -1.1150689e-08)
-mesh = SubResource("CylinderMesh_v1gob")
-
-[node name="SpotLight3D" type="SpotLight3D" parent="FlashlightItem" unique_id=64045392]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, -0.081323385, -1.39948355e-08)
-light_energy = 1.5
-spot_range = 8.466755
-spot_angle = 33.56934
-
-[node name="LightBulb" type="MeshInstance3D" parent="FlashlightItem/SpotLight3D" unique_id=860594785]
-transform = Transform3D(1, 0, 1.3159717e-14, 0, 1, 0, 1.3159717e-14, 0, 1, 0, -1.4510704e-10, 0.0014345348)
-mesh = SubResource("SphereMesh_jw32o")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Items/PistolItem" unique_id=1874177917]
+shape = SubResource("BoxShape3D_jw32o")
 
 [connection signal="body_entered" from="Maze/Door" to="." method="_on_door_body_entered"]
 [connection signal="body_exited" from="Maze/Door" to="." method="_on_door_body_exited"]

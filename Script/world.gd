@@ -5,8 +5,8 @@ extends Node3D
 @onready var access_light_mesh: MeshInstance3D = $Maze/Door/Keypad/AccessLight
 @onready var access_spotlight: SpotLight3D = $Maze/Door/Keypad/AccessLight/SpotLight3D
 @onready var access_spotlight_outer: SpotLight3D = $Maze/Door/Keypad2/AccessLight/SpotLight3D
-@onready var flashlight: Node3D = $FlashlightItem
-@onready var pistol: Node3D = $PistolItem
+@onready var flashlight: Node3D = $Items/FlashlightItem/FlashlightItem
+@onready var pistol: Node3D = $Items/PistolItem/PistolItem
 
 var access_light_material
 var access_light_color = Color("ff0000"):
@@ -48,7 +48,8 @@ func _set_keypad_color(color):
 func _on_pistol_item_body_entered(body: Node3D) -> void:
 	var item_node = body.get_node("PlayerModel/Armature/Skeleton3D/RightHandAttachment/Items")
 	if item_node.get_child_count() < 3:
-		item_node.add_child(pistol)
+		var pistol_node = pistol.duplicate()
+		item_node.add_child(pistol_node)
 
 func _on_flashlight_item_body_entered(body: Node3D) -> void:
 	var item_node = body.get_node("PlayerModel/Armature/Skeleton3D/RightHandAttachment/Items")
