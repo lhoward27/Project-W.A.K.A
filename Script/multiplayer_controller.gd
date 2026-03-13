@@ -8,23 +8,23 @@ extends CharacterBody3D
 @onready var ray_cast_3d: RayCast3D = $RayCast3D # Used to check for ceiling when uncrouching
 @onready var camera_3d: Camera3D = $Neck/Head/Eyes/Camera3D
 @onready var eyes: Node3D = $Neck/Head/Eyes
-@onready var body_mesh: MeshInstance3D = $PlayerModel/Armature/Skeleton3D/body
-@onready var head_mesh: MeshInstance3D = $PlayerModel/Armature/Skeleton3D/head
 @onready var player_animation: AnimationTree = $AnimationTree
 @onready var animation_state_machine = player_animation["parameters/AnimationNodeStateMachine/playback"]
-@onready var ik_target: Node3D = $IK_Target
-@onready var right_arm_ik: SkeletonIK3D = $PlayerModel/Armature/Skeleton3D/RightArm_IK
-@onready var skeleton: Skeleton3D = $PlayerModel/Armature/Skeleton3D
 @onready var player_synchronizer: MultiplayerSynchronizer = $PlayerSynchronizer
-@onready var pistol: Node3D = $PlayerModel/Armature/Skeleton3D/RightHandAttachment/Pistol
-@onready var flashlight: Node3D = $PlayerModel/Armature/Skeleton3D/RightHandAttachment/Flashlight
-@onready var flashlight_light: SpotLight3D = $PlayerModel/Armature/Skeleton3D/RightHandAttachment/Flashlight/SpotLight3D
-@onready var light_bulb: MeshInstance3D = $PlayerModel/Armature/Skeleton3D/RightHandAttachment/Flashlight/SpotLight3D/LightBulb
+@onready var ik_target: Node3D = $IK_Target
+@onready var skeleton: Skeleton3D = $PlayerModel/Armature/Skeleton3D
+@onready var body_mesh: MeshInstance3D = skeleton.get_node("body")
+@onready var head_mesh: MeshInstance3D = skeleton.get_node("head")
+@onready var right_arm_ik: SkeletonIK3D = skeleton.get_node("RightArm_IK")
+@onready var items: Node3D = skeleton.get_node("RightHandAttachment/Items")
+@onready var pistol: Node3D = items.get_node("Pistol")
+@onready var flashlight: Node3D = items.get_node("Flashlight")
+@onready var flashlight_light: SpotLight3D = flashlight.get_node("SpotLight3D")
+@onready var light_bulb: MeshInstance3D = flashlight.get_node("SpotLight3D/LightBulb")
 @onready var pause_menu: Control = $PauseMenu
 @onready var player_hud: Control = $PlayerHUD
-@onready var pistol_highlight_hud: ColorRect = $PlayerHUD/PistolBorderHUD/PistolHighlightHUD
-@onready var flashlight_highlight_hud: ColorRect = $PlayerHUD/FlashlightBorderHUD/FlashlightHighlightHUD
-
+@onready var pistol_highlight_hud: ColorRect = player_hud.get_node("PistolBorderHUD/PistolHighlightHUD")
+@onready var flashlight_highlight_hud: ColorRect = player_hud.get_node("FlashlightBorderHUD/FlashlightHighlightHUD")
 
 @export var player_materials = [
 preload("uid://van6okct3p66"),  #blue player material
@@ -465,7 +465,8 @@ func _set_spawn_location(group: String, index: int):
 	self.set_collision_mask_value(1, true)
 
 func _on_items_child_entered_tree(node: Node) -> void:
-	if node.name == "Flashlight":
+	#node.
+	if node.name == "FlashlightItem":
 		print("Flashlight Equipped")
 	else:
 		print("Pistol Equipped")

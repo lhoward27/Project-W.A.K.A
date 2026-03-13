@@ -14,7 +14,7 @@ const MAX_DECALS: int = 30
 # Oldest decals are at index 0 → newest at the end
 var active_decals: Array[Node] = []
 
-@onready var pistol: Node3D = $"../../../../PlayerModel/Armature/Skeleton3D/RightHandAttachment/Pistol"
+@onready var pistol: Node3D = $"../../../../PlayerModel/Armature/Skeleton3D/RightHandAttachment/Items/Pistol"
 
 # How far the ray should travel when checking for hits (in units)
 var ray_range: float = 2000.0

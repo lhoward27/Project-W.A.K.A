@@ -167,32 +167,32 @@ _surfaces = [{
 }]
 blend_shape_mode = 0
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_idj7w"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r5668"]
 albedo_color = Color(0.13319641, 0.13319641, 0.13319638, 1)
 metallic = 0.77
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_sxj10"]
-material = SubResource("StandardMaterial3D_idj7w")
+material = SubResource("StandardMaterial3D_r5668")
 top_radius = 0.02
 bottom_radius = 0.02
 height = 0.1
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pbw6q"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lenjf"]
 albedo_color = Color(0.13333334, 0.13333334, 0.13333334, 1)
 metallic = 0.77
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_y481q"]
-material = SubResource("StandardMaterial3D_pbw6q")
+material = SubResource("StandardMaterial3D_lenjf")
 top_radius = 0.02
 bottom_radius = 0.028
 height = 0.03
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tq1mk"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fux7b"]
 emission_enabled = true
 emission = Color(18.892157, 18.892157, 18.892157, 1)
 
 [sub_resource type="SphereMesh" id="SphereMesh_5obxw"]
-material = SubResource("StandardMaterial3D_tq1mk")
+material = SubResource("StandardMaterial3D_fux7b")
 radius = 0.01
 height = 0.02
 
@@ -202,7 +202,7 @@ metallic = 1.0
 metallic_specular = 0.0
 roughness = 0.0
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_c352c"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_c8b38"]
 _surfaces = [{
 "aabb": AABB(-1.5869567, 0.27396077, -0.26524812, 3.5801384, 2.299229, 0.5304963),
 "format": 34359742465,
@@ -232,7 +232,7 @@ _surfaces = [{
 "vertex_data": PackedByteArray("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2FwsviyXxj+azoe+ujWCvpElqD+Ar3i+9cIDP5YEsT+azoe+T+0Tvl5etz+azoe+bhziPkLToT+azoe+BCIMP/ATwz+azoe+BCIMP/ETwz+czoc+BCIMP/ETwz+czoc+BCIMP/ATwz+azoe+T+0Tvl9etz+czoc+bhziPkLToT+czoc+ujWCvpElqD+Venc+9cIDP5cEsT+czoc+bhziPkLToT+azoe+bhziPkLToT+czoc+IAzec////78AAP9//385/gAA/397h///IAzec////78gDN5z////v/////9DMiDZOfrk/gqAEP12Be795X8r/f////9DMiDZ/////////79KC80B/5osbjfzHQF7modtN/MdAXuah23sEEr+////v/////////+/7BBK/v///7//////////v1b9pgD///+//////////79W/aYA////v1b9pgD///+//////////7//////////v/////////+//////////7//////////v/////////+//fLz/v///7/98vP+////v////3//fzv68uvza////7////9/XoP//y7nGWf///+/LucZZ////78u5xln////v0IsvFP///+/Qiy8U////79CLLxT////v0IsvFP///+/84KDAn791cHzgoMC+vs9wfOCgwJd+zvB84KDAoD9HML/f/9/////P+aApnX///8/NX7Rkf///z/mgKZ1////P/9//3////8//3//f////z//f/9/////P/9//3////8//3//f////z//f/9/////P0KAqXz///8/QoCpfP///z9CgKl8////P/9//3////8//3//f////z//f/9/////P/9//3////8//3//f////z//f/9/////PzOFFo7///8/M4UWjv///z9DXbsi////v0NduyL///+/Q127Iv///79DXbsi////vwaCVf5+A9LArH2r/YIE2r6sfav9UAbfvgaCVf4qBNHAQoGdhryG9/+YfraDOHz7/0KBnYbAhvX/mH62gzN8+f9eb+AQje65t15v4BBc75K3Xm/gEHTvQLdeb+AQ5u3Gt3QhdKH///+/dCF0of///790IXSh////v3QhdKH///+/Zd13Xf///z9l3Xdd////P2Xdd13///8/Zd13Xf///z9m1Jer////v2bUl6v///+/ZtSXq////79m1Jer////vwl9cvz///8/wXw0/P///z8JfXL8////P8F8NPz///8/CX1y/P///z8JfXL8////P8PJy0n///8/w8nLSf///z/DyctJ////P8PJy0n///8/Rf9Ff7mAov9F/0V/uYCi/0X/RX+5gKL/Rf9Ff7mAov/9+P54/nh+fP34/nj+eH58/fj+eP54fnz9+P54/nh+fJvqYpX///+/m+pilf///7+b6mKV////v5vqYpX///+/TO2xko0J0QBM7bGSjQnRAEztsZKNCdEAWwBagP///79bAFqA////vxUYFZj///+/FRgVmP///7/2iAj3////v/aICPf///+/9ogI9////7/2iAj3////v5HDkkP///+/kcOSQ////7+Rw5JD////v5HDkkP///+/g3d7CP///78deuEF////v4N3ewj///+/HXrhBf///7+4NgVJ////v7g2BUn///+/uDYFSf///7+4NgVJ////vwAA/3//f2z/AAD/f/9/i/o5+uT+9X8Q/Tn65P7xfw/9Ofrk/g6ADv3///9/HoD//////38ajf//mH62g8aD+/+YfraDy4P5/6x9q/1OAlK+rH2r/UYCfb0u5xln////vxp+FHT///8/Gn4UdP///z8afhR0////Pxp+FHT///8/N/MdAXuah2038x0B////v/////9DMiDZ/////////7//////QzIg2f////////+//////////7//////////v/9//3////8//3//f////z//f/9/////P/9//3////8//3//f////z/y6/Nr////v/Lr82v///+/8uvza////7/y6/Nr////v/Lr82v///+/IAzec////79KC80B/5osbkoLzQH/mixuSgvNAf///7/mgKZ1////P+aApnX///8/Vv2mAP///78GglX+pAGdwQaCVf6iAefBQoGdhkN5+P9CgZ2GP3n2/3YF7v3xfzH9dgXu/QyAMf12Be79F4As/XQhdKH///+/dCF0of///790IXSh////v3QhdKH///+/dCF0of///790IXSh////v3QhdKH///+/dCF0of///79CgKl8////Px164QX///+/HXrhBf///7/CgHpz////P8KAenP///8/woB6c////z/CgHpz////Pwv0ugD///+/C/S6AP///78L9LoA////vwv0ugD///+//fLz/v///7/98vP+////v8F8NPz///8/wXw0/P///z//f/9/////P/9//3////8/M4UWjv///z8zhRaO////P/////////+//////////7/sEEr+////v+wQSv7///+//////////7//////////v/////////+/NX7Rkf///z81ftGR////PzV+0ZH///8//3//f////z//f/9/////P/9//3////8/TO2xkv///7/7CJQC////v/sIlAL///+/+wiUAv///7/7CJQC////v1sAWoD///+/WwBagP///78VGBWY////vxUYFZj///+/TH2Wdv///z9MfZZ2////P0x9lnb///8/TH2Wdv///z+Dd3sI////v4N3ewj///+/")
 }]
 blend_shape_mode = 0
-shadow_mesh = SubResource("ArrayMesh_c352c")
+shadow_mesh = SubResource("ArrayMesh_c8b38")
 
 [sub_resource type="Animation" id="Animation_cg1ai"]
 resource_name = "Crouch Animation"
@@ -629,7 +629,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Armature/Skeleton3D/RightHandAttachment/Pistol:rotation")
+tracks/0/path = NodePath("Armature/Skeleton3D/RightHandAttachment/Items/Pistol:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -775,7 +775,7 @@ length = 0.3
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Armature/Skeleton3D/RightHandAttachment/Pistol:rotation")
+tracks/0/path = NodePath("Armature/Skeleton3D/RightHandAttachment/Items/Pistol:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -1459,6 +1459,7 @@ filter_enabled = true
 filters = ["", "Armature/Skeleton3D/RightHandAttachment/Pistol:rotation"]
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_sxj10"]
+graph_offset = Vector2(-1431.8975, 241.17926)
 nodes/output/position = Vector2(-320, 360)
 nodes/AnimationNodeStateMachine/node = ExtResource("3_7kmab")
 nodes/AnimationNodeStateMachine/position = Vector2(-820, 220)
@@ -1733,32 +1734,36 @@ transform = Transform3D(0.9999997, 6.7811754e-08, -1.7246937e-07, -1.8515841e-07
 bone_name = "shoulder.L.002_leaf"
 bone_idx = 9
 
-[node name="Flashlight" type="Node3D" parent="PlayerModel/Armature/Skeleton3D/RightHandAttachment" unique_id=174649447]
-transform = Transform3D(2.222222, 0, 0, 0, -9.713636e-08, -2.2222219, 0, 2.222221, -9.71364e-08, 0, 0, 0)
+[node name="Items" type="Node3D" parent="PlayerModel/Armature/Skeleton3D/RightHandAttachment" unique_id=1302539684]
+transform = Transform3D(-2.2222228, 3.8326553e-07, 4.3580105e-08, 6.8511405e-08, -4.123095e-07, 2.222223, -4.1146336e-07, 2.2222228, 4.7280247e-07, 0, 0, 0)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayerModel/Armature/Skeleton3D/RightHandAttachment/Flashlight" unique_id=262620946]
+[node name="Flashlight" type="Node3D" parent="PlayerModel/Armature/Skeleton3D/RightHandAttachment/Items" unique_id=174649447]
+transform = Transform3D(-0.99999964, -1.8515831e-07, 8.742273e-08, -1.851584e-07, 0.9999991, 1.4182777e-07, -8.742278e-08, 1.418277e-07, -0.99999946, 0, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayerModel/Armature/Skeleton3D/RightHandAttachment/Items/Flashlight" unique_id=262620946]
 transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("CylinderMesh_sxj10")
-skeleton = NodePath("../../../../../..")
+skeleton = NodePath("../../../../../../..")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="PlayerModel/Armature/Skeleton3D/RightHandAttachment/Flashlight" unique_id=1541354954]
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="PlayerModel/Armature/Skeleton3D/RightHandAttachment/Items/Flashlight" unique_id=1541354954]
 transform = Transform3D(0.99999994, -1.3658914e-16, 0, 5.716964e-15, 0.9999998, -1.4210855e-14, 5.684342e-14, 1.4210855e-14, 0.9999999, 0, -0.06479615, -1.1150689e-08)
 mesh = SubResource("CylinderMesh_y481q")
 
-[node name="SpotLight3D" type="SpotLight3D" parent="PlayerModel/Armature/Skeleton3D/RightHandAttachment/Flashlight" unique_id=1355094324]
+[node name="SpotLight3D" type="SpotLight3D" parent="PlayerModel/Armature/Skeleton3D/RightHandAttachment/Items/Flashlight" unique_id=1355094324]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, -0.081323385, -1.39948355e-08)
 light_energy = 1.5
 spot_range = 8.466755
 spot_angle = 33.56934
 
-[node name="LightBulb" type="MeshInstance3D" parent="PlayerModel/Armature/Skeleton3D/RightHandAttachment/Flashlight/SpotLight3D" unique_id=2080014772]
+[node name="LightBulb" type="MeshInstance3D" parent="PlayerModel/Armature/Skeleton3D/RightHandAttachment/Items/Flashlight/SpotLight3D" unique_id=2080014772]
 transform = Transform3D(1, 0, 1.3159717e-14, 0, 1, 0, 1.3159717e-14, 0, 1, 0, -1.4510704e-10, 0.0014345348)
 mesh = SubResource("SphereMesh_5obxw")
 
-[node name="Pistol" type="Node3D" parent="PlayerModel/Armature/Skeleton3D/RightHandAttachment" unique_id=1810424007]
-transform = Transform3D(-8.388657e-09, -9.713642e-09, -0.11111114, -9.713642e-09, -0.11111112, 9.713645e-09, -0.11111112, 9.713643e-09, 8.388658e-09, 0, 0.05927509, -0.057160318)
+[node name="Pistol" type="Node3D" parent="PlayerModel/Armature/Skeleton3D/RightHandAttachment/Items" unique_id=1810424007]
+transform = Transform3D(-3.774894e-09, -4.371137e-09, -0.049999997, -4.3711372e-09, -0.049999975, 4.371139e-09, -0.049999982, 4.371137e-09, 3.7748946e-09, 0, -0.010908246, 0.030066863)
 
-[node name="Cube" type="MeshInstance3D" parent="PlayerModel/Armature/Skeleton3D/RightHandAttachment/Pistol" unique_id=1971720044]
+[node name="Cube" type="MeshInstance3D" parent="PlayerModel/Armature/Skeleton3D/RightHandAttachment/Items/Pistol" unique_id=1971720044]
+transform = Transform3D(2.1855695e-07, 0.99999994, -1.6292083e-07, 0.99999994, -2.18557e-07, -2.5034333e-07, -2.5034336e-07, -1.6292081e-07, -0.99999994, 0, 0, 0)
 mesh = SubResource("ArrayMesh_7kmab")
 skeleton = NodePath("")
 
@@ -1995,9 +2000,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("7_r5668")
 
-[node name="Items" type="Node3D" parent="." unique_id=1302539684]
-
 [connection signal="pressed" from="PauseMenu/VBoxContainer/ResumeButton" to="." method="_on_resume_button_pressed"]
 [connection signal="pressed" from="PauseMenu/VBoxContainer/StartScreenButton" to="." method="_on_start_screen_button_pressed"]
 [connection signal="pressed" from="PauseMenu/VBoxContainer/ExitButton" to="." method="_on_exit_button_pressed"]
-[connection signal="child_entered_tree" from="Items" to="." method="_on_items_child_entered_tree"]
+[connection signal="child_entered_tree" from="PlayerModel/Armature/Skeleton3D/RightHandAttachment/Items" to="." method="_on_items_child_entered_tree"]
