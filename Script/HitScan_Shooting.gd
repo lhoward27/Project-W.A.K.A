@@ -14,7 +14,8 @@ const MAX_DECALS: int = 30
 # Oldest decals are at index 0 → newest at the end
 var active_decals: Array[Node] = []
 
-@onready var pistol: Node3D = $"../../../../PlayerModel/Armature/Skeleton3D/RightHandAttachment/Items/Pistol"
+@onready var player = get_node("../../../../")
+var pistol
 
 # How far the ray should travel when checking for hits (in units)
 var ray_range: float = 2000.0
@@ -32,8 +33,10 @@ func _input(event: InputEvent) -> void:
 
 # Main function: shoots a ray from the center of the screen and places a decal where it hits
 func get_camera_collision() -> void:
-	if not pistol.visible or not is_multiplayer_authority():
-		return
+	pistol = player.pistol
+	if pistol == null: return
+	
+	if not pistol.visible or not is_multiplayer_authority(): return
 	# Get the center of the current viewport
 	var center: Vector2 = get_viewport().get_size() / 2.0
 	

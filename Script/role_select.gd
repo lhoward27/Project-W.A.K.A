@@ -37,14 +37,16 @@ func _set_player_properties():
 			"body_material": 0,
 			"head_material": 2,
 			"role_group": "survivors",
-			"player_spawn_index": 0
+			"player_spawn_index": 0,
+			"item_1": "Pistol"
 			}
 		"medic": return {
 			"role": "medic",
 			"body_material": 0,
 			"head_material": 3,
 			"role_group": "survivors",
-			"player_spawn_index": 1
+			"player_spawn_index": 1,
+			"item_1": "Flashlight"
 			}
 		"defender": return {
 			"role": "medic",

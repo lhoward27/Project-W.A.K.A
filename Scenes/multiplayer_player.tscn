@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://c7ojjiwt8b8cy" path="res://Script/multiplayer_controller.gd" id="1_tq1mk"]
 [ext_resource type="Script" uid="uid://cttymgm2k6vbd" path="res://Script/HitScan_Shooting.gd" id="2_5obxw"]
-[ext_resource type="AnimationNodeStateMachine" uid="uid://dwo05uejilr10" path="res://assets/Player animation states.tres" id="3_7kmab"]
 [ext_resource type="Texture2D" uid="uid://b64fxmf4dlg3a" path="res://assets/textures/a-simple-black-square-frame-designed-for-displaying-art-or-photographs-png.png" id="4_y481q"]
 [ext_resource type="Texture2D" uid="uid://ss7xbr33lr0f" path="res://assets/textures/weapon_11177525.png" id="5_r5668"]
 [ext_resource type="Texture2D" uid="uid://bkdvkoubxij4c" path="res://assets/textures/flashlight_10173822.png" id="6_lenjf"]
@@ -24,18 +23,6 @@ properties/3/replication_mode = 1
 properties/4/path = NodePath("IK_Target/AimOffset:position")
 properties/4/spawn = true
 properties/4/replication_mode = 1
-properties/5/path = NodePath("PlayerModel/Armature/Skeleton3D/RightHandAttachment/Flashlight/SpotLight3D:light_energy")
-properties/5/spawn = true
-properties/5/replication_mode = 1
-properties/6/path = NodePath("PlayerModel/Armature/Skeleton3D/RightHandAttachment/Flashlight/SpotLight3D/LightBulb:visible")
-properties/6/spawn = true
-properties/6/replication_mode = 1
-properties/7/path = NodePath("PlayerModel/Armature/Skeleton3D/RightHandAttachment/Pistol:visible")
-properties/7/spawn = true
-properties/7/replication_mode = 1
-properties/8/path = NodePath("PlayerModel/Armature/Skeleton3D/RightHandAttachment/Flashlight:visible")
-properties/8/spawn = true
-properties/8/replication_mode = 1
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5obxw"]
 radius = 0.2758789
@@ -629,7 +616,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Armature/Skeleton3D/RightHandAttachment/Items/Pistol:rotation")
+tracks/0/path = NodePath("Armature/Skeleton3D/RightHandAttachment/Pistol:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -775,7 +762,7 @@ length = 0.3
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Armature/Skeleton3D/RightHandAttachment/Items/Pistol:rotation")
+tracks/0/path = NodePath("Armature/Skeleton3D/RightHandAttachment/Pistol:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -1454,19 +1441,121 @@ _data = {
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_7kmab"]
 animation = &"Shoot Pistol"
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_bqinh"]
+animation = &"Crouch Animation"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_sxj10"]
+animation = &"Crouch Idle Animation"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lenjf"]
+animation = &"Crouchwalk Animation"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_5obxw"]
+animation = &"Stand Idle Animation"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_r5668"]
+animation = &"Run Animation"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_y481q"]
+animation = &"Slide End Animation"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_fux7b"]
+animation = &"Slide Start Animation"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_c8b38"]
+animation = &"Sliding Animation"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_g683q"]
+animation = &"Walk Animation"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_sxj10"]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_r5668"]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_y481q"]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_lenjf"]
+xfade_time = 0.2
+switch_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_g683q"]
+xfade_time = 0.4
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_5obxw"]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_a0dua"]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_wl1nn"]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_7kmab"]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_bqinh"]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_fux7b"]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_c8b38"]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_c7vkq"]
+xfade_time = 0.2
+switch_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_e5hbt"]
+xfade_time = 0.2
+switch_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_3sb36"]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_oltvb"]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_lenjf"]
+"states/Crouch Animation/node" = SubResource("AnimationNodeAnimation_bqinh")
+"states/Crouch Animation/position" = Vector2(285, 318)
+"states/Crouch Idle/node" = SubResource("AnimationNodeAnimation_sxj10")
+"states/Crouch Idle/position" = Vector2(395, 395)
+"states/Crouchwalk Animation/node" = SubResource("AnimationNodeAnimation_lenjf")
+"states/Crouchwalk Animation/position" = Vector2(682, 395)
+states/End/position = Vector2(1210, 318)
+states/Idle/node = SubResource("AnimationNodeAnimation_5obxw")
+states/Idle/position = Vector2(395, 245)
+"states/Run Animation/node" = SubResource("AnimationNodeAnimation_r5668")
+"states/Run Animation/position" = Vector2(919, 245)
+"states/Slide End Animation/node" = SubResource("AnimationNodeAnimation_y481q")
+"states/Slide End Animation/position" = Vector2(807.8152, 318)
+"states/Slide Start Animation/node" = SubResource("AnimationNodeAnimation_fux7b")
+"states/Slide Start Animation/position" = Vector2(1026, 318)
+"states/Sliding Animation/node" = SubResource("AnimationNodeAnimation_c8b38")
+"states/Sliding Animation/position" = Vector2(919, 395)
+states/Start/position = Vector2(106, 318)
+"states/Walk Animation/node" = SubResource("AnimationNodeAnimation_g683q")
+"states/Walk Animation/position" = Vector2(682, 245)
+transitions = ["Idle", "Walk Animation", SubResource("AnimationNodeStateMachineTransition_sxj10"), "Walk Animation", "Idle", SubResource("AnimationNodeStateMachineTransition_r5668"), "Idle", "Crouch Animation", SubResource("AnimationNodeStateMachineTransition_y481q"), "Crouch Animation", "Crouch Idle", SubResource("AnimationNodeStateMachineTransition_lenjf"), "Walk Animation", "Run Animation", SubResource("AnimationNodeStateMachineTransition_g683q"), "Run Animation", "Walk Animation", SubResource("AnimationNodeStateMachineTransition_5obxw"), "Crouch Idle", "Crouchwalk Animation", SubResource("AnimationNodeStateMachineTransition_a0dua"), "Walk Animation", "Crouchwalk Animation", SubResource("AnimationNodeStateMachineTransition_wl1nn"), "Crouchwalk Animation", "Walk Animation", SubResource("AnimationNodeStateMachineTransition_7kmab"), "Crouchwalk Animation", "Crouch Idle", SubResource("AnimationNodeStateMachineTransition_bqinh"), "Crouch Idle", "Idle", SubResource("AnimationNodeStateMachineTransition_fux7b"), "Run Animation", "Slide Start Animation", SubResource("AnimationNodeStateMachineTransition_c8b38"), "Slide End Animation", "Walk Animation", SubResource("AnimationNodeStateMachineTransition_c7vkq"), "Slide Start Animation", "Sliding Animation", SubResource("AnimationNodeStateMachineTransition_e5hbt"), "Sliding Animation", "Crouchwalk Animation", SubResource("AnimationNodeStateMachineTransition_3sb36"), "Sliding Animation", "Slide End Animation", SubResource("AnimationNodeStateMachineTransition_oltvb")]
+graph_offset = Vector2(247.81512, 202)
+
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_bqinh"]
 filter_enabled = true
 filters = ["Armature/Skeleton3D/RightHandAttachment/Items/Pistol:rotation", "Armature/Skeleton3D/RightHandAttachment/Pistol:rotation"]
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_sxj10"]
-graph_offset = Vector2(-858.16626, 156.60205)
+graph_offset = Vector2(-1279.9205, 220.8869)
 nodes/output/position = Vector2(-320, 360)
-nodes/AnimationNodeStateMachine/node = ExtResource("3_7kmab")
+nodes/AnimationNodeStateMachine/node = SubResource("AnimationNodeStateMachine_lenjf")
 nodes/AnimationNodeStateMachine/position = Vector2(-820, 220)
-nodes/Animation/node = SubResource("AnimationNodeAnimation_7kmab")
-nodes/Animation/position = Vector2(-780, 440)
 nodes/OneShot/node = SubResource("AnimationNodeOneShot_bqinh")
 nodes/OneShot/position = Vector2(-520, 280)
+nodes/Animation/node = SubResource("AnimationNodeAnimation_7kmab")
+nodes/Animation/position = Vector2(-780, 440)
 node_connections = [&"output", 0, &"OneShot", &"OneShot", 0, &"AnimationNodeStateMachine", &"OneShot", 1, &"Animation"]
 
 [node name="MultiplayerPlayer" type="CharacterBody3D" unique_id=109561205]
@@ -1507,6 +1596,7 @@ script = ExtResource("2_5obxw")
 transform = Transform3D(1, 0, 0, 0, -2.9802322e-08, 1.0000001, 0, -1.0000001, -2.9802322e-08, 0, 0, 0)
 
 [node name="PauseMenu" type="Control" parent="." unique_id=1730473292]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -1734,37 +1824,41 @@ transform = Transform3D(0.9999997, 6.7811754e-08, -1.7246937e-07, -1.8515841e-07
 bone_name = "shoulder.L.002_leaf"
 bone_idx = 9
 
-[node name="Items" type="Node3D" parent="PlayerModel/Armature/Skeleton3D/RightHandAttachment" unique_id=1302539684]
+[node name="Pistol" type="Node3D" parent="PlayerModel/Armature/Skeleton3D/RightHandAttachment" unique_id=1810424007]
+process_mode = 4
+transform = Transform3D(-8.3047675e-09, -9.616504e-09, -0.10999996, -9.616503e-09, -0.109999985, 9.616503e-09, -0.10999997, 9.616505e-09, 8.304767e-09, 0, 0.06332958, -0.020138443)
+visible = false
 
-[node name="Pistol" type="Node3D" parent="PlayerModel/Armature/Skeleton3D/RightHandAttachment/Items" unique_id=1810424007]
-transform = Transform3D(-8.3047675e-09, -9.616504e-09, -0.10999996, -9.616503e-09, -0.109999985, 9.616503e-09, -0.10999997, 9.616505e-09, 8.304767e-09, 1.1920929e-07, 0.062057305, -0.04718572)
-
-[node name="Cube" type="MeshInstance3D" parent="PlayerModel/Armature/Skeleton3D/RightHandAttachment/Items/Pistol" unique_id=1971720044]
+[node name="Cube" type="MeshInstance3D" parent="PlayerModel/Armature/Skeleton3D/RightHandAttachment/Pistol" unique_id=1971720044]
 transform = Transform3D(0.9999996, 0, 0, 0, 0.9999997, 0, 0, 0, 0.9999998, 0, 0, 0)
 mesh = SubResource("ArrayMesh_7kmab")
 skeleton = NodePath("")
 
-[node name="Flashlight" type="Node3D" parent="PlayerModel/Armature/Skeleton3D/RightHandAttachment/Items" unique_id=174649447]
-transform = Transform3D(-3, -9.6900294e-08, 1.0292289e-06, 1.029229e-06, -5.566175e-07, 3.0000005, -9.690024e-08, 3, 5.5661764e-07, 0, 0, 0)
+[node name="Flashlight" type="Node3D" parent="PlayerModel/Armature/Skeleton3D/RightHandAttachment" unique_id=174649447]
+process_mode = 4
+transform = Transform3D(3, 9.703958e-07, -5.883306e-08, -1.1317165e-06, -6.3828344e-07, -3.0000007, -1.004053e-06, 3.0000002, -5.566179e-07, 2.9802322e-08, -8.049454e-09, 0.043384135)
+visible = false
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayerModel/Armature/Skeleton3D/RightHandAttachment/Items/Flashlight" unique_id=262620946]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayerModel/Armature/Skeleton3D/RightHandAttachment/Flashlight" unique_id=262620946]
 transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("CylinderMesh_sxj10")
-skeleton = NodePath("../../../../../../..")
+skeleton = NodePath("../../../../../..")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="PlayerModel/Armature/Skeleton3D/RightHandAttachment/Items/Flashlight" unique_id=1541354954]
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="PlayerModel/Armature/Skeleton3D/RightHandAttachment/Flashlight" unique_id=1541354954]
 transform = Transform3D(0.99999994, -1.3658914e-16, 0, 5.716964e-15, 0.9999998, -1.4210855e-14, 5.684342e-14, 1.4210855e-14, 0.9999999, 0, -0.06479615, -1.1150689e-08)
 mesh = SubResource("CylinderMesh_y481q")
 
-[node name="SpotLight3D" type="SpotLight3D" parent="PlayerModel/Armature/Skeleton3D/RightHandAttachment/Items/Flashlight" unique_id=1355094324]
+[node name="SpotLight3D" type="SpotLight3D" parent="PlayerModel/Armature/Skeleton3D/RightHandAttachment/Flashlight" unique_id=1355094324]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, -0.081323385, -1.39948355e-08)
 light_energy = 1.5
 spot_range = 8.466755
 spot_angle = 33.56934
 
-[node name="LightBulb" type="MeshInstance3D" parent="PlayerModel/Armature/Skeleton3D/RightHandAttachment/Items/Flashlight/SpotLight3D" unique_id=2080014772]
+[node name="LightBulb" type="MeshInstance3D" parent="PlayerModel/Armature/Skeleton3D/RightHandAttachment/Flashlight/SpotLight3D" unique_id=2080014772]
 transform = Transform3D(1, 0, 1.3159717e-14, 0, 1, 0, 1.3159717e-14, 0, 1, 0, -1.4510704e-10, 0.0014345348)
 mesh = SubResource("SphereMesh_5obxw")
+
+[node name="Items" type="Node3D" parent="PlayerModel/Armature/Skeleton3D/RightHandAttachment" unique_id=1302539684]
 
 [node name="PlayerDecalDump" type="Node3D" parent="PlayerModel/Armature/Skeleton3D" unique_id=1912126617]
 
@@ -1788,7 +1882,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PistolBorderHUD" type="TextureRect" parent="PlayerHUD" unique_id=1859192460]
+[node name="Item1HUD" type="TextureRect" parent="PlayerHUD" unique_id=1859192460]
 self_modulate = Color(0, 0, 0, 1)
 layout_mode = 1
 anchors_preset = 2
@@ -1801,7 +1895,88 @@ grow_vertical = 0
 scale = Vector2(0.6, 0.6)
 texture = ExtResource("4_y481q")
 
-[node name="PistolTextureHUD" type="TextureRect" parent="PlayerHUD/PistolBorderHUD" unique_id=507060821]
+[node name="PistolTextureHUD" type="TextureRect" parent="PlayerHUD/Item1HUD" unique_id=507060821]
+visible = false
+self_modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -255.99997
+offset_top = -256.0001
+offset_right = 256.0
+offset_bottom = 255.99991
+grow_horizontal = 2
+grow_vertical = 2
+rotation = -0.49741885
+scale = Vector2(0.5, 0.5)
+pivot_offset_ratio = Vector2(0.5, 0.5)
+texture = ExtResource("5_r5668")
+
+[node name="FlashlightTextureHUD" type="TextureRect" parent="PlayerHUD/Item1HUD" unique_id=2091430092]
+visible = false
+modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -256.0
+offset_top = -255.99988
+offset_right = 256.0
+offset_bottom = 256.00012
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+pivot_offset_ratio = Vector2(0.5, 0.5)
+texture = ExtResource("6_lenjf")
+flip_h = true
+
+[node name="Item1LabelHUD" type="Label" parent="PlayerHUD/Item1HUD" unique_id=849290004]
+layout_mode = 0
+offset_left = 141.66666
+offset_top = 43.333374
+offset_right = 192.66666
+offset_bottom = 126.333374
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 60
+text = "1"
+
+[node name="Item1HighlightHUD" type="ColorRect" parent="PlayerHUD/Item1HUD" unique_id=1658946213]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -140.0
+offset_top = -138.75
+offset_right = 138.75
+offset_bottom = 133.75
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.3528, 0.43913335, 0.56, 0.48235294)
+
+[node name="Item2HUD" type="TextureRect" parent="PlayerHUD" unique_id=846406485]
+self_modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 200.0
+offset_top = -217.0
+offset_right = 725.0
+offset_bottom = 133.0
+grow_vertical = 0
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("4_y481q")
+
+[node name="PistolTextureHUD" type="TextureRect" parent="PlayerHUD/Item2HUD" unique_id=1797404603]
+visible = false
 self_modulate = Color(0, 0, 0, 1)
 layout_mode = 1
 anchors_preset = 8
@@ -1820,46 +1995,8 @@ scale = Vector2(0.5, 0.5)
 pivot_offset_ratio = Vector2(0.5, 0.5)
 texture = ExtResource("5_r5668")
 
-[node name="PistolLabelHud" type="Label" parent="PlayerHUD/PistolBorderHUD" unique_id=849290004]
-layout_mode = 0
-offset_left = 141.66666
-offset_top = 43.333374
-offset_right = 192.66666
-offset_bottom = 126.333374
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 60
-text = "1"
-
-[node name="PistolHighlightHUD" type="ColorRect" parent="PlayerHUD/PistolBorderHUD" unique_id=1658946213]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -140.0
-offset_top = -138.75
-offset_right = 138.75
-offset_bottom = 133.75
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.43137255, 0.43137255, 0.43137255, 0.5254902)
-
-[node name="FlashlightBorderHUD" type="TextureRect" parent="PlayerHUD" unique_id=846406485]
-self_modulate = Color(0, 0, 0, 1)
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 200.0
-offset_top = -217.0
-offset_right = 725.0
-offset_bottom = 133.0
-grow_vertical = 0
-scale = Vector2(0.6, 0.6)
-texture = ExtResource("4_y481q")
-
-[node name="FlashlightTextureHUD" type="TextureRect" parent="PlayerHUD/FlashlightBorderHUD" unique_id=984940880]
+[node name="FlashlightTextureHUD" type="TextureRect" parent="PlayerHUD/Item2HUD" unique_id=984940880]
+visible = false
 modulate = Color(0, 0, 0, 1)
 layout_mode = 1
 anchors_preset = 8
@@ -1878,7 +2015,7 @@ pivot_offset_ratio = Vector2(0.5, 0.5)
 texture = ExtResource("6_lenjf")
 flip_h = true
 
-[node name="FlashlightLabelHUD" type="Label" parent="PlayerHUD/FlashlightBorderHUD" unique_id=2073723224]
+[node name="Item2LabelHUD" type="Label" parent="PlayerHUD/Item2HUD" unique_id=2073723224]
 layout_mode = 0
 offset_left = 143.33333
 offset_top = 41.666626
@@ -1888,7 +2025,8 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 60
 text = "2"
 
-[node name="FlashlightHighlightHUD" type="ColorRect" parent="PlayerHUD/FlashlightBorderHUD" unique_id=1039581409]
+[node name="Item2HighlightHUD" type="ColorRect" parent="PlayerHUD/Item2HUD" unique_id=1039581409]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -1901,9 +2039,10 @@ offset_right = 138.75
 offset_bottom = 133.75
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.43137255, 0.43137255, 0.43137255, 0.5254902)
+color = Color(0.34901962, 0.4392157, 0.5647059, 0.5254902)
 
 [node name="Item3HUD" type="TextureRect" parent="PlayerHUD" unique_id=1172157206]
+visible = false
 self_modulate = Color(0, 0, 0, 1)
 layout_mode = 1
 anchors_preset = 2
@@ -1916,6 +2055,46 @@ offset_bottom = 133.0
 grow_vertical = 0
 scale = Vector2(0.6, 0.6)
 texture = ExtResource("4_y481q")
+
+[node name="PistolTextureHUD" type="TextureRect" parent="PlayerHUD/Item3HUD" unique_id=1607645350]
+visible = false
+self_modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -256.00003
+offset_top = -255.99997
+offset_right = 256.0
+offset_bottom = 256.00003
+grow_horizontal = 2
+grow_vertical = 2
+rotation = -0.49741885
+scale = Vector2(0.5, 0.5)
+pivot_offset_ratio = Vector2(0.5, 0.5)
+texture = ExtResource("5_r5668")
+
+[node name="FlashlightTextureHUD" type="TextureRect" parent="PlayerHUD/Item3HUD" unique_id=688105775]
+visible = false
+modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -256.0
+offset_top = -256.0
+offset_right = 256.0
+offset_bottom = 256.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+pivot_offset_ratio = Vector2(0.5, 0.5)
+texture = ExtResource("6_lenjf")
+flip_h = true
 
 [node name="Item3LabelHUD" type="Label" parent="PlayerHUD/Item3HUD" unique_id=1732925739]
 layout_mode = 0
@@ -1941,49 +2120,9 @@ offset_right = 138.75
 offset_bottom = 133.75
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.43137255, 0.43137255, 0.43137255, 0.5254902)
+color = Color(0.34901962, 0.4392157, 0.5647059, 0.5254902)
 
-[node name="FlashlightTextureHUD" type="TextureRect" parent="PlayerHUD/Item3HUD" unique_id=688105775]
-visible = false
-modulate = Color(0, 0, 0, 1)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -256.0
-offset_top = -256.0
-offset_right = 256.0
-offset_bottom = 256.0
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(0.5, 0.5)
-pivot_offset_ratio = Vector2(0.5, 0.5)
-texture = ExtResource("6_lenjf")
-flip_h = true
-
-[node name="PistolTextureHUD" type="TextureRect" parent="PlayerHUD/Item3HUD" unique_id=1607645350]
-visible = false
-self_modulate = Color(0, 0, 0, 1)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -256.0
-offset_top = -256.0
-offset_right = 256.0
-offset_bottom = 256.0
-grow_horizontal = 2
-grow_vertical = 2
-rotation = -0.49741885
-scale = Vector2(0.5, 0.5)
-pivot_offset_ratio = Vector2(0.5, 0.5)
-texture = ExtResource("5_r5668")
-
-[node name="TextureRect" type="TextureRect" parent="PlayerHUD" unique_id=2051280679]
+[node name="CrosshairTextureHUD" type="TextureRect" parent="PlayerHUD" unique_id=2051280679]
 self_modulate = Color(1, 1, 1, 0.4392157)
 layout_mode = 1
 anchors_preset = 8

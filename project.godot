@@ -25,8 +25,8 @@ MultiplayerManager="*uid://cvf5gfq82tqnu"
 
 [display]
 
-window/size/viewport_width=1624
-window/size/viewport_height=1105
+window/size/viewport_width=1269
+window/size/viewport_height=926
 window/stretch/mode="viewport"
 window/stretch/aspect="expand"
 

@@ -208,7 +208,6 @@ func _remove_player_from_game(id: int):
 @rpc("any_peer", "call_local")
 func _remove_player_request(request):
 	if not multiplayer.is_server(): return
-	print("requested")
 	# Identify which peer sent the request
 	var id = multiplayer.get_remote_sender_id()
 	
@@ -221,7 +220,6 @@ func _remove_player_request(request):
 			return
 		# Ensure the node is still valid before trying to free it
 		if is_instance_valid(players[id]):
-			print("is valid")
 			# If host leaves game, disconnect all peers
 			if id == 1:
 				var players_array = players.keys()
@@ -231,10 +229,8 @@ func _remove_player_request(request):
 					print(player)
 					if request == "quit":
 						if player == 1:
-							prints(player, "quitting")
 							_cleanup(player, "quit")
 						else:
-							prints(player, "leaving")
 							_cleanup.rpc(player, "leave")
 					else:
 						print("dont do this")

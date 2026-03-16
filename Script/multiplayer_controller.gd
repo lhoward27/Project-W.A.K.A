@@ -1,5 +1,4 @@
 extends CharacterBody3D
-
 # Player nodes
 @onready var neck: Node3D = $Neck
 @onready var head: Node3D = $Neck/Head
@@ -17,17 +16,19 @@ extends CharacterBody3D
 @onready var head_mesh: MeshInstance3D = skeleton.get_node("head")
 @onready var right_arm_ik: SkeletonIK3D = skeleton.get_node("RightArm_IK")
 @onready var items: Node3D = skeleton.get_node("RightHandAttachment/Items")
-@onready var pistol: Node3D = items.get_node("Pistol")
-@onready var flashlight: Node3D = items.get_node("Flashlight")
-@onready var flashlight_light: SpotLight3D = flashlight.get_node("SpotLight3D")
-@onready var light_bulb: MeshInstance3D = flashlight.get_node("SpotLight3D/LightBulb")
+@onready var pistol_ref: Node3D = skeleton.get_node("RightHandAttachment/Pistol")
+@onready var flashlight_ref: Node3D = skeleton.get_node("RightHandAttachment/Flashlight")
+
+# 2D Nodes
 @onready var pause_menu: Control = $PauseMenu
 @onready var player_hud: Control = $PlayerHUD
-@onready var pistol_highlight_hud: ColorRect = player_hud.get_node("PistolBorderHUD/PistolHighlightHUD")
-@onready var flashlight_highlight_hud: ColorRect = player_hud.get_node("FlashlightBorderHUD/FlashlightHighlightHUD")
+@onready var item_1_highlight_hud: ColorRect = player_hud.get_node("Item1HUD/Item1HighlightHUD")
+@onready var item_2_highlight_hud: ColorRect = player_hud.get_node("Item2HUD/Item2HighlightHUD")
 @onready var item_3_highlight_hud: ColorRect = player_hud.get_node("Item3HUD/Item3HighlightHUD")
 
-@export var player_materials = [
+var highlight_huds = []
+
+var player_materials = [
 preload("uid://van6okct3p66"),  #blue player material
 preload("uid://fwb3q3xqa28w"),  #red player material
 preload("uid://cmex25x32muqy"), #green head material
@@ -36,6 +37,14 @@ preload("uid://b4cpqxwmwox0a"), #orange head material
 preload("uid://cqgryetal08l"),  #yellow head material
 preload("uid://fwb3q3xqa28w")   #red player material
 ]
+
+var flashlight_scene = preload("res://Scenes/flashlight_item.tscn")
+var pistol_scene = preload("res://Scenes/pistol_item.tscn")
+
+var item_scenes = {
+	"Pistol": pistol_scene,
+	"Flashlight": flashlight_scene
+}
 
 # Speed Vars
 var current_speed = 5.0
@@ -62,33 +71,6 @@ var sprinting = false
 var crouching = false
 var free_looking = false
 var sliding = false
-
-# Equipped held item states
-var flashlight_equipped: bool = false:
-	set(is_equipped):
-		flashlight_equipped = is_equipped
-		flashlight.visible = is_equipped
-		flashlight_highlight_hud.visible = is_equipped
-
-var pistol_equipped: bool = false:
-	set(is_equipped):
-		pistol_equipped = is_equipped
-		pistol.visible = is_equipped
-		pistol_highlight_hud.visible = is_equipped
-
-var item3: Node3D
-
-var item3_equipped: bool = false:
-	set(is_equipped):
-		item3_equipped = is_equipped
-		if items.get_child_count() > 3:
-			item3.visible = is_equipped
-		item_3_highlight_hud.visible = is_equipped
-
-var items_equipped = []
-var equipped_item = 1:
-	set(item):
-		items_equipped[item]
 
 #Slide vars
 var slide_timer = 0.0
@@ -148,6 +130,26 @@ var is_paused = false
 			else:
 				_apply_material_change(head_mesh)
 
+var flashlight: Node3D
+var pistol: Node3D
+var items_equipped = []
+var item_properties = {}
+# Tracks the previously active item slot index to hide its highlight on switch
+var last_item_index = 0
+# Active item slot index; setter handles visibility toggling and HUD highlight updates
+var equipped_item_index: int = 0:
+	set(index):
+		equipped_item_index = index
+		# Hide the previously equipped item and remove its HUD highlight
+		var item_node = items.get_node(NodePath(items_equipped[last_item_index]))
+		highlight_huds[last_item_index].visible = false
+		_sync_item_change.rpc(str(item_node.name), false)
+		# Show the newly selected item and activate its HUD highlight
+		item_node = items.get_node(NodePath(items_equipped[index]))
+		highlight_huds[index].visible = true
+		_sync_item_change.rpc(str(item_node.name), true)
+		last_item_index = index
+
 func _ready() -> void:
 	pause_menu.visible = false
 	
@@ -175,9 +177,15 @@ func _ready() -> void:
 	rpc("_sync_material_change", role_properties["body_material"])
 	rpc("_sync_material_change", role_properties["head_material"])
 	
-	pistol_equipped = false
-	flashlight_equipped = true
-
+	if role_properties.has("item_1"):
+		var item_node = item_scenes[role_properties["item_1"]].instantiate().get_node(role_properties["item_1"]).duplicate()
+		items.add_child(item_node)
+	\
+	highlight_huds = [
+		item_1_highlight_hud,
+		item_2_highlight_hud,
+		item_3_highlight_hud
+		]
 
 func _process(_delta: float) -> void:
 	if not multiplayer.has_multiplayer_peer(): return
@@ -363,38 +371,42 @@ func _unhandled_input(event: InputEvent) -> void:
 			head.rotation.x = clamp(head.rotation.x,deg_to_rad(-45), deg_to_rad(65))
 	
 	# Toggle Flashlight
-	if event.is_action_pressed("Flashlight") and flashlight_equipped:
-		if flashlight_light.light_energy > 0:
-			light_bulb.visible = false
-			flashlight_light.light_energy = 0
-		else:
-			light_bulb.visible = true
-			flashlight_light.light_energy = 1
+	if event.is_action_pressed("Flashlight") and items_equipped.has("Flashlight"):
+		if flashlight.visible:
+			if item_properties["Flashlight Light"].light_energy > 0:
+				_sync_item_change.rpc("Light Bulb", false)
+				_sync_item_change.rpc("Flashlight Light", 0)
+			else:
+				_sync_item_change.rpc("Light Bulb", true)
+				_sync_item_change.rpc("Flashlight Light", 1.5)
 	
 	if event.is_action_pressed("Scroll Down"):
-		
-		flashlight_equipped = not flashlight_equipped
-		pistol_equipped = not pistol_equipped
+		if items_equipped.size() < 2: return
+		if equipped_item_index == 0:
+			equipped_item_index = items_equipped.size() - 1
+		else:
+			equipped_item_index -= 1
 	
 	if event.is_action_pressed("Scroll Up"):
-		equipped_item += 1
+		if items_equipped.size() < 2: return
+		if equipped_item_index == items_equipped.size() - 1:
+			equipped_item_index = 0
+		else:
+			equipped_item_index += 1
 	
-	if event.is_action_pressed("Equip One") and not is_paused:
-		pistol_equipped = true
-		flashlight_equipped = false
-		item3_equipped = false
+	if event.is_action_pressed("Equip One"):
+		if items_equipped.size() < 1: return
+		equipped_item_index = 0
 	
-	if event.is_action_pressed("Equip Two") and not is_paused:
-		pistol_equipped = false
-		flashlight_equipped = true
-		item3_equipped = false
+	if event.is_action_pressed("Equip Two"):
+		if items_equipped.size() < 2: return
+		equipped_item_index = 1
 	
-	if event.is_action_pressed("Equip Three") and not is_paused:
-		pistol_equipped = false
-		flashlight_equipped = false
-		item3_equipped = true
+	if event.is_action_pressed("Equip Three"):
+		if items_equipped.size() < 3: return
+		equipped_item_index = 2
 	
-	if event.is_action_pressed("Shoot") and pistol_equipped:
+	if event.is_action_pressed("Shoot"):
 		_sync_player_animation.rpc("Shoot")
 	# Pause Menu
 	if event.is_action_pressed("ui_cancel"):
@@ -433,7 +445,6 @@ func _update_ik_pose():
 	if not free_looking:
 		ik_target.global_transform = Transform3D(cam_transform.basis, hand_target_pos)
 
-
 func _on_exit_button_pressed() -> void:
 	if not is_multiplayer_authority(): return
 	else:
@@ -457,6 +468,8 @@ func _on_start_screen_button_pressed() -> void:
 func _sync_player_animation(animation: String):
 	if animation == "Shoot":
 		player_animation["parameters/OneShot/request"] = AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE
+		if items_equipped.has("Pistol"):
+			pistol.get_node("AnimationPlayer").play("Shoot Pistol")
 	else:
 		animation_state_machine.travel(animation)
 
@@ -467,6 +480,13 @@ func _sync_material_change(new_index: int):
 		_apply_material_change(body_mesh)
 	else:
 		_apply_material_change(head_mesh)
+
+@rpc("any_peer","call_local","reliable")
+func _sync_item_change(item, state):
+	if item == "Flashlight Light":
+		item_properties[item].light_energy = state
+	else:
+		item_properties[item].visible = state
 
 func _apply_material_change(mesh):
 	mesh.set_surface_override_material(0, player_materials[material_index])
@@ -487,14 +507,26 @@ func _set_spawn_location(group: String, index: int):
 
 func _on_items_child_entered_tree(node: Node) -> void:
 	items_equipped.append(node.name)
-	print(items_equipped)
-	if node.name == "FlashlightItem":
-		_item3_equipped(node, flashlight)
-	elif node.name == "PistolItem":
-		_item3_equipped(node, pistol)
+	item_1_highlight_hud.visible = true
+	if node.name == "Flashlight":
+		flashlight = items.get_node("Flashlight")
+		item_properties["Flashlight"] = flashlight
+		item_properties["Flashlight Light"] = flashlight.get_node("SpotLight3D")
+		item_properties["Light Bulb"] = flashlight.get_node("SpotLight3D/LightBulb")
+		_item_equipped(node, flashlight_ref)
+		player_hud.get_node("Item%sHUD" % items_equipped.size()).get_node("FlashlightTextureHUD").visible = true
+		
+	elif node.name == "Pistol":
+		pistol = items.get_node("Pistol")
+		item_properties["Pistol"] = pistol
+		_item_equipped(node, pistol_ref)
+		player_hud.get_node("Item%sHUD" % items_equipped.size()).get_node("PistolTextureHUD").visible = true
 
-func _item3_equipped(node, item):
-	node.visible = false
+func _item_equipped(node, item):
+	if items_equipped.size() == 1:
+		node.visible = true
+	else:
+		node.visible = false
 	node.transform = item.transform
-	item3 = node
 	print("%s Equipped" % node.name)
+	

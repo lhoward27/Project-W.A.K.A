@@ -1,0 +1,66 @@
+[gd_scene format=3 uid="uid://c14wadw0s0nt3"]
+
+[ext_resource type="Script" uid="uid://cy67axoh3gsmb" path="res://Script/flashlight_item.gd" id="1_cgjxs"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rgh2o"]
+albedo_color = Color(0.13319641, 0.13319641, 0.13319638, 1)
+metallic = 0.77
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_pbw6q"]
+material = SubResource("StandardMaterial3D_rgh2o")
+top_radius = 0.02
+bottom_radius = 0.02
+height = 0.1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pbw6q"]
+albedo_color = Color(0.13333334, 0.13333334, 0.13333334, 1)
+metallic = 0.77
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_v1gob"]
+material = SubResource("StandardMaterial3D_pbw6q")
+top_radius = 0.02
+bottom_radius = 0.028
+height = 0.03
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tq1mk"]
+emission_enabled = true
+emission = Color(18.892157, 18.892157, 18.892157, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_jw32o"]
+material = SubResource("StandardMaterial3D_tq1mk")
+radius = 0.01
+height = 0.02
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_jw32o"]
+size = Vector3(0.2642212, 0.17659378, 0.32531738)
+
+[node name="FlashlightItem" type="Area3D" unique_id=492495518]
+script = ExtResource("1_cgjxs")
+
+[node name="Flashlight" type="Node3D" parent="." unique_id=1007289399]
+transform = Transform3D(2.222222, 0, 0, 0, -0.13175327, -2.218313, 0, 2.2183118, -0.13175333, 0, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Flashlight" unique_id=1251381641]
+transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_pbw6q")
+skeleton = NodePath("../../../../../../..")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Flashlight" unique_id=43074652]
+transform = Transform3D(0.99999994, -1.3658914e-16, 0, 5.716964e-15, 0.9999998, -1.4210855e-14, 5.684342e-14, 1.4210855e-14, 0.9999999, 0, -0.06479615, -1.1150689e-08)
+mesh = SubResource("CylinderMesh_v1gob")
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Flashlight" unique_id=2117241056]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, -0.081323385, -1.39948355e-08)
+light_energy = 1.5
+spot_range = 8.466755
+spot_angle = 33.56934
+
+[node name="LightBulb" type="MeshInstance3D" parent="Flashlight/SpotLight3D" unique_id=686810513]
+transform = Transform3D(1, 0, 1.3159717e-14, 0, 1, 0, 1.3159717e-14, 0, 1, 0, -1.4510704e-10, 0.0014345348)
+mesh = SubResource("SphereMesh_jw32o")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=495734235]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00015258789, 0.03670311, -0.02911377)
+shape = SubResource("BoxShape3D_jw32o")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
